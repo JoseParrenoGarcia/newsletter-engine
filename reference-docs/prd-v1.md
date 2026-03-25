@@ -961,3 +961,398 @@ newsletter-engine/
 ├─ posts/
 │  └─ <post_slug>/
 └─ scratch/
+
+## 21.1 Folder Purposes
+
+### `agents/`
+Agent instructions, role definitions, contracts, and task guidance.
+
+Includes:
+- orchestrator
+- brainstorming
+- research
+- outlining
+- drafting
+- promotion
+- SEO
+
+---
+
+### `style_guide/`
+Codified writing guidance used repeatedly by drafting, promotion, and SEO layers.
+
+Includes:
+- tone and voice
+- structure patterns
+- intro and closing styles
+- promotion formats
+- SEO patterns
+- anti-patterns
+
+---
+
+### `reference_posts/`
+Curated examples written by Jose and manually copied into the repo.
+
+Purpose:
+- provide real writing samples
+- ground tone and structure
+- enable style learning
+
+---
+
+### `templates/post_template/`
+Standard artefact structure for each new post.
+
+Purpose:
+- enforce consistency
+- reduce setup friction
+- enable orchestrator to operate predictably
+
+---
+
+### `posts/`
+Actual working directories for content generation.
+
+Each post gets:
+- its own folder
+- its own artefacts
+- its own lifecycle
+
+---
+
+### `docs/`
+Architecture notes, workflow definitions, milestone tracking, and SEO/editorial guidance.
+
+Includes:
+- architecture decisions
+- workflow descriptions
+- milestone planning
+- SEO guidelines
+
+---
+
+### `scratch/`
+Optional sandbox space for:
+- experiments
+- temporary drafts
+- prompt testing
+
+---
+
+# 22. Input Contracts
+
+## 22.1 Minimum Input
+The system should handle:
+- a topic
+- rough notes (~10 points)
+- non-structured thinking
+
+---
+
+## 22.2 Acceptable Input Types
+A post may begin with:
+- bullet points
+- fragments
+- copied notes
+- personal reflections
+- rough ideas
+- optional titles
+- optional links
+- optional references to past posts
+
+---
+
+## 22.3 Requirement
+The system must handle messy input gracefully.  
+It should not require a clean or structured brief.
+
+---
+
+# 23. Output Contracts
+
+## 23.1 Notes File (`notes.md`)
+Raw input and captured thoughts.
+
+---
+
+## 23.2 Research Brief (`research_brief.md`)
+Contains:
+- references
+- supporting material
+- missing angles
+- include/exclude guidance
+
+---
+
+## 23.3 Outline (`outline.md`)
+Contains:
+- table of contents
+- section bullets
+- narrative flow
+
+---
+
+## 23.4 Long Draft (`long_draft.md`)
+Contains:
+- full article draft
+- structured sections
+- transitions
+- grounded references
+
+---
+
+## 23.5 SEO Brief (`seo_brief.md`)
+Contains:
+- title options
+- keyword/theme suggestions
+- search intent framing
+- header improvements
+- meta description options
+
+Important:
+SEO is **advisory**, not rewriting the article blindly.
+
+---
+
+## 23.6 LinkedIn Posts (`linkedin_posts.md`)
+Contains:
+- multiple promotional variants
+- platform-adapted tone
+
+---
+
+## 23.7 Substack Promos (`substack_promos.md`)
+Contains:
+- teaser-style posts
+- article-linked content
+
+---
+
+# 24. Grounding and Source Handling
+
+## 24.1 General Rule
+No hallucinated references. Ever.
+
+---
+
+## 24.2 When Uncertain
+The system must:
+- flag uncertainty
+- avoid fabrication
+
+---
+
+## 24.3 Preferred Pattern
+Separate:
+- research (fact gathering)
+- drafting (writing)
+
+---
+
+## 24.4 SEO Grounding Rule
+SEO suggestions must:
+- avoid fake “keyword authority”
+- avoid invented trends
+- remain practical and realistic
+
+---
+
+# 25. Quality Evaluation Framework
+
+## 25.1 Draft Quality
+Evaluate:
+- tone match
+- non-generic writing
+- flow
+- clarity
+- groundedness
+- technical correctness
+
+---
+
+## 25.2 Research Quality
+Evaluate:
+- relevance
+- usefulness
+- completeness
+- honesty about uncertainty
+
+---
+
+## 25.3 Promotion Quality
+Evaluate:
+- engagement potential
+- clarity
+- tone alignment
+- non-redundancy
+
+---
+
+## 25.4 SEO Quality
+Evaluate:
+- usefulness of suggestions
+- fit to article intent
+- non-clickbait quality
+- preservation of voice
+
+---
+
+## 25.5 Evaluation Approach
+Start with manual review by Jose.  
+No need for automation yet.
+
+---
+
+# 26. Milestone Strategy
+
+## 26.1 Philosophy
+Each milestone must:
+- be usable
+- reduce friction
+- add one meaningful capability
+- avoid overengineering
+
+---
+
+# 27. Proposed Milestones
+
+## Milestone 0 — Foundation
+
+Includes:
+- repo structure
+- templates
+- style guides (initial)
+- reference posts (manual)
+- agent definitions (draft)
+
+Goal:
+Create a working base system.
+
+---
+
+## Milestone 1 — End-to-End Workflow (First Useful Version)
+
+Includes:
+- Brainstorm Agent
+- Research Agent
+- Outline Agent
+- Drafting Agent
+- Promotion Agent
+- Basic Orchestrator
+- Output bundle generation
+
+Flow:
+notes → research → outline → draft → promos
+
+Goal:
+Produce usable outputs from messy notes.
+
+---
+
+## Milestone 2 — Style Fidelity Upgrade
+
+Includes:
+- improved style guides
+- anti-pattern refinement
+- stronger tone alignment
+- structure consistency improvements
+
+Goal:
+Reduce generic AI feel.
+
+---
+
+## Milestone 3 — Research + Grounding Upgrade
+
+Includes:
+- better reference tracking
+- clearer research outputs
+- optional fact-check logic
+
+Goal:
+Improve trust and accuracy.
+
+---
+
+## Milestone 4 — SEO Layer
+
+Includes:
+- SEO Agent
+- SEO Brief generation
+- title suggestions
+- header improvements
+- meta descriptions
+
+Important:
+SEO remains advisory.
+
+Goal:
+Improve discoverability without damaging writing quality.
+
+---
+
+## Milestone 5 — Content Expansion
+
+Includes:
+- better promo sequences
+- repurposing flows
+- short-form generation
+- title banks
+
+Goal:
+Make system more like a content engine.
+
+---
+
+## Milestone 6 — Series Intelligence
+
+Includes:
+- series context tracking
+- continuity support
+- “next article” suggestions
+
+Goal:
+Support long-running content series.
+
+---
+
+## Milestone 7 — Integrations (Optional, Late)
+
+Includes:
+- Substack ingestion
+- Medium ingestion
+
+Goal:
+Convenience, not core value.
+
+---
+
+# 28. Requirements by Priority
+
+## Must-Have
+- reusable instructions
+- structured outputs
+- drafting + promotion
+- no hallucinations
+
+---
+
+## Should-Have
+- SEO suggestions
+- better tone alignment
+- decision logs
+
+---
+
+## Could-Have
+- SEO automation improvements
+- fact-checking agent
+- repurposing tools
+
+---
+
+## Won’t-Have (Early)
+- publishing automation
+- UI apps
+- heavy integrations
