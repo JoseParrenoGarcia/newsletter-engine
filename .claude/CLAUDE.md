@@ -30,10 +30,9 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 
 ## Available Skills
 
-None yet. Skills are added as milestones complete.
-
-| Skill | Description | Introduced |
-|-------|-------------|------------|
+| Skill | Description | Status |
+|-------|-------------|--------|
+| `/import-pdf` | Convert a PDF reference post to clean markdown | **Live (M0)** |
 | `/new-post` | Orchestrates full or partial pipeline | M1 (stub) → M6 (full) |
 | `/brainstorm` | Interactive brainstorm → `post.yaml` | M1 |
 | `/research` | Web-grounded research brief | M2 |
