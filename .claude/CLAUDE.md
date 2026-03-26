@@ -9,8 +9,8 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 
 ## Reference Docs
 
-- @reference-docs/prd-v1.md — full product requirements and design decisions
-- @reference-docs/milestones-v1.md — milestone plan, definitions of done, architectural principles
+- `reference-docs/prd-v1.md` — full product requirements and design decisions
+- `reference-docs/milestones-v1.md` — milestone plan, definitions of done, architectural principles
 
 ---
 
@@ -53,27 +53,9 @@ None yet. Skills are added as milestones complete.
 
 ---
 
-## Core Rules
+## Rules
 
-1. Never hallucinate references, sources, or citations. Flag uncertainty explicitly.
-2. Every skill reads from and writes to predictable files — no side effects outside the post folder.
-3. Check `post.yaml` stage flags before running a skill. Do not overwrite completed stages without explicit instruction.
-4. Style guides and reference posts are ground truth for tone and structure. Load the ones referenced in `post.yaml` before drafting.
-5. SEO and promotion skills must work on any draft — including posts Jose wrote independently.
+Behavioural and maintenance rules live in `.claude/rules/` and are loaded automatically:
 
----
-
-## Maintenance Rules
-
-These apply after any significant change (new directory, new agent, completed milestone, new MCP dependency):
-
-**Update this file:**
-- Add new directories to the Repo Index table
-- Add new skills to the Available Skills table
-- Update the active milestone line at the top
-- Add new MCPs to the Required MCPs table
-
-**Update README.md:**
-- Keep the repo tree structure current
-- Update the pipeline mermaid diagram to reflect the current skill chain
-- List any new MCP, plugin, or Claude Code skill required to use this repo
+- `.claude/rules/core-rules.md` — content, workflow, and writing guardrails
+- `.claude/rules/maintenance-rules.md` — what to update when significant changes happen
