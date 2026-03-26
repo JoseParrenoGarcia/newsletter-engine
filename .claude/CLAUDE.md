@@ -3,7 +3,7 @@
 A repo-based, Claude-first writing system for creating blog and newsletter content. Claude operates from durable repo files rather than chat memory, coordinating specialised agents across a repeatable content workflow.
 
 **Primary user:** Jose
-**Active milestone:** M0 — Foundation
+**Active milestone:** M0 — Complete ✓ | Next: M1
 
 ---
 
@@ -20,7 +20,7 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 |-----------|---------|--------|
 | `reference-docs/` | PRD, milestones, planning docs | Active |
 | `reference_posts/` | Jose's real posts (series, standalone, short_technical) | M0 |
-| `style_guide/` | Codified voice, structure, intro/closing patterns, anti-patterns | M0 |
+| `style_guide/` | Voice, anti-patterns (shared/), plus per-type rules for management, paper-explainer, book-review, series-genai | **Done (M0)** |
 | `agents/` | Agent instruction files (one per skill) | M1+ |
 | `templates/` | Post folder template and prompt templates | M1 |
 | `posts/` | Per-post working folders with artefacts | M1+ |
@@ -30,10 +30,9 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 
 ## Available Skills
 
-None yet. Skills are added as milestones complete.
-
-| Skill | Description | Introduced |
-|-------|-------------|------------|
+| Skill | Description | Status |
+|-------|-------------|--------|
+| `/import-pdf` | Convert a PDF reference post to clean markdown | **Live (M0)** |
 | `/new-post` | Orchestrates full or partial pipeline | M1 (stub) → M6 (full) |
 | `/brainstorm` | Interactive brainstorm → `post.yaml` | M1 |
 | `/research` | Web-grounded research brief | M2 |
