@@ -1,0 +1,66 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "claude-code-skills-explained"                    # matches the posts/<slug>/ folder name
+working_title: "What the docs don't tell you about Claude Code skills"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"       # standalone | short_technical | series
+content_type: "series-genai"        # closest match; no standalone-genai type exists yet — flag for future style guide
+series_name: ""                     # only if structural_type: series (leave blank otherwise)
+series_position: null               # integer (1, 2, 3 …), only if structural_type: series
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Everyone can build a Claude Code skill from the docs, but the real power lives in the quirks, hidden gems, and design patterns that are not documented — skills are a design pattern, not just a feature."
+target_audience: "Technical practitioners using Claude Code seriously — developers, data scientists, engineers who have already encountered skills and want to go deeper."
+topics_to_cover:
+  - Anatomy of a skill beyond the obvious (SKILL.md as playbook, frontmatter fields, scripts/references/assets)
+  - Hidden gems that make skills powerful (progressive disclosure, encoding edge cases, structuring outputs)
+  - Advanced tricks (scripts for reliability, multi-stage workflows, composability)
+  - How skills combine with the rest of the system (MCP, subagents, plugins, agentic pipelines)
+  - Practical design principles (narrow, explicit, discoverable; test like code)
+  - When skills are the wrong tool
+topics_to_exclude:
+  - Basic skill tutorials and step-by-step how-to-build-a-skill
+  - Data science specific use cases (earmarked for a future short-form post)
+open_research_questions:
+  - Verify experimental fields (allowed-tools) and what they actually imply in practice
+  - Confirm observed model selection behaviour inside skills (Haiku vs Opus) — is this documented?
+  - Check agentskills.io spec for cross-platform design nuances worth highlighting
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "A practical deep-dive for practitioners who already know what skills are and want to understand the non-obvious parts: the anatomy, the hidden levers, the design principles, and how skills fit into a broader agentic system. Thematically continues the Claude Code mental models thread (memory → rules → skills) but stands alone."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/genai-ai/claude-code-memory-explained-how-it-really-works.md
+  - reference_posts/standalone/genai-ai/how-claude-code-rules-actually-work.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: null
+  outline: null
+  long_draft: null
+  seo_brief: null
+  promotion_bundle: null
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-03-26"
+  research:
+    status: pending
+    completed_at: null
+  draft:
+    status: pending
+    completed_at: null
+  seo:
+    status: pending
+    completed_at: null
+  promote:
+    status: pending
+    completed_at: null

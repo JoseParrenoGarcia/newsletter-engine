@@ -45,19 +45,25 @@ newsletter-engine/                        (M0)
 └── scratch/                       # Experiments and temporary drafts
 
                                           (M1+)
-├── agents/                        # Agent instruction files (one per skill)
-├── templates/                     # Post folder template
+├── .claude/
+│   ├── agents/                    # Custom subagent definitions (one per agent)
+│   └── skills/                    # Skill instruction files
+│       ├── import-pdf/            # /import-pdf — convert PDF reference posts
+│       ├── brainstorm/            # /brainstorm — interactive brainstorm → post.yaml
+│       └── new-post/              # /new-post — create post folder + kick off brainstorm
+├── templates/                     # Post folder template (post.yaml, notes.md, placeholders)
+├── tasks/                         # Planning docs and specs
 └── posts/
     └── <post-slug>/
-        ├── post.yaml
-        ├── notes.md
-        ├── research_brief.md
-        ├── outline.md
-        ├── long_draft.md
-        ├── seo_brief.md
-        ├── titles.md
-        ├── linkedin_posts.md
-        └── substack_promos.md
+        ├── post.yaml              # Shared state contract (populated by /brainstorm)
+        ├── notes.md               # Raw notes + brainstorm summary + rough ToC
+        ├── research_brief.md      # Populated by /research (M2)
+        ├── outline.md             # Populated by /draft (M3)
+        ├── long_draft.md          # Populated by /draft (M3)
+        ├── seo_brief.md           # Populated by /seo (M4)
+        └── promotion/
+            ├── linkedin.md        # Populated by /promote (M5)
+            └── substack_promo.md  # Populated by /promote (M5)
 ```
 
 ---
@@ -75,6 +81,7 @@ newsletter-engine/                        (M0)
 
 ## Active Milestone
 
-**M0 — Complete.** Scaffold, reference corpus (31 posts), and style guide all done.
-**Next: M1** — `/brainstorm` skill, `post.yaml` schema, and `/draft` stub.
+**M0 — Complete.** Scaffold, reference corpus (31 posts), and style guide done.
+**M1 — Complete.** `/brainstorm`, `/new-post` stub, `post.yaml` schema, and post folder template done.
+**Next: M2** — `/research` skill producing a web-grounded `research_brief.md`.
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.

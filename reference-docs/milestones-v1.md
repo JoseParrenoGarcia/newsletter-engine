@@ -1,7 +1,7 @@
 # Newsletter Engine — Milestone Plan v1
 
 **Status:** Approved
-**Last updated:** 2026-03-25
+**Last updated:** 2026-03-26
 **Context:** Companion to `prd-v1.md`. Defines the phased build plan, architectural principles, and definition of done for each milestone.
 
 ---
@@ -64,7 +64,7 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ---
 
-## M1 — Brainstorm + Metadata
+## M1 — Brainstorm + Metadata ✓ Complete (2026-03-26)
 
 **Goal:** Go from rough notes to a rich, structured `post.yaml` that every subsequent agent can use as its starting point.
 

@@ -1,0 +1,52 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: ""                    # matches the posts/<slug>/ folder name
+working_title: ""
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: ""         # standalone | short_technical | series
+content_type: ""            # management | paper-explainer | book-review | series-genai
+series_name: ""             # only if structural_type: series (leave blank otherwise)
+series_position: null       # integer (1, 2, 3 …), only if structural_type: series
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: ""
+target_audience: ""
+topics_to_cover: []
+topics_to_exclude: []
+open_research_questions: []
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: ""
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts: []
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: null
+  outline: null
+  long_draft: null
+  seo_brief: null
+  promotion_bundle: null
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: pending         # pending | complete
+    completed_at: null
+  research:
+    status: pending
+    completed_at: null
+  draft:
+    status: pending
+    completed_at: null
+  seo:
+    status: pending
+    completed_at: null
+  promote:
+    status: pending
+    completed_at: null
