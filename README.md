@@ -39,7 +39,9 @@ newsletter-engine/                        (M0)
 │   ├── series/
 │   ├── standalone/
 │   └── short_technical/
-├── style_guide/                   # Codified voice, structure, anti-patterns
+├── style_guide/                   # Codified voice and per-type structure rules
+│   ├── shared/                    # voice.md, anti_patterns.md (all types)
+│   └── types/                     # management.md, paper-explainer.md, book-review.md, series-genai.md
 └── scratch/                       # Experiments and temporary drafts
 
                                           (M1+)
@@ -73,5 +75,6 @@ newsletter-engine/                        (M0)
 
 ## Active Milestone
 
-**M0 — Foundation:** Scaffold + style system seeded with real posts.
+**M0 — Complete.** Scaffold, reference corpus (31 posts), and style guide all done.
+**Next: M1** — `/brainstorm` skill, `post.yaml` schema, and `/draft` stub.
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.
