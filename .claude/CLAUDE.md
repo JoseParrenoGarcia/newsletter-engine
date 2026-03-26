@@ -3,7 +3,7 @@
 A repo-based, Claude-first writing system for creating blog and newsletter content. Claude operates from durable repo files rather than chat memory, coordinating specialised agents across a repeatable content workflow.
 
 **Primary user:** Jose
-**Active milestone:** M0 — Complete ✓ | Next: M1
+**Active milestone:** M0 — Complete ✓ | M1 — In Progress
 
 ---
 
@@ -21,9 +21,10 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `reference-docs/` | PRD, milestones, planning docs | Active |
 | `reference_posts/` | Jose's real posts (series, standalone, short_technical) | M0 |
 | `style_guide/` | Voice, anti-patterns (shared/), plus per-type rules for management, paper-explainer, book-review, series-genai | **Done (M0)** |
-| `agents/` | Agent instruction files (one per skill) | M1+ |
-| `templates/` | Post folder template and prompt templates | M1 |
+| `.claude/agents/` | Custom subagent definitions (one per agent) | M1+ |
+| `templates/` | Post folder template (`post.yaml`, `notes.md`, `placeholder.md`) | **Done (M1)** |
 | `posts/` | Per-post working folders with artefacts | M1+ |
+| `tasks/` | Planning docs, specs, lessons | Active |
 | `scratch/` | Experiments, prompt testing, temporary drafts | Ongoing |
 
 ---
@@ -33,8 +34,8 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | Skill | Description | Status |
 |-------|-------------|--------|
 | `/import-pdf` | Convert a PDF reference post to clean markdown | **Live (M0)** |
-| `/new-post` | Orchestrates full or partial pipeline | M1 (stub) → M6 (full) |
-| `/brainstorm` | Interactive brainstorm → `post.yaml` | M1 |
+| `/new-post` | Creates post folder + kicks off brainstorm | **Live (M1 stub)** → M6 (full) |
+| `/brainstorm` | Interactive brainstorm → `post.yaml` + expanded notes | **Live (M1)** |
 | `/research` | Web-grounded research brief | M2 |
 | `/draft` | Outline + long-form draft | M3 |
 | `/seo` | SEO brief + title variants (any draft) | M4 |
