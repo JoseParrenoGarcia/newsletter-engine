@@ -66,6 +66,7 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ## M1 — Brainstorm + Metadata ✓ Complete (2026-03-26)
 
+
 **Goal:** Go from rough notes to a rich, structured `post.yaml` that every subsequent agent can use as its starting point.
 
 **What to build:**
@@ -96,7 +97,8 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ---
 
-## M2 — Research
+## M2 — Research ✓ Complete (2026-03-27)
+
 
 **Goal:** Enrich the topic with grounded, web-sourced supporting material before drafting begins.
 
@@ -118,7 +120,7 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ---
 
-## M3 — Draft
+## M3 — Draft ✓ Complete (2026-03-27)
 
 **Goal:** Generate a structured, styled long-form draft that is materially closer to Jose's voice than a cold AI prompt.
 

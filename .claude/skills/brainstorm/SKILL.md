@@ -41,7 +41,11 @@ Let the conversation breathe. Follow Jose's lead. Ask one or two questions at a 
 
 ### Wrapping up
 
-When you have enough to populate every field in `post.yaml` and sketch a rough table of contents, say:
+When you have enough to populate every field in `post.yaml` and sketch a rough table of contents, ask one final question before proposing to wrap up:
+
+> "How long should this be? Give me a reading time — e.g. 10 min, 15 min, 20 min."
+
+Wait for the answer, then say:
 > "I think we have enough to write this up. Want me to go ahead and produce the YAML and summary notes?"
 
 Jose can also say "let's wrap up" at any point — work with what you have.
@@ -71,7 +75,7 @@ Based on `content_type`, add the matching type-specific guide:
 Confirm with Jose (usually a quick "yes" is enough — just name it).
 
 ### Step 3 — Write `post.yaml`
-Write a fully populated `post.yaml` to the post folder. All fields must have a value — no empty strings except `series_name` and `series_position` for non-series posts.
+Write a fully populated `post.yaml` to the post folder. All fields must have a value — no empty strings except `series_name` and `series_position` for non-series posts. Include `target_reading_time_minutes` from the answer given during wrap-up.
 
 Set:
 - `stages.brainstorm.status: complete`

@@ -1,6 +1,6 @@
 # M2 Spec — Research
 
-**Status:** Draft — awaiting Jose approval
+**Status:** Complete (2026-03-27)
 **Date:** 2026-03-27
 
 ---

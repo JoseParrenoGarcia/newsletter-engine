@@ -11,6 +11,7 @@ series_position: null       # integer (1, 2, 3 …), only if structural_type: se
 # ── Core content ──────────────────────────────────────────────────────
 thesis: ""
 target_audience: ""
+target_reading_time_minutes: null  # e.g. 10, 15, 20 — set during brainstorm; drives word count (×250)
 topics_to_cover: []
 topics_to_exclude: []
 open_research_questions: []
