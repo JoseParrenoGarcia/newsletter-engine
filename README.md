@@ -83,6 +83,7 @@ newsletter-engine/                        (M0)
 
 **M0 — Complete.** Scaffold, reference corpus (31 posts), and style guide done.
 **M1 — Complete.** `/brainstorm`, `/new-post` stub, `post.yaml` schema, and post folder template done.
-**M2 — In Progress.** `/research` skill producing a web-grounded `research_brief.md`.
-**Next: M3** — `/draft` skill producing `outline.md` + `long_draft.md`.
+**M2 — Complete.** `/research` skill producing a web-grounded `research_brief.md`.
+**M3 — Complete.** `/draft` skill producing style-grounded `outline.md` + `long_draft.md`.
+**Next: M4** — `/seo` skill producing SEO brief + title variants.
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.

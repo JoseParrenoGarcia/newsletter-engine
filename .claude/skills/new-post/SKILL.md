@@ -73,6 +73,7 @@ Once `/brainstorm` has finished and `post.yaml` is written, present:
 
 **Option 2:** Run each pipeline stage in sequence:
 - `/research posts/<slug>/`
-- Then for each subsequent stage (draft → seo → promote): if the skill exists and is implemented, run it; if not, say: *"[Stage] is not yet available — stopping here."* and exit cleanly.
+- `/draft posts/<slug>/` — in pipeline mode (no pause after outline)
+- Then for each subsequent stage (seo → promote): if the skill exists and is implemented, run it; if not, say: *"[Stage] is not yet available — stopping here."* and exit cleanly.
 
 **Option 3:** Exit. Remind Jose they can resume at any point with `/research posts/<slug>/`.

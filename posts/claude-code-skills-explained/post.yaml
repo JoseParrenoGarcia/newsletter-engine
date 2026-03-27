@@ -1,6 +1,7 @@
 # ── Identity ──────────────────────────────────────────────────────────
 slug: "claude-code-skills-explained"                    # matches the posts/<slug>/ folder name
 working_title: "What the docs don't tell you about Claude Code skills"
+target_reading_time_minutes: 12
 
 # ── Post classification ────────────────────────────────────────────────
 structural_type: "standalone"       # standalone | short_technical | series
@@ -42,8 +43,8 @@ style_guides:
 artefacts:
   notes: notes.md
   research_brief: research_brief.md
-  outline: null
-  long_draft: null
+  outline: outline.md
+  long_draft: long_draft.md
   seo_brief: null
   promotion_bundle: null
 
@@ -56,8 +57,8 @@ stages:
     status: complete
     completed_at: "2026-03-27"
   draft:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-03-27"
   seo:
     status: pending
     completed_at: null
