@@ -41,7 +41,7 @@ style_guides:
 # ── Artefacts ─────────────────────────────────────────────────────────
 artefacts:
   notes: notes.md
-  research_brief: null
+  research_brief: research_brief.md
   outline: null
   long_draft: null
   seo_brief: null
@@ -53,8 +53,8 @@ stages:
     status: complete
     completed_at: "2026-03-26"
   research:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-03-27"
   draft:
     status: pending
     completed_at: null
