@@ -1,7 +1,7 @@
 # Newsletter Engine — Milestone Plan v1
 
 **Status:** Approved
-**Last updated:** 2026-03-26
+**Last updated:** 2026-03-27
 **Context:** Companion to `prd-v1.md`. Defines the phased build plan, architectural principles, and definition of done for each milestone.
 
 ---

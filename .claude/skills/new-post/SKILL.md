@@ -59,3 +59,20 @@ Tell Jose:
 > "Created `posts/<slug>/`. Starting the brainstorm now."
 
 Then immediately run the `/brainstorm` skill on `posts/<slug>/`.
+
+### 5. After brainstorm completes — pipeline menu
+
+Once `/brainstorm` has finished and `post.yaml` is written, present:
+
+> "Brainstorm complete. What would you like to do next?
+> 1. Run research only
+> 2. Run full pipeline (research → draft → seo → promote)
+> 3. Stop here — I'll continue later"
+
+**Option 1:** Run `/research posts/<slug>/`.
+
+**Option 2:** Run each pipeline stage in sequence:
+- `/research posts/<slug>/`
+- Then for each subsequent stage (draft → seo → promote): if the skill exists and is implemented, run it; if not, say: *"[Stage] is not yet available — stopping here."* and exit cleanly.
+
+**Option 3:** Exit. Remind Jose they can resume at any point with `/research posts/<slug>/`.

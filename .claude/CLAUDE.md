@@ -3,7 +3,7 @@
 A repo-based, Claude-first writing system for creating blog and newsletter content. Claude operates from durable repo files rather than chat memory, coordinating specialised agents across a repeatable content workflow.
 
 **Primary user:** Jose
-**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | Next: M2
+**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — In Progress
 
 ---
 
@@ -34,9 +34,9 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | Skill | Description | Status |
 |-------|-------------|--------|
 | `/import-pdf` | Convert a PDF reference post to clean markdown | **Live (M0)** |
-| `/new-post` | Creates post folder + kicks off brainstorm | **Live (M1 stub)** → M6 (full) |
+| `/new-post` | Creates post folder + brainstorm + pipeline menu | **Live (M2 stub)** → M6 (full) |
 | `/brainstorm` | Interactive brainstorm → `post.yaml` + expanded notes | **Live (M1)** |
-| `/research` | Web-grounded research brief | M2 |
+| `/research` | Validate + enrich URLs, fill gaps, write `research_brief.md` | **Live (M2)** |
 | `/draft` | Outline + long-form draft | M3 |
 | `/seo` | SEO brief + title variants (any draft) | M4 |
 | `/promote` | LinkedIn + Substack bundle (any draft) | M5 |
