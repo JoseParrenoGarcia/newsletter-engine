@@ -31,6 +31,7 @@ artefacts:
   research_brief: null
   outline: null
   long_draft: null
+  long_draft_backup: null  # populated by /revise
   seo_brief: null
   promotion_posts: null
 
@@ -46,6 +47,9 @@ stages:
     status: pending
     completed_at: null
   seo:
+    status: pending
+    completed_at: null
+  revise:
     status: pending
     completed_at: null
   promote:

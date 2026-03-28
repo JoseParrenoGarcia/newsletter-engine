@@ -8,7 +8,7 @@ This month, I finished building a skill for every stage of my newsletter writing
 
 The process was straightforward. Each skill is a markdown file. Each one gets invoked with a slash command. And each one — when designed carefully — behaves the same way every time.
 
-What I kept running into while building Claude Code skills was the gap between what the documentation covers and what actually matters. The Anthropic docs tell you how to create a skill. They do not explain why the same instruction produces different results depending on where in the file it lives, or what the description field is actually doing, or why some skills degrade unpredictably as they grow. Those answers are scattered across the official spec, production examples, and a fair amount of direct observation.
+What I kept running into was the gap between what the documentation covers and what actually matters. The Anthropic docs tell you how to create a skill. They do not explain why the same instruction produces different results depending on where in the file it lives, or what the description field is actually doing, or why some skills degrade unpredictably as they grow. Those answers are scattered across the official spec, production examples, and a fair amount of direct observation.
 
 That gap is what this post is about.
 
@@ -26,11 +26,11 @@ This post assumes you have already encountered Claude Code skills and want to go
 - Advanced tricks: scripts, composability, and model routing
 - How skills fit with MCP, subagents, and agentic pipelines
 - When skills are the wrong tool
-- Claude Code skill design principles — including how to test skills like code
+- Practical design principles — including how to test skills like code
 
 ---
 
-## The mental model most Claude Code practitioners miss
+## The mental model most people miss
 
 Most practitioners mentally model a skill as: a markdown file, instructions at the top, maybe some examples. Claude reads it, follows it, done.
 
@@ -54,7 +54,7 @@ The mental model shift: a skill is not a prompt you save. It is a layered system
 
 ---
 
-## Claude Code skill anatomy (beyond the obvious)
+## Anatomy of a skill (beyond the obvious)
 
 The [agentskills.io specification](https://agentskills.io/specification) is the canonical reference for the SKILL.md format. Here is what it covers that the basic how-to articles do not.
 
@@ -144,7 +144,7 @@ If you are seeing inconsistency between how well skills get selected versus how 
 
 ---
 
-## How Claude Code skills combine with MCP and subagents
+## How skills combine with the rest of the system
 
 The [skills explained blog post](https://claude.com/blog/skills-explained) from Anthropic includes a comparison table across five primitives: Skills, Prompts, Projects, Subagents, and MCP. The table covers persistence, what each contains, when it loads, and best-for scenarios. The two integrations that matter most in practice are skills + MCP and skills + subagents.
 
@@ -180,7 +180,7 @@ Knowing where skills fit also clarifies where they do not. The integration pictu
 
 ---
 
-## Claude Code skill design principles
+## Practical design principles
 
 The [best practices guide](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) and the [evaluation guide from agentskills.io](https://agentskills.io/skill-creation/evaluating-skills) together provide the clearest operational guidance available. These are the principles I apply consistently.
 
