@@ -17,7 +17,7 @@ graph LR
     G --> H["/seo"]
     G --> I["/promote"]
     H --> J[seo_brief.md]
-    I --> K[linkedin.md + substack_promo.md]
+    I --> K[promotion_posts.md]
 ```
 
 Each skill is independently invocable. `/new-post` chains the full pipeline.
@@ -41,7 +41,8 @@ newsletter-engine/                        (M0)
 │   └── short_technical/
 ├── style_guide/                   # Codified voice and per-type structure rules
 │   ├── shared/                    # voice.md, anti_patterns.md (all types)
-│   └── types/                     # management.md, paper-explainer.md, book-review.md, series-genai.md
+│   ├── types/                     # management.md, paper-explainer.md, book-review.md, series-genai.md
+│   └── promotion_formats.md       # Launch post + section deep-dive templates
 └── scratch/                       # Experiments and temporary drafts
 
                                           (M1+)
@@ -53,7 +54,8 @@ newsletter-engine/                        (M0)
 │       ├── new-post/              # /new-post — create post folder + kick off brainstorm
 │       ├── research/              # /research — web-grounded research brief
 │       ├── draft/                 # /draft — outline + long-form draft
-│       └── seo/                   # /seo — SEO brief + title variants
+│       ├── seo/                   # /seo — SEO brief + title variants
+│       └── promote/               # /promote — launch post + section deep-dives
 ├── templates/                     # Post folder template (post.yaml, notes.md, placeholders)
 ├── tasks/                         # Planning docs and specs
 └── posts/
@@ -64,9 +66,7 @@ newsletter-engine/                        (M0)
         ├── outline.md             # Populated by /draft (M3)
         ├── long_draft.md          # Populated by /draft (M3)
         ├── seo_brief.md           # Populated by /seo (M4)
-        └── promotion/
-            ├── linkedin.md        # Populated by /promote (M5)
-            └── substack_promo.md  # Populated by /promote (M5)
+        └── promotion_posts.md     # Populated by /promote (M5) — launch post + 3 deep-dives
 ```
 
 ---
@@ -89,5 +89,6 @@ newsletter-engine/                        (M0)
 **M2 — Complete.** `/research` skill producing a web-grounded `research_brief.md`.
 **M3 — Complete.** `/draft` skill producing style-grounded `outline.md` + `long_draft.md`.
 **M4 — Complete.** `/seo` skill producing `seo_brief.md` with keyword analysis, readability, and 5 title variants.
-**Next: M5** — `/promote` skill producing LinkedIn + Substack bundle.
+**M5 — Complete.** `/promote` skill producing `promotion_posts.md` — 1 launch post + 3 section deep-dives for LinkedIn and Substack.
+**Next: M6** — full pipeline (`/new-post` chains all stages end-to-end, unattended).
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.

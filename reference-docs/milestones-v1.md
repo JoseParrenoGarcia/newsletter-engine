@@ -169,26 +169,31 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ---
 
-## M5 — Promotion
+## M5 — Promotion ✓ Complete (2026-03-28)
 
-**Goal:** Generate platform-ready promotional content from any completed draft. Works standalone.
+**Goal:** Generate platform-ready promotional posts from any completed draft. Works standalone.
 
-**What to build:**
-- `/promote` skill that reads any `long_draft.md` and writes:
-  - `linkedin_posts.md`: 3 LinkedIn post variants (different angles, not just summaries)
-  - `substack_promos.md`: 2 Substack teaser-style posts that drive back to the article
-- Skill loads `style_guide/promotion_formats.md` to maintain Jose's promotion style
-- Skill works standalone: does not require `post.yaml` or the full pipeline
+**What was built:**
+- `/promote` skill that reads any `long_draft.md` and writes `promotion_posts.md`
+- Output: 1 launch post + 3 section deep-dives — copy-paste-ready for LinkedIn and Substack
+- Both platforms use the same format (one output file, not separate per-platform)
+- Skill loads `style_guide/promotion_formats.md` — codifies two distinct templates:
+  - **Launch Post Template:** 🗞️ opener, bold claim, 3 insight bullets, optional credibility line, engagement question, CTA
+  - **Final Notes Template (v2):** strong opinionated opening, 3 🔹 bullets with paired 👉 follow-ups, credibility/punchline, engagement question, CTA
+- Skill selects the 3 most promotable H2 sections (criteria: standalone claim, concrete example, 3 extractable bullets); prints a 1-line rationale for each selected section
+- Skill works standalone: `post.yaml` and `seo_brief.md` are optional inputs
 
 **Guardrails:**
-- Teasers must not reproduce the full article argument
-- Each LinkedIn variant must take a different angle or hook
-- No generic "I wrote a blog post" framing
+- No reproduction of the full article argument — teasers only
+- Each post must be distinct — not the same angle restated
+- No "I wrote a blog post about..." framing in any variant
+- Deep-dive opening must stand alone — no reference to the article or other sections
 
 **Definition of done:**
-- `/promote` runs on any draft without needing the full pipeline
-- 3 LinkedIn variants and 2 Substack promos are generated
-- Each variant is distinct — not just the same post slightly reworded
+- `/promote` runs on any draft without needing the full pipeline ✓
+- `promotion/posts.md` is generated with launch post + 3 section deep-dives ✓
+- Each post is meaningfully distinct ✓
+- Each deep-dive has a `> Why this section:` rationale ✓
 
 ---
 

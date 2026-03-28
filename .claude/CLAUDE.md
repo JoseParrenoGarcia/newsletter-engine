@@ -3,7 +3,7 @@
 A repo-based, Claude-first writing system for creating blog and newsletter content. Claude operates from durable repo files rather than chat memory, coordinating specialised agents across a repeatable content workflow.
 
 **Primary user:** Jose
-**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | Next: M5
+**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | M5 — Complete ✓ | Next: M6
 
 ---
 
@@ -20,7 +20,7 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 |-----------|---------|--------|
 | `reference-docs/` | PRD, milestones, planning docs | Active |
 | `reference_posts/` | Jose's real posts (series, standalone, short_technical) | M0 |
-| `style_guide/` | Voice, anti-patterns (shared/), plus per-type rules for management, paper-explainer, book-review, series-genai | **Done (M0)** |
+| `style_guide/` | Voice, anti-patterns (shared/), per-type rules, promotion_formats.md | **Done (M0, M5)** |
 | `.claude/agents/` | Custom subagent definitions (one per agent) | M1+ |
 | `templates/` | Post folder template (`post.yaml`, `notes.md`, `placeholder.md`) | **Done (M1)** |
 | `posts/` | Per-post working folders with artefacts | M1+ |
@@ -39,7 +39,7 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `/research` | Validate + enrich URLs, fill gaps, write `research_brief.md` | **Live (M2)** |
 | `/draft` | Style-grounded outline + long-form draft | **Live (M3)** |
 | `/seo` | SEO brief + title variants (any draft) | **Live (M4)** |
-| `/promote` | LinkedIn + Substack bundle (any draft) | M5 |
+| `/promote` | LinkedIn + Substack bundle (any draft) | **Live (M5)** |
 | `/ideate` | Trend-aware content ideas, standalone | M7 |
 
 ---
