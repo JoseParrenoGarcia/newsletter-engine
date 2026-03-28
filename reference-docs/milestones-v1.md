@@ -197,20 +197,29 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ---
 
-## M6 — Full Pipeline
+## M6 — Full Pipeline ✓ Complete (2026-03-28)
 
 **Goal:** A single skill that runs the full workflow end-to-end, unattended, from notes to complete bundle.
 
-**What to build:**
-- Mature `/new-post` skill that chains: brainstorm → research → draft → seo → promote in sequence
-- Support for an optional `--from-draft` entry point that skips M1–M3 and runs only M4–M5 on an existing draft
-- `decision_log.md` appended to the post folder with a summary of what each agent did and any flags raised
-- Pipeline handles interruptions gracefully: if a stage has already run (as indicated by `post.yaml` stage flags), it skips rather than overwrites
+**What was built:**
+- `/revise` skill — reads `long_draft.md` + `seo_brief.md`; applies keyword placement gaps, Quick Wins, and readability fixes; backs up original as `long_draft_v1.md`; updates `post.yaml`
+- `/new-post` full rewrite — two modes:
+  - **Mode A (new post):** brainstorm → research → draft → seo → revise → promote, unattended
+  - **Mode B (`--from-draft`):** runs post-draft stages (seo → revise → promote) on an existing draft; conflict check in Mode A also triggers Mode B automatically
+- Stage-skip logic: reads `post.yaml` flags before each stage; skips completed stages with `⏩` message
+- `decision_log.md` appended to the post folder after each stage with a 1-line summary, flags, and artefact path
+- `templates/post.yaml` updated with `revise` stage and `long_draft_backup` artefact
+
+**Key design decisions:**
+- `/revise` applies only additive SEO changes — no restructuring, no content removal, no new paragraphs; structural changes are advisory-only
+- `long_draft_v1.md` backup always created before any revision — preserves the pre-SEO draft
+- `decision_log.md` is append-only (not overwritten) — preserves history across incremental pipeline runs
 
 **Definition of done:**
-- Jose can run `/new-post` from rough notes and return the next morning to a complete artefact bundle
-- `--from-draft` mode works for posts written outside the system
-- `decision_log.md` is readable and useful for understanding what the pipeline decided
+- Jose can run `/new-post` from rough notes and return to a complete artefact bundle ✓
+- `--from-draft` mode works for posts written outside the system ✓
+- `decision_log.md` is readable and useful for understanding what the pipeline decided ✓
+- `/revise` works standalone on any `long_draft.md` + `seo_brief.md` pair ✓
 
 ---
 

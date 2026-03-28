@@ -3,7 +3,7 @@
 A repo-based, Claude-first writing system for creating blog and newsletter content. Claude operates from durable repo files rather than chat memory, coordinating specialised agents across a repeatable content workflow.
 
 **Primary user:** Jose
-**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | M5 — Complete ✓ | Next: M6
+**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | M5 — Complete ✓ | M6 — Complete ✓ | Next: M7
 
 ---
 
@@ -34,11 +34,12 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | Skill | Description | Status |
 |-------|-------------|--------|
 | `/import-pdf` | Convert a PDF reference post to clean markdown | **Live (M0)** |
-| `/new-post` | Creates post folder + brainstorm + pipeline menu | **Live (M2 stub)** → M6 (full) |
+| `/new-post` | Full pipeline orchestrator — new post or `--from-draft` mode | **Live (M6 full)** |
 | `/brainstorm` | Interactive brainstorm → `post.yaml` + expanded notes | **Live (M1)** |
 | `/research` | Validate + enrich URLs, fill gaps, write `research_brief.md` | **Live (M2)** |
 | `/draft` | Style-grounded outline + long-form draft | **Live (M3)** |
 | `/seo` | SEO brief + title variants (any draft) | **Live (M4)** |
+| `/revise` | SEO-driven draft revision (any draft + brief pair) | **Live (M6)** |
 | `/promote` | LinkedIn + Substack bundle (any draft) | **Live (M5)** |
 | `/ideate` | Trend-aware content ideas, standalone | M7 |
 

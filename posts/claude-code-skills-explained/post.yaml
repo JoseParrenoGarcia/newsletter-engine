@@ -45,6 +45,7 @@ artefacts:
   research_brief: research_brief.md
   outline: outline.md
   long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
   seo_brief: seo_brief.md
   promotion_posts: promotion_posts.md
 
@@ -60,6 +61,9 @@ stages:
     status: complete
     completed_at: "2026-03-27"
   seo:
+    status: complete
+    completed_at: "2026-03-28"
+  revise:
     status: complete
     completed_at: "2026-03-28"
   promote:

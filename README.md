@@ -15,8 +15,10 @@ graph LR
     E --> F["/draft"]
     F --> G[long_draft.md]
     G --> H["/seo"]
-    G --> I["/promote"]
     H --> J[seo_brief.md]
+    J --> L["/revise"]
+    L --> M[long_draft.md revised]
+    M --> I["/promote"]
     I --> K[promotion_posts.md]
 ```
 
@@ -55,6 +57,7 @@ newsletter-engine/                        (M0)
 │       ├── research/              # /research — web-grounded research brief
 │       ├── draft/                 # /draft — outline + long-form draft
 │       ├── seo/                   # /seo — SEO brief + title variants
+│       ├── revise/                # /revise — SEO-driven draft revision
 │       └── promote/               # /promote — launch post + section deep-dives
 ├── templates/                     # Post folder template (post.yaml, notes.md, placeholders)
 ├── tasks/                         # Planning docs and specs
@@ -64,9 +67,11 @@ newsletter-engine/                        (M0)
         ├── notes.md               # Raw notes + brainstorm summary + rough ToC
         ├── research_brief.md      # Populated by /research (M2)
         ├── outline.md             # Populated by /draft (M3)
-        ├── long_draft.md          # Populated by /draft (M3)
+        ├── long_draft.md          # Populated by /draft (M3); revised in-place by /revise (M6)
+        ├── long_draft_v1.md       # Backup of original draft, created by /revise (M6)
         ├── seo_brief.md           # Populated by /seo (M4)
-        └── promotion_posts.md     # Populated by /promote (M5) — launch post + 3 deep-dives
+        ├── promotion_posts.md     # Populated by /promote (M5) — launch post + 3 deep-dives
+        └── decision_log.md        # Appended by /new-post pipeline after each stage (M6)
 ```
 
 ---
@@ -90,5 +95,6 @@ newsletter-engine/                        (M0)
 **M3 — Complete.** `/draft` skill producing style-grounded `outline.md` + `long_draft.md`.
 **M4 — Complete.** `/seo` skill producing `seo_brief.md` with keyword analysis, readability, and 5 title variants.
 **M5 — Complete.** `/promote` skill producing `promotion_posts.md` — 1 launch post + 3 section deep-dives for LinkedIn and Substack.
-**Next: M6** — full pipeline (`/new-post` chains all stages end-to-end, unattended).
+**M6 — Complete.** `/revise` skill (SEO-driven draft revision) + `/new-post` full pipeline orchestrator with `--from-draft` mode and `decision_log.md`.
+**Next: M7** — `/ideate` skill for trend-aware content ideation.
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.
