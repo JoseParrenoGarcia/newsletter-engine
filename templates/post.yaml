@@ -32,7 +32,7 @@ artefacts:
   outline: null
   long_draft: null
   seo_brief: null
-  promotion_bundle: null
+  promotion_posts: null
 
 # ── Pipeline stages ───────────────────────────────────────────────────
 stages:
