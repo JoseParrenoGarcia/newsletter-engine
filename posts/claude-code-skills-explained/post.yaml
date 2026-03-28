@@ -45,7 +45,7 @@ artefacts:
   research_brief: research_brief.md
   outline: outline.md
   long_draft: long_draft.md
-  seo_brief: null
+  seo_brief: seo_brief.md
   promotion_bundle: null
 
 # ── Pipeline stages ───────────────────────────────────────────────────
@@ -60,8 +60,8 @@ stages:
     status: complete
     completed_at: "2026-03-27"
   seo:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-03-28"
   promote:
     status: pending
     completed_at: null

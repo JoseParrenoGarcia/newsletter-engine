@@ -143,25 +143,29 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ---
 
-## M4 — SEO + Titles
+## M4 — SEO + Titles ✓ Complete (2026-03-28)
 
 **Goal:** Produce advisory SEO improvements and engagement-optimised title variants without compromising writing quality. Works on any draft, including posts Jose wrote himself.
 
-**What to build:**
-- `/seo` skill that reads any `long_draft.md` (or a path provided by the user) and writes two artefacts:
-  - `seo_brief.md`: suggested title improvements, URL slug, meta description, header structure suggestions, keyword themes — all advisory, not rewrites
-  - `titles.md`: 5–8 title variants optimised for open rate and SEO, with a short rationale for each
-- Skill works standalone: `post.yaml` is optional input, not a requirement
+**What was built:**
+- `/seo` skill that reads `long_draft.md` (+ `post.yaml` and `research_brief.md` when available) and writes `seo_brief.md`
+- `seo_brief.md` contains: extracted keywords, meta description, URL slug recommendation, H1/H2 structure review, keyword placement checklist (X/5), readability assessment, 5 title variants (one per style), and top 3 Quick Wins
+- Title styles: keyword-first, curiosity-gap, how-to, contrarian, authority — each with a suggested subtitle
+- Platform: Medium-first (title length limits, readability targets calibrated for Medium)
+- Keyword research: extracted from draft content + thesis — no live API; future milestone to add keyword volume via Google Search Console / DataForSEO
+- Skill works standalone: `post.yaml` is optional; if absent, runs on `long_draft.md` alone
 
 **Guardrails:**
-- No invented keyword trends or fake "search volume" claims
-- SEO suggestions must preserve Jose's voice — flag conflicts explicitly rather than silently rewriting
-- Clickbait drift is explicitly prohibited
+- No invented keyword trends or fake "search volume" claims — limitation flagged explicitly in brief
+- Titles must be accurate to the content — clickbait drift is prohibited
+- Stage guard prevents silent overwrites
 
 **Definition of done:**
 - `/seo` runs on any draft without needing the full pipeline to have run
-- `seo_brief.md` and `titles.md` are generated and inspectable
-- At least one title variant is meaningfully better than the working title in `post.yaml`
+- `seo_brief.md` is generated with all sections present
+- Keyword placement score (X/5) and readability verdict are specific, not generic
+- 5 title variants present with subtitles
+- At least one title variant is meaningfully better than the working title
 
 ---
 

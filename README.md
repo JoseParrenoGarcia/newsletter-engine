@@ -8,16 +8,16 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 
 ```mermaid
 graph LR
-    A[rough notes] --> B[/brainstorm]
+    A[rough notes] --> B["/brainstorm"]
     B --> C[post.yaml]
-    C --> D[/research]
+    C --> D["/research"]
     D --> E[research_brief.md]
-    E --> F[/draft]
+    E --> F["/draft"]
     F --> G[long_draft.md]
-    G --> H[/seo]
-    G --> I[/promote]
-    H --> J[seo_brief.md + titles.md]
-    I --> K[linkedin_posts.md + substack_promos.md]
+    G --> H["/seo"]
+    G --> I["/promote"]
+    H --> J[seo_brief.md]
+    I --> K[linkedin.md + substack_promo.md]
 ```
 
 Each skill is independently invocable. `/new-post` chains the full pipeline.
@@ -50,7 +50,10 @@ newsletter-engine/                        (M0)
 │   └── skills/                    # Skill instruction files
 │       ├── import-pdf/            # /import-pdf — convert PDF reference posts
 │       ├── brainstorm/            # /brainstorm — interactive brainstorm → post.yaml
-│       └── new-post/              # /new-post — create post folder + kick off brainstorm
+│       ├── new-post/              # /new-post — create post folder + kick off brainstorm
+│       ├── research/              # /research — web-grounded research brief
+│       ├── draft/                 # /draft — outline + long-form draft
+│       └── seo/                   # /seo — SEO brief + title variants
 ├── templates/                     # Post folder template (post.yaml, notes.md, placeholders)
 ├── tasks/                         # Planning docs and specs
 └── posts/
@@ -85,5 +88,6 @@ newsletter-engine/                        (M0)
 **M1 — Complete.** `/brainstorm`, `/new-post` stub, `post.yaml` schema, and post folder template done.
 **M2 — Complete.** `/research` skill producing a web-grounded `research_brief.md`.
 **M3 — Complete.** `/draft` skill producing style-grounded `outline.md` + `long_draft.md`.
-**Next: M4** — `/seo` skill producing SEO brief + title variants.
+**M4 — Complete.** `/seo` skill producing `seo_brief.md` with keyword analysis, readability, and 5 title variants.
+**Next: M5** — `/promote` skill producing LinkedIn + Substack bundle.
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.
