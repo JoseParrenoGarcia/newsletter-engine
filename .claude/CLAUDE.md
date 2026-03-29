@@ -24,8 +24,6 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `.claude/agents/` | Custom subagent definitions (one per agent) | M1+ |
 | `templates/` | Post folder template (`post.yaml`, `notes.md`, `placeholder.md`) | **Done (M1)** |
 | `posts/` | Per-post working folders with artefacts | M1+ |
-| `tasks/` | Planning docs, specs, lessons | Active |
-| `scratch/` | Experiments, prompt testing, temporary drafts | Ongoing |
 
 ---
 

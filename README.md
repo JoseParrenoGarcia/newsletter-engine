@@ -7,33 +7,45 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 ## Pipeline
 
 ```mermaid
-graph LR
-    A[rough notes] --> B["/brainstorm"]
-    B --> C[post.yaml]
-    C --> D["/research"]
-    D --> E[research_brief.md]
-    E --> F["/draft"]
-    F --> G[long_draft.md]
-    G --> H["/seo"]
-    H --> J[seo_brief.md]
-    J --> L["/revise"]
-    L --> M[long_draft.md revised]
-    M --> I["/promote"]
-    I --> K[promotion_posts.md]
+flowchart LR
+    A([notes.md]) --> B["/brainstorm"]
+    B --> C["/research"]
+    C --> D["/draft"]
+    D --> E["/seo"]
+    E --> F["/revise"]
+    F --> G["/promote"]
+    G --> H([bundle])
 ```
 
-Each skill is independently invocable. `/new-post` chains the full pipeline.
+Each skill is independently invocable. `/new-post` chains all stages unattended.
+
+| Stage | Produces |
+|-------|----------|
+| `/brainstorm` | `post.yaml` |
+| `/research` | `research_brief.md` |
+| `/draft` | `outline.md`, `long_draft.md` |
+| `/seo` | `seo_brief.md` |
+| `/revise` | `long_draft.md` (revised), `long_draft_v1.md` (backup) |
+| `/promote` | `promotion_posts.md` |
 
 ---
 
 ## Repo Structure
 
 ```
-newsletter-engine/                        (M0)
+newsletter-engine/
 ├── .claude/
 │   ├── CLAUDE.md                  # Session context and repo index
-│   └── rules/                     # Behavioural rules, auto-loaded
-├── README.md
+│   ├── rules/                     # Behavioural rules, auto-loaded
+│   └── skills/                    # Skill instruction files
+│       ├── import-pdf/            # /import-pdf
+│       ├── new-post/              # /new-post — full pipeline orchestrator
+│       ├── brainstorm/            # /brainstorm
+│       ├── research/              # /research
+│       ├── draft/                 # /draft
+│       ├── seo/                   # /seo
+│       ├── revise/                # /revise
+│       └── promote/               # /promote
 ├── reference-docs/
 │   ├── prd-v1.md                  # Full product requirements
 │   └── milestones-v1.md           # Milestone plan and definitions of done
@@ -41,37 +53,22 @@ newsletter-engine/                        (M0)
 │   ├── series/
 │   ├── standalone/
 │   └── short_technical/
-├── style_guide/                   # Codified voice and per-type structure rules
-│   ├── shared/                    # voice.md, anti_patterns.md (all types)
-│   ├── types/                     # management.md, paper-explainer.md, book-review.md, series-genai.md
+├── style_guide/
+│   ├── shared/                    # voice.md, anti_patterns.md
+│   ├── types/                     # Per-type structure rules
 │   └── promotion_formats.md       # Launch post + section deep-dive templates
-└── scratch/                       # Experiments and temporary drafts
-
-                                          (M1+)
-├── .claude/
-│   ├── agents/                    # Custom subagent definitions (one per agent)
-│   └── skills/                    # Skill instruction files
-│       ├── import-pdf/            # /import-pdf — convert PDF reference posts
-│       ├── brainstorm/            # /brainstorm — interactive brainstorm → post.yaml
-│       ├── new-post/              # /new-post — create post folder + kick off brainstorm
-│       ├── research/              # /research — web-grounded research brief
-│       ├── draft/                 # /draft — outline + long-form draft
-│       ├── seo/                   # /seo — SEO brief + title variants
-│       ├── revise/                # /revise — SEO-driven draft revision
-│       └── promote/               # /promote — launch post + section deep-dives
-├── templates/                     # Post folder template (post.yaml, notes.md, placeholders)
-├── tasks/                         # Planning docs and specs
+├── templates/                     # post.yaml template, notes.md placeholder
 └── posts/
-    └── <post-slug>/
-        ├── post.yaml              # Shared state contract (populated by /brainstorm)
-        ├── notes.md               # Raw notes + brainstorm summary + rough ToC
-        ├── research_brief.md      # Populated by /research (M2)
-        ├── outline.md             # Populated by /draft (M3)
-        ├── long_draft.md          # Populated by /draft (M3); revised in-place by /revise (M6)
-        ├── long_draft_v1.md       # Backup of original draft, created by /revise (M6)
-        ├── seo_brief.md           # Populated by /seo (M4)
-        ├── promotion_posts.md     # Populated by /promote (M5) — launch post + 3 deep-dives
-        └── decision_log.md        # Appended by /new-post pipeline after each stage (M6)
+    └── <slug>/
+        ├── post.yaml              # Shared state — brainstorm output + pipeline stage flags
+        ├── notes.md
+        ├── research_brief.md
+        ├── outline.md
+        ├── long_draft.md
+        ├── long_draft_v1.md       # Pre-revision backup (created by /revise)
+        ├── seo_brief.md
+        ├── promotion_posts.md
+        └── decision_log.md        # Append-only pipeline run log
 ```
 
 ---
@@ -82,19 +79,22 @@ newsletter-engine/                        (M0)
 |-------------|---------|---------|
 | [Claude Code](https://claude.ai/code) | Primary interface | See Claude Code docs |
 | `context-mode` MCP | Context window management | See Claude Code MCP docs |
-| `WebSearch` tool | Grounded research (M2+) | Built into Claude Code |
-| `poppler` | PDF → text conversion for reference post import | `brew install poppler` |
+| `WebSearch` tool | Grounded research | Built into Claude Code |
+| `poppler` | PDF → text conversion for `/import-pdf` | `brew install poppler` |
 
 ---
 
-## Active Milestone
+## Milestones
 
-**M0 — Complete.** Scaffold, reference corpus (31 posts), and style guide done.
-**M1 — Complete.** `/brainstorm`, `/new-post` stub, `post.yaml` schema, and post folder template done.
-**M2 — Complete.** `/research` skill producing a web-grounded `research_brief.md`.
-**M3 — Complete.** `/draft` skill producing style-grounded `outline.md` + `long_draft.md`.
-**M4 — Complete.** `/seo` skill producing `seo_brief.md` with keyword analysis, readability, and 5 title variants.
-**M5 — Complete.** `/promote` skill producing `promotion_posts.md` — 1 launch post + 3 section deep-dives for LinkedIn and Substack.
-**M6 — Complete.** `/revise` skill (SEO-driven draft revision) + `/new-post` full pipeline orchestrator with `--from-draft` mode and `decision_log.md`.
-**Next: M7** — `/ideate` skill for trend-aware content ideation.
+| Milestone | Skill | Status |
+|-----------|-------|--------|
+| M0 — Foundation | — | ✓ Complete |
+| M1 — Brainstorm | `/brainstorm` | ✓ Complete |
+| M2 — Research | `/research` | ✓ Complete |
+| M3 — Draft | `/draft` | ✓ Complete |
+| M4 — SEO | `/seo` | ✓ Complete |
+| M5 — Promotion | `/promote` | ✓ Complete |
+| M6 — Full Pipeline | `/revise` + `/new-post` | ✓ Complete |
+| M7 — Ideation | `/ideate` | Next |
+
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.
