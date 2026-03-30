@@ -1,8 +1,13 @@
 ---
 name: brainstorm
-description: Interactive brainstorm session from rough notes (or nothing) → populated post.yaml + expanded notes.md with rough ToC.
+description: "Runs an interactive brainstorm conversation to populate post.yaml and expand notes.md with a rough Table of Contents. DO trigger: at the start of a new post, before research or drafting; when post.yaml needs to be written from scratch or rough notes need shaping into a structured brief. DO NOT trigger: when brainstorm is already marked complete and no redo is requested; when a draft already exists and the goal is post-draft stages (use /new-post --from-draft instead). Keywords: brainstorm, new post, post.yaml, ideas, rough notes, table of contents, content_type, thesis."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
 disable-model-invocation: true
+license: proprietary
+compatibility: "Claude Code"
+metadata:
+  author: jose-parreno-garcia
+  version: "1.0"
 ---
 
 Run an interactive brainstorm session for the post in `$ARGUMENTS` (or the current post folder if no argument given).
@@ -84,19 +89,7 @@ Set:
 - `reference_posts` contains the confirmed paths
 
 ### Step 4 — Update `notes.md`
-Append the following section to `notes.md` (after any existing content). Do not modify or delete anything above it.
-
-```
----
-
-## Brainstorm Summary
-
-[3–5 paragraphs capturing the key ideas, framing, and decisions from the brainstorm. Write in plain prose — this will be read by future agents as the source of truth for what the post is about.]
-
-## Rough Table of Contents
-
-[Bullet list of proposed sections. Each bullet: section title + one sentence on what it covers.]
-```
+Append the section defined in `assets/notes_brainstorm_template.md` to `notes.md` (after any existing content). Do not modify or delete anything above it.
 
 ---
 

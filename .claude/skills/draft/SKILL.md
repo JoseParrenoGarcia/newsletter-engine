@@ -1,8 +1,13 @@
 ---
 name: draft
-description: Drafting skill. Reads post.yaml, research_brief.md, notes.md, style guides, and reference posts to produce outline.md and long_draft.md. Follows the rough ToC strictly; captures structural suggestions separately.
+description: "Produces outline.md and long_draft.md from post.yaml, research_brief.md, notes.md, style guides, and reference posts. DO trigger: after brainstorm and research stages are both complete; when a full long-form draft is needed. DO NOT trigger: before brainstorm or research are complete; when the draft already exists and the goal is SEO review or revision (use /seo or /revise); for short edits or single-section rewrites. Keywords: draft, outline, long_draft, writing, article, style guide, voice, reference posts, tone."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
 disable-model-invocation: true
+license: proprietary
+compatibility: "Claude Code"
+metadata:
+  author: jose-parreno-garcia
+  version: "1.0"
 ---
 
 Produce `outline.md` and `long_draft.md` for the post in `$ARGUMENTS` (or the current post folder if no argument given).
@@ -49,36 +54,7 @@ Do not reproduce these in any output. Use them to internalise rhythm, sentence l
 
 Calculate: `word_count_target = target_reading_time_minutes × 250`
 
-Using the rough Table of Contents from `notes.md` as the fixed structure — do not add, remove, or reorder sections — produce `outline.md`:
-
-```
-# Outline: <working_title>
-
-**Target:** ~<target_reading_time_minutes> min read (~<word_count_target> words)
-
-## Sections
-
-### 1. <Section name — from rough ToC>
-- <What this section covers — 1-2 sentences>
-- <Key point or angle to make>
-- Sources: [<Title>](<url>), [<Title>](<url>)
-
-### 2. <Section name>
-- <What this section covers>
-- <Key angle>
-- Sources: [<Title>](<url>)
-
-[repeat for every section in the rough ToC]
-
----
-
-## ToC Suggestions
-
-[Include this section only if you observe a structural issue worth flagging.
-Omit entirely if none. Do NOT act on these — they are for Jose to review.]
-
-- <Suggestion: e.g. "Section 3 covers two distinct ideas — consider splitting into 3a and 3b">
-```
+Using the rough Table of Contents from `notes.md` as the fixed structure — do not add, remove, or reorder sections — produce `outline.md` following the template in `assets/outline_template.md`.
 
 For each section, map the most relevant source(s) from `research_brief.md`. If a section has no matching source, note "Sources: none — model knowledge only".
 
@@ -107,7 +83,11 @@ Apply these throughout — they are not optional:
 - Use the extracted style anchors from Step 1 as private calibration. Every section should reflect Jose's rhythm, not a generic AI register.
 - Vary sentence length. Short sentences land a point. Longer ones build context or nuance. Mix them.
 - No generic AI filler — refer to `style_guide/shared/anti_patterns.md` and actively avoid every pattern listed there.
-- Follow the structural conventions in the type-specific style guide for this `content_type`.
+- **Before writing the opening paragraph:** check the Opening Pattern section of the type-specific style guide. For `series-genai`: open with a thesis statement or contrarian reframe — not personal anecdote or context-setting about the author's own experience.
+- **For any "What this covers" section:** use the labelled preview bullet format from `shared/voice.md` — `**Bold label.** Explainer sentence(s).` — not plain unlabelled bullets.
+- **Explanation depth:** the Register rule in `shared/voice.md` is a tone rule, not a depth rule. For complex or non-obvious concepts, build from first principles. Do not skip scaffolding on the assumption the reader already knows the internals.
+- **Transitions:** close each section with a claim or observation that implies the natural next question. Open the following section by answering it directly. Do not use meta-commentary transitions ("Now that we've explored X...").
+- Follow the type-specific style guide for all remaining structural conventions (closing pattern, technical depth, formatting, tone).
 - Do not pad to hit word count. If a section is done, it is done. Aim for the target, not a mechanical fill.
 
 ### Reference guardrails
@@ -121,19 +101,7 @@ Apply these throughout — they are not optional:
   `[1] [Title](url) — 1-sentence description of what this source covers`
 
 ### Structure of `long_draft.md`
-```
-# <working_title>
-
-[article prose — section by section per outline.md]
-
----
-
-## References
-
-[1] [Title](url) — 1-sentence description
-[2] [Title](url) — 1-sentence description
-...
-```
+Follow the template in `assets/long_draft_template.md`.
 
 Write `long_draft.md` to the post folder.
 

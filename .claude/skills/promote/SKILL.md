@@ -1,8 +1,13 @@
 ---
 name: promote
-description: Promotion skill. Reads long_draft.md to produce promotion_posts.md — 1 launch post + 3 section deep-dives ready to copy-paste to LinkedIn and Substack. Works on any draft, pipeline or standalone.
+description: "Reads long_draft.md to produce promotion_posts.md — 1 launch post and 3 section deep-dives formatted for copy-paste to LinkedIn and Substack Notes. DO trigger: after long_draft.md exists; when social promotion copy is needed for a post; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; when SEO review or revision is the goal (use /seo or /revise); for full article editing. Keywords: promote, LinkedIn, Substack, social posts, launch post, deep-dive, promotion, copy-paste."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
 disable-model-invocation: true
+license: proprietary
+compatibility: "Claude Code"
+metadata:
+  author: jose-parreno-garcia
+  version: "1.0"
 ---
 
 # /promote
@@ -56,15 +61,9 @@ Read these files without printing their contents:
 
 ### Step 5 — Select 3 most promotable sections
 
-Scan the H2 sections of `long_draft.md`. Select the 3 sections that best meet all three criteria:
+Selection criteria, what to avoid, and rationale format are in `references/section-selection-criteria.md` — load that file now.
 
-1. **Clear standalone claim** — the section's core idea can be stated as a single provocative sentence without article context
-2. **Concrete example or analogy** — the section contains something specific (a pattern, a mechanism, a comparison) that grounds the claim
-3. **3 extractable bullet points** — the section has enough substance for three distinct 🔹 insights with paired 👉 follow-ups
-
-Avoid: intro/ToC sections, closing/CTA sections, pure reference lists.
-
-For each selected section, note a 1-line rationale (used in step 8).
+Scan the H2 sections of `long_draft.md` and select the 3 that best meet all three criteria defined there. Note a 1-line rationale for each (used in step 8).
 
 ---
 
@@ -72,10 +71,7 @@ For each selected section, note a 1-line rationale (used in step 8).
 
 Follow the Launch Post Template from `style_guide/promotion_formats.md` exactly.
 
-**Title to use** (priority order):
-1. If `seo_brief.md` exists: use the curiosity-gap or authority variant from the Title Variants table
-2. If `post.yaml` exists: use `working_title`
-3. Else: use the H1 from `long_draft.md`
+Title priority order and deep-dive rules are in `references/section-selection-criteria.md`.
 
 **Bold claim:** restate the article's thesis as a standalone, provocative statement — not a description of what the article contains. Draw from `post.yaml.thesis` if available.
 

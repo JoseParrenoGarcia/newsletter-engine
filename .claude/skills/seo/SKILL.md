@@ -1,8 +1,13 @@
 ---
 name: seo
-description: SEO review skill. Analyses long_draft.md to produce seo_brief.md — keyword suggestions, meta description, H1/H2 recommendations, readability assessment, and 5 title variants. Works on any draft, pipeline or standalone.
+description: "Analyses long_draft.md to produce seo_brief.md — primary and secondary keywords, meta description, H1/H2 structure review, readability assessment, keyword placement checklist, and 5 title variants. DO trigger: after long_draft.md exists; when keyword optimisation and title options are needed before publishing to Medium or Substack; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; for social copy (use /promote); when seo_brief is already complete and no redo is requested. Keywords: SEO, keywords, meta description, title variants, readability, H1, H2, Medium, Substack, seo_brief."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
 disable-model-invocation: true
+license: proprietary
+compatibility: "Claude Code"
+metadata:
+  author: jose-parreno-garcia
+  version: "1.0"
 ---
 
 Produce `seo_brief.md` for the post in `$ARGUMENTS` (or ask if no argument is given).
@@ -56,53 +61,16 @@ Identify the primary keyword and up to 5 secondary keywords.
 
 ## Step 2 — Analyse the draft
 
-Work through each assessment area before writing anything:
+Work through each assessment area before writing anything. Full definitions for each area are in `references/assessment-processes.md` — load that file now.
 
-### Meta description
-Draft a meta description that:
-- Is ≤160 characters
-- Includes the primary keyword
-- Has a clear call to action or value proposition
-- Reads naturally — not keyword-stuffed
-
-### URL slug
-Compare the current slug (from `post.yaml` or folder name) against the primary keyword. Recommend a change only if the current slug is significantly weaker (e.g. missing the keyword, too long, contains stop words). If the current slug is good, say "no change needed."
-
-### H1 recommendation
-- Medium displays titles up to ~60-70 characters cleanly
-- The H1 should include the primary keyword
-- Assess the current `working_title` — recommend a tighter version if it is too long, keyword-weak, or generic
-
-### H2/H3 structure review
-Read all headings in `long_draft.md`. For each H2/H3:
-- Note whether it includes a relevant keyword or is purely descriptive
-- Recommend a reword if the heading would benefit from keyword inclusion without sounding forced
-- Keep recommendation to "keep as-is" if it is already strong
-
-### Keyword placement checklist
-Check each of the 5 positions:
-1. H1 / Title — is the primary keyword in `working_title` or your H1 recommendation?
-2. First 100 words — does the primary keyword appear in the opening?
-3. At least one H2 — does any H2 include the primary keyword or a close variant?
-4. Meta description — does your recommended meta description include it?
-5. URL slug — does the slug include the primary keyword?
-
-Score: count of ✓ out of 5.
-
-### Readability assessment
-Analyse the draft for:
-- **Average sentence length**: estimate from a representative sample of 10-15 sentences
-- **Long sentences**: sentences over 30 words — count them; list the first 3 if count > 5
-- **Passive voice**: count passive constructions; list examples if > 3
-- **Paragraph length**: are most paragraphs 2-4 sentences? Flag any paragraph over 6 sentences
-- **Jargon density**: are there terms a non-specialist would not know? Rate low/medium/high and list specific terms if medium or high
-- **Reading level**: estimate as Plain English / Grade 8-10 / Technical — aim for Plain English or Grade 8-10 for Medium
-
-### Content quality signals
-- Count actual words in the draft
-- Compare to `target_reading_time_minutes × 250` (if set in `post.yaml`)
-- Count external links cited in the draft
-- If `research_brief.md` is available: cross-reference cited URLs against it to confirm they are from authoritative sources. If any cited URL is not in `research_brief.md`, flag it.
+Assessment areas to complete:
+- Meta description
+- URL slug
+- H1 recommendation
+- H2/H3 structure review
+- Keyword placement checklist (5 positions, scored out of 5)
+- Readability assessment
+- Content quality signals
 
 ---
 
@@ -110,21 +78,7 @@ Analyse the draft for:
 
 Produce 5 titles, one per style. For each, also write a suggested subtitle (1 sentence, ≤120 chars).
 
-**Style definitions:**
-
-| Style | What it does | Example pattern |
-|-------|-------------|-----------------|
-| Keyword-first | Primary keyword leads; direct and clear | "[Primary keyword]: [what the reader gets]" |
-| Curiosity-gap | Withholds the payoff to create intrigue | "What happens when [premise]" / "I [did X]. Here's what I found." |
-| How-to | Action-oriented; verb-led | "How to [achieve outcome] [context or constraint]" |
-| Contrarian | Challenges a common assumption in the topic area | "You don't need [common thing]. [Alternative]." / "Why [common belief] is wrong" |
-| Authority | Result + credibility signal | "I [did X for Y period / built X]. Here's the system." |
-
-**Guardrails for all titles:**
-- ≤70 characters (Medium hard limit for clean card display)
-- Must be accurate to the content — not click-bait
-- Should include or strongly imply the primary keyword
-- Must not sound like generic AI output — read them back against the draft's actual voice
+Style definitions, guardrails, and Medium-specific notes are in `references/title-styles.md` — load that file now.
 
 ---
 
@@ -139,131 +93,7 @@ Bad: "Improve keyword placement"
 
 ## Step 5 — Write `seo_brief.md`
 
-Write to the post folder using this exact structure:
-
-```
-# SEO Brief: <working_title>
-
-**Post:** posts/<slug>/long_draft.md
-**Generated:** <YYYY-MM-DD>
-
----
-
-## 1. Suggested Keywords
-
-**Primary keyword:** <keyword phrase>
-**Secondary keywords:**
-- <keyword>
-- <keyword>
-- <keyword>
-- <keyword>
-- <keyword>
-
-*Note: Keywords extracted from draft content and thesis. No search volume data — validate with a keyword tool before publishing. See Future: Keyword Volume section.*
-
----
-
-## 2. Meta Description
-
-**Recommended (≤160 chars):**
-> <meta description>
-
-- Primary keyword included: Yes / No
-- Call to action present: Yes / No
-- Character count: <N>
-
----
-
-## 3. URL Slug
-
-**Current slug:** <slug>
-**Recommended slug:** <slug>
-**Change needed:** Yes / No
-
----
-
-## 4. H1 Recommendation
-
-**Current H1 (draft title):** <working_title>
-**Recommended H1:** <recommendation>
-**Primary keyword in H1:** Yes / No
-
----
-
-## 5. H2/H3 Structure Review
-
-| # | Current heading | Recommendation |
-|---|----------------|----------------|
-| 1 | <heading> | keep / reword to: "<new heading>" |
-| … | | |
-
-**Primary keyword in at least one H2:** Yes / No
-
----
-
-## 6. Keyword Placement Checklist
-
-| Position | Present? |
-|----------|----------|
-| H1 / Title | ✓ / ✗ |
-| First 100 words | ✓ / ✗ |
-| At least one H2 | ✓ / ✗ |
-| Meta description | ✓ / ✗ |
-| URL slug | ✓ / ✗ |
-
-**Score: X / 5**
-
----
-
-## 7. Readability Assessment
-
-- **Estimated reading level:** <Plain English / Grade 8-10 / Technical>
-- **Average sentence length:** ~<N> words
-- **Long sentences (>30 words):** <count> — <list first 3 if count > 5, else "none / within acceptable range">
-- **Passive voice instances:** <count> — <list examples if > 3>
-- **Paragraph length:** <assessment>
-- **Jargon density:** low / medium / high — <list terms if medium or high>
-- **Overall:** Good / Needs work — <1-2 sentence assessment>
-
----
-
-## 8. Content Quality Signals
-
-- **Word count:** <N> (~<M> min read)
-- **Target word count:** <N words / n/a>
-- **On target:** Yes / Within 10% / Off by <N>%
-- **External links:** <count> — <quality assessment>
-
----
-
-## 9. Title Variants
-
-| Style | Title | Suggested subtitle |
-|-------|-------|--------------------|
-| Keyword-first | <title> | <subtitle> |
-| Curiosity-gap | <title> | <subtitle> |
-| How-to | <title> | <subtitle> |
-| Contrarian | <title> | <subtitle> |
-| Authority | <title> | <subtitle> |
-
-**Medium-specific notes:**
-- Optimal title length: 40-60 characters
-- Subtitles display on Medium post cards — treat them as a second hook
-
----
-
-## 10. Quick Wins
-
-1. <specific, actionable change>
-2. <specific, actionable change>
-3. <specific, actionable change>
-
----
-
-## Future: Keyword Volume
-
-*This brief does not include keyword search volume, difficulty, or SERP competition data. A future milestone will integrate a keyword API (candidates: Google Search Console API, DataForSEO free tier, SEMrush API) to enrich this section with: monthly search volume, keyword difficulty score, top-10 SERP competitors, and related keyword suggestions.*
-```
+Write to the post folder using the template in `assets/seo_brief_template.md` — load that file now and fill every section. Do not omit any section from the template.
 
 ---
 

@@ -17,7 +17,7 @@ Two patterns in the corpus:
 1. **Thesis declaration:** "Your job isn't to build models; it's to solve problems." — states the post's central argument directly.
 2. **Contrarian reframe:** "Prompting is not building AI systems." / "Fine-tuning is not a magic fix." — names a common misunderstanding before dismantling it.
 
-For **Part 1 of a series:** open with a "What we will cover in this series" bullet list (3–5 items). Gives new readers the roadmap.
+For **Part 1 of a series:** open with a "What we will cover in this series" bullet list (3–5 items) using the labelled preview format from `shared/voice.md` — `**Bold label.** Explainer sentence(s).` Gives new readers the roadmap and the reason each topic matters.
 
 For **later parts:** open with a brief "In this series so far" recap (2–4 bullets), then "In this part, we cover...". This makes each post standalone without requiring the reader to have read all prior parts.
 

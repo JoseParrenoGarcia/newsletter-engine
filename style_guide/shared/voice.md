@@ -11,6 +11,8 @@ These rules apply to every post type. Load this file alongside the relevant `typ
 - Do: "If you've ever had to choose between two approaches with no clear winner, this is the framework I use."
 - Avoid: "Let me walk you through this concept step by step."
 
+**This is a TONE rule, not a depth rule.** For genuinely complex or non-obvious concepts, build the explanation from first principles — don't skip scaffolding on the assumption the reader already knows the internals. The rule prohibits condescension, not careful explanation. A post that walks through a three-layer loading architecture step by step is not treating the reader like a beginner — it is respecting the complexity of the topic.
+
 **First-person is natural, not performative.** Use "I" when grounding a claim in lived experience. Avoid "I" when it adds no information ("I think that X is important" → "X is important").
 
 ---
@@ -41,6 +43,11 @@ If the source cannot be named with confidence, flag uncertainty explicitly: "I a
 - Do: "But why skip-gram and not CBOW? The key is directionality."
 - Avoid: "Have you ever wondered what makes a great manager? Keep reading to find out!"
 
+**Reader-direct address is permitted.** Addressing the reader as "you" at key moments is a legitimate rhetorical device — to anticipate an objection, make a concept land concretely, or signal a shift in stakes. Use sparingly (2–3 moments per post at most).
+
+- Do: "If you have 100 skills available, this distinction becomes a deal-breaker."
+- Avoid: sustained second-person narration that reads like a tutorial ("Now you will need to...", "You should always...").
+
 ---
 
 ## Sentence Rhythm
@@ -63,6 +70,12 @@ Avoid paragraph-length sentences. Avoid stringing three or more clauses with com
 **Blockquotes** = named attribution only. A direct quote from a named person, book page, or paper. Never used for callouts, highlights, or emphasis.
 
 **Bullet lists** = taxonomies, frameworks, steps. Not for prose that would flow naturally as sentences.
+
+**Preview bullet lists** (used in "What this covers" sections) use a labelled format:
+```
+- **Bold label.** One to two sentence explainer of what will be covered and why it matters.
+```
+Plain unlabelled bullets are for taxonomies, steps, and conditions. Labelled bullets are for topic previews only.
 
 **Visual placeholders** = required wherever a diagram, screenshot, or image was referenced or would serve the post. Format:
 ```
