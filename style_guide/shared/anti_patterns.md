@@ -93,7 +93,10 @@ These constructions are a signature of AI-generated prose. Remove on sight.
 - "With that in mind, let's turn to..."
 - "Before we get to X, it's worth understanding Y."
 
-**Fix for all of the above:** Remove the meta-sentence. Let the content follow naturally.
+**Fix for all of the above:** Remove the meta-sentence. Good transitions don't announce themselves — they work through content. Close a section with a claim or observation that implies an unresolved question. Open the next section by answering it directly. The reader follows the logic, not a signpost.
+
+- Do: End a section with "That distinction has a real token cost, and across a system of many skills it compounds." — which implies the natural next question (so what do you do about it?). The next section answers it.
+- Avoid: "Now that we understand the token cost, let's look at how to structure your skills folder."
 
 ---
 

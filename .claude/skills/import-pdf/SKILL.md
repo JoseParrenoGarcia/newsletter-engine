@@ -1,8 +1,13 @@
 ---
 name: import-pdf
-description: Convert a PDF reference post to clean markdown. Strips noise, restores formatting, adds metadata frontmatter, moves PDF to scratch/.
+description: "Converts a PDF reference post to clean markdown. DO trigger: when importing a Substack PDF export as a reference post — strips date headers, page numbers, UI noise, and subscription prompts; restores heading hierarchy, bold, blockquotes, and visual placeholders; writes frontmatter; moves the PDF to a pdf/ subfolder. DO NOT trigger: for non-PDF files; for files already in markdown; when the goal is content editing rather than format conversion. Keywords: import, PDF, convert, markdown, Substack, reference post, pdftotext."
 argument-hint: "[path/to/file.pdf]"
 disable-model-invocation: true
+license: proprietary
+compatibility: "Claude Code; requires poppler (pdftotext) installed"
+metadata:
+  author: jose-parreno-garcia
+  version: "1.0"
 ---
 
 Convert the PDF at `$ARGUMENTS` into a clean markdown reference post.
@@ -22,13 +27,7 @@ pdftotext "$ARGUMENTS" "/tmp/import_pdf_working.txt"
 Read `/tmp/import_pdf_working.txt` in full.
 
 ### 4. Strip noise
-When writing the markdown output, ignore all lines that match these patterns (common in Substack PDF exports):
-- Date-time headers: lines matching `DD/MM/YYYY, HH:MM` format
-- URL headers: lines starting with `https://` or `http://`
-- Page number footers: lines matching `N/NN` (e.g. `3/34`, `12/34`)
-- Substack UI text: "likes", "restacks", "Further reading", "Read full story", "Subscribe"
-- Substack subscription prompts: any block containing phrases like "is a reader-supported publication", "consider becoming a free or paid subscriber", "To receive new posts and support my work" — strip the entire surrounding paragraph
-- Comments section: everything from the first occurrence of "Discussion about this post", "Write a comment", or reader comment patterns (names followed by dates, "LIKED", "REPLY", "SHARE") to the end of the file — discard entirely
+Full noise patterns to strip (date headers, page numbers, Substack UI text, subscription prompts, comments section) are in `references/formatting-rules.md` — load that file now.
 
 Capture the Substack URL (from the noise) to use as the `source` field in frontmatter.
 
@@ -63,28 +62,7 @@ type: <inferred from path>
 [body of post with clean markdown formatting]
 ```
 
-Formatting rules:
-- Main title → `#`
-- Section headings → `##`
-- Subsection headings → `###`
-- Bold text → `**bold**`
-- Italic text → `*italic*`
-- Named quotes (e.g. "— George Patton") → blockquote `> text` with attribution on next line `> *Name*`
-- Bullet lists → `- item`
-- Where visuals appeared, insert a structured placeholder that captures type, source, and role:
-  ```
-  [Visual: <type> | <source> | <role>]
-  ```
-  - **type**: `photo`, `diagram`, `screenshot`, `meme`, `chart`, or `illustration`
-  - **source**: e.g. `Unsplash (photographer name)`, `Napkin.AI`, `author-generated`, `unknown`
-  - **role**: what the visual is doing in the post — e.g. `section separator`, `framework illustration`, `analogy reinforcer`, `mood setter`, `concept diagram`
-  - Examples:
-    - `[Visual: photo | Unsplash (Casey Horner) | section separator — lighthouse at night]`
-    - `[Visual: diagram | Napkin.AI | framework illustration — house showing 5 management traits]`
-    - `[Visual: photo | Unsplash (Anastasiya Badun) | mood setter — person with shell over face]`
-  - If the source or role is unclear, use `unknown` rather than guessing
-  - This metadata is intentional: it tells the style system that Jose's posts use visuals structurally, not just decoratively
-- Do not include Substack UI elements (like counts, promotional links, further reading widgets)
+Markdown formatting conventions and visual placeholder format (with type/source/role definitions and examples) are in `references/formatting-rules.md` — load that file now and apply all rules throughout.
 
 ### 7. Move PDF to a `pdf/` subfolder alongside the markdown
 Create a `pdf/` directory inside the same directory as the input file (if it doesn't exist), then move the PDF there:

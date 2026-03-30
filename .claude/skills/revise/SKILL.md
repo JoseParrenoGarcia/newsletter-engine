@@ -1,8 +1,13 @@
 ---
 name: revise
-description: SEO revision skill. Reads long_draft.md + seo_brief.md and applies keyword placement, readability fixes, and Quick Wins to produce an improved draft. Works standalone on any draft+brief pair.
+description: "Applies SEO-driven revisions to long_draft.md based on seo_brief.md — keyword placement, readability fixes, H1/H2 rewording, and Quick Wins. Creates a backup (long_draft_v1.md) before writing changes. DO trigger: after both long_draft.md and seo_brief.md exist; when the draft needs improvement for search and readability. DO NOT trigger: when only one of the two required inputs exists; for general editorial rewrites not driven by an SEO brief; when revise is already complete and no redo is requested. Keywords: revise, revision, SEO, keyword placement, readability, Quick Wins, long_draft, seo_brief."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
 disable-model-invocation: true
+license: proprietary
+compatibility: "Claude Code"
+metadata:
+  author: jose-parreno-garcia
+  version: "1.0"
 ---
 
 Apply SEO-driven revisions to the draft in `$ARGUMENTS` (or ask if no argument is given).
