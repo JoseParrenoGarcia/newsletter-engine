@@ -1,0 +1,76 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "agentic-coding-team-management"
+working_title: "When Speed Stops Being the Constraint: What Agentic Coding Changes for Tech Leads"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "management"
+series_name: ""             # only if structural_type: series (leave blank otherwise)
+series_position: null       # integer (1, 2, 3 …), only if structural_type: series
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Agentic coding has made speed abundant — but that doesn't solve the problem. It shifts the constraint from execution to governance. The new scarce resources are trust, control, and attention. Leadership must move from managing speed scarcity to managing output abundance."
+target_audience: "Tech leads and engineering managers in data science and ML orgs"
+target_reading_time_minutes: 15  # drives word count (×250 = ~3750 words)
+topics_to_cover:
+  - The iron triangle and its roots in software project management
+  - How agentic coding and GenAI tools have made speed cheap
+  - The asymmetry between demo cost and production cost
+  - The reframed triangle: speed (abundant), trust (scarce), control (fragile)
+  - How planning, exploration, managing up, validation, and individual roles change for tech leads
+  - The contradictions teams will face (building faster vs trusting less, etc.)
+  - Practical actions for the next 6 months
+  - The 3–5 year view of team structures and roles
+topics_to_exclude:
+  - Individual productivity tips for developers (how to use specific AI tools)
+  - Technical explainers of how LLMs or agentic systems work
+  - Broad AI ethics or safety debates
+  - Hiring and HR decisions
+open_research_questions:
+  - Validate all referenced URLs (ScienceDirect, DORA, Gartner, getquotient, linearb, stackoverflow blog, elastic, beon.tech, insight.com, leaddev)
+  - Are there stronger or more recent sources for the POC-to-production gap claim?
+  - Is there data on review fatigue / code volume increase from AI coding tools?
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "The post argues that agentic coding and GenAI tools have fundamentally changed the team management problem for tech leads — not by removing constraints, but by moving them. Speed, which was historically scarce and therefore the primary lever of trade-off decisions, is now abundant. This exposes a new set of constraints: trust (can we rely on what was generated?), control (do we understand and govern what ships?), and attention (can teams prioritise when everything is easy to start?). The iron triangle doesn't disappear; it migrates from execution to governance. The post is structured as an analytical argument, not a tips list. It opens by establishing the classical model (iron triangle, POC → MVP → production lifecycle), then traces the disruption caused by AI speed, reframes the triangle, walks through five concrete changes for tech leads (planning, exploration, managing up, validation, individual roles), catalogues the contradictions that follow, and closes with practical actions and a longer-horizon view of where teams are headed."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/data-science-management/engineering-meets-data-the-collaboration-no-one-prepared-you-for.md
+  - reference_posts/standalone/data-science-management/how-i-broke-3-myths-about-chinese-tech-teams-and-confirmed-1.md
+  - reference_posts/standalone/data-science-management/is-gut-feeling-a-proxy-for-experience.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/management.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  seo_brief: seo_brief.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-03-31"
+  research:
+    status: complete
+    completed_at: "2026-03-31"
+  draft:
+    status: complete
+    completed_at: "2026-03-31"
+  seo:
+    status: complete
+    completed_at: "2026-03-31"
+  revise:
+    status: complete
+    completed_at: "2026-03-31"
+  promote:
+    status: complete
+    completed_at: "2026-03-31"
