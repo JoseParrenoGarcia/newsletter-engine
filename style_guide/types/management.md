@@ -23,6 +23,22 @@ The anecdote establishes emotional credibility before any framework or advice. O
 
 ---
 
+## Preview Section
+
+**Always present. Placed directly after the intro (after the anecdote + thesis), before the first content H2.**
+
+Heading options (any variant is acceptable):
+- `## What will we cover?`
+- `## What will we cover in this post?`
+- `## What will we cover in this blog post?`
+- `## What this post covers` / `## What this blog covers`
+
+Format: labelled bullet list (`**Bold label.** One–two sentence explainer.`), 4–7 bullets, one per major section or story arc of the post.
+
+Purpose: orients the reader before the argument begins. For longer posts (10+ min), this is the reader's map.
+
+---
+
 ## Section Structure
 
 - **5–8 thematic sections** per post
@@ -37,7 +53,13 @@ The anecdote establishes emotional credibility before any framework or advice. O
 
 ## Closing Pattern
 
-**No hard CTA. Ends with reflection or synthesis.**
+**No hard CTA. Ends with reflection or synthesis. Must be a named `##` section — not the final paragraphs of a content section.**
+
+Heading options (any variant is acceptable):
+- `## Closing thoughts`
+- `## Summary`
+- `## Final thoughts: <specific topic>`
+- `## Wrapping it up: <specific topic>`
 
 The closing invites the reader to assess their own situation or leaves them with a lasting thought — not a subscription push, not an urgent call to action.
 
@@ -51,6 +73,20 @@ Two valid closing patterns:
    - *"The 3Ps are not a perfect system. Time will tell if it works long-term — but my calendar is mine again."*
 
 Both patterns feel like the end of a thoughtful conversation, not a sales pitch.
+
+---
+
+## Reader Engagement
+
+**After the closing section. Named `##` heading: `## Now, I want to hear from you`.**
+
+A specific, content-tied question or short set of questions inviting readers to share their experience or reflect on their own situation. Can be bullet questions or short prose. Not a generic sign-off.
+
+- Do: bullet questions tied to the post's specific argument
+- Do: a short paragraph naming what you are curious about, followed by 2–3 targeted questions
+- Avoid: "Let me know your thoughts in the comments." — too generic (see anti_patterns.md)
+
+This section is required for all management posts.
 
 ---
 

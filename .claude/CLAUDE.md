@@ -38,6 +38,7 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `/draft` | Style-grounded outline + long-form draft | **Live (M3)** |
 | `/seo` | SEO brief + title variants (any draft) | **Live (M4)** |
 | `/revise` | SEO-driven draft revision (any draft + brief pair) | **Live (M6)** |
+| `/review` | Editorial quality gate — 6-dimension rubric + publish readiness verdict | **Live (M7)** |
 | `/promote` | LinkedIn + Substack bundle (any draft) | **Live (M5)** |
 | `/ideate` | Trend-aware content ideas, standalone | M7 |
 
