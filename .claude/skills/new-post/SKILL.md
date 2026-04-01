@@ -1,8 +1,7 @@
 ---
 name: new-post
-description: "Pipeline orchestrator. Creates a new post folder from the standard template and chains the full pipeline (brainstorm → research → draft → seo → revise → promote) with stage-skip logic and a decision_log. DO trigger: when starting a new post from scratch; when running post-draft stages on an existing draft (--from-draft); when the full pipeline needs to run unattended. DO NOT trigger: when a single isolated stage is needed (invoke that skill directly instead). Keywords: new post, pipeline, orchestrator, full pipeline, from-draft, stage-skip, decision_log, brainstorm, template."
+description: "Pipeline orchestrator. Creates a new post folder from the standard template and chains the full pipeline (brainstorm → research → draft → seo → revise → review → promote) with stage-skip logic and a decision_log. DO trigger: when starting a new post from scratch; when running post-draft stages on an existing draft (--from-draft); when the full pipeline needs to run unattended. DO NOT trigger: when a single isolated stage is needed (invoke that skill directly instead). Keywords: new post, pipeline, orchestrator, full pipeline, from-draft, stage-skip, decision_log, brainstorm, template."
 argument-hint: "[slug or --from-draft posts/<slug>/ — optional]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code"
 metadata:
@@ -76,7 +75,7 @@ Then immediately run the `/brainstorm` skill on `posts/<slug>/`.
 Once `/brainstorm` has finished and `post.yaml` is written, present:
 
 > "Brainstorm complete. What would you like to do next?
-> 1. Run full pipeline (research → draft → seo → revise → promote)
+> 1. Run full pipeline (research → draft → seo → revise → review → promote)
 > 2. Run research only
 > 3. Stop here — I'll continue later"
 
@@ -110,6 +109,7 @@ Read `post.yaml` if it exists and report which stages are already complete:
 > - draft: complete (2026-03-27)
 > - seo: complete (2026-03-28)
 > - revise: pending
+> - review: pending
 > - promote: pending"
 
 ### Step 4 — From-draft menu
@@ -117,8 +117,8 @@ Read `post.yaml` if it exists and report which stages are already complete:
 Present:
 
 > "Which stages do you want to run?
-> 1. Run from SEO (seo → revise → promote)
-> 2. Run revise + promote only (requires seo_brief.md)
+> 1. Run from SEO (seo → revise → review → promote)
+> 2. Run revise + review + promote only (requires seo_brief.md)
 > 3. Run promote only (requires long_draft.md)
 > 4. Run a single stage — which one?"
 
@@ -134,7 +134,8 @@ When the full pipeline is requested (Mode A option 1, or Mode B option 1), run e
 2. `/draft posts/<slug>/` — in pipeline mode (no pause after outline; proceed directly to writing)
 3. `/seo posts/<slug>/`
 4. `/revise posts/<slug>/`
-5. `/promote posts/<slug>/`
+5. `/review posts/<slug>/`
+6. `/promote posts/<slug>/`
 
 After each stage completes, append to `decision_log.md` — see [decision_log format](#decision_log-format) below.
 

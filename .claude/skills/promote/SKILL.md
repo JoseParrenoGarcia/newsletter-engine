@@ -2,7 +2,6 @@
 name: promote
 description: "Reads long_draft.md to produce promotion_posts.md — 1 launch post and 3 section deep-dives formatted for copy-paste to LinkedIn and Substack Notes. DO trigger: after long_draft.md exists; when social promotion copy is needed for a post; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; when SEO review or revision is the goal (use /seo or /revise); for full article editing. Keywords: promote, LinkedIn, Substack, social posts, launch post, deep-dive, promotion, copy-paste."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code"
 metadata:

@@ -2,7 +2,6 @@
 name: seo
 description: "Analyses long_draft.md to produce seo_brief.md — primary and secondary keywords, meta description, H1/H2 structure review, readability assessment, keyword placement checklist, and 5 title variants. DO trigger: after long_draft.md exists; when keyword optimisation and title options are needed before publishing to Medium or Substack; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; for social copy (use /promote); when seo_brief is already complete and no redo is requested. Keywords: SEO, keywords, meta description, title variants, readability, H1, H2, Medium, Substack, seo_brief."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code"
 metadata:

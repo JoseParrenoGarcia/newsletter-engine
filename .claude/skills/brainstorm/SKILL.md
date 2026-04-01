@@ -2,7 +2,6 @@
 name: brainstorm
 description: "Runs an interactive brainstorm conversation to populate post.yaml and expand notes.md with a rough Table of Contents. DO trigger: at the start of a new post, before research or drafting; when post.yaml needs to be written from scratch or rough notes need shaping into a structured brief. DO NOT trigger: when brainstorm is already marked complete and no redo is requested; when a draft already exists and the goal is post-draft stages (use /new-post --from-draft instead). Keywords: brainstorm, new post, post.yaml, ideas, rough notes, table of contents, content_type, thesis."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code"
 metadata:

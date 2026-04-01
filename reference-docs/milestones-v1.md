@@ -38,7 +38,8 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 | M4 | SEO + Titles | SEO brief + title variants from any draft | `/seo` |
 | M5 | Promotion | LinkedIn + Substack bundle from any draft | `/promote` |
 | M6 | Full Pipeline | End-to-end run from notes to full bundle | `/new-post` |
-| M7 | Content Ideation | Trend-aware topic ideas independent of any post | `/ideate` |
+| M7 | Editorial Quality Gate | 3-critic multi-agent review with panel consensus | `/review` |
+| M8 | Content Ideation | Trend-aware topic ideas independent of any post | `/ideate` |
 
 ---
 
@@ -223,7 +224,30 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 
 ---
 
-## M7 — Content Ideation
+## M7 — Editorial Quality Gate ✓ Complete (2026-04-01)
+
+**Goal:** An editorial quality gate that gives every draft a structured, multi-perspective review before publishing.
+
+**What was built:**
+- `/review` skill — 3-critic multi-agent debate:
+  - **Voice & Audience Critic** — Pass 2 (Voice fidelity) + Pass 6 (Audience specificity); reads `voice.md` + `anti_patterns.md`
+  - **Structure & Depth Critic** — Pass 1 (Structural completeness) + Pass 4 (Section depth)
+  - **Impact & Argument Critic** — Pass 3 (Argument build-up) + Pass 5 (Actionability)
+  - All 3 critics run **in parallel** using the Agent tool; each returns scores + preliminary verdict
+  - **Synthesizer step** reconciles verdicts: if unanimous, states consensus; if split, identifies decisive criterion and resolves deterministically
+- Output: `review_report.md` with Panel Consensus table + 6 dimension scores + publish readiness verdict (Ready / Revise first / Major rework needed)
+- Wired into `/new-post` pipeline as stage 5 (after `/revise`, before `/promote`)
+- Stage guard in `post.yaml`; works standalone on any `long_draft.md`
+
+**Definition of done:**
+- 3 critic agents run in parallel and return structured per-dimension outputs ✓
+- Synthesizer resolves conflicting verdicts with explicit reasoning ✓
+- `review_report.md` contains Panel Consensus section + all 6 dimension scores ✓
+- `/new-post` full pipeline now ends: research → draft → seo → revise → review → promote ✓
+
+---
+
+## M8 — Content Ideation
 
 **Goal:** An independent agent that helps Jose discover and prioritise new content ideas, not tied to any specific post.
 
@@ -243,6 +267,6 @@ Each skill has one job. The orchestrator has one job: sequencing. This mirrors s
 - Publishing automation (Substack, Medium, LinkedIn direct posting)
 - GUI or web interface
 - Series continuity agent (tracks cross-post progression) — candidate for M8+
-- Style evaluation agent (scores draft against style guide) — candidate for M8+
+- Style evaluation agent (scores draft against style guide) — **delivered as `/review` in M7**
 - Fact-checking agent
 - Multi-user support

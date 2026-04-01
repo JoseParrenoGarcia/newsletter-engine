@@ -2,7 +2,6 @@
 name: draft
 description: "Produces outline.md and long_draft.md from post.yaml, research_brief.md, notes.md, style guides, and reference posts. DO trigger: after brainstorm and research stages are both complete; when a full long-form draft is needed. DO NOT trigger: before brainstorm or research are complete; when the draft already exists and the goal is SEO review or revision (use /seo or /revise); for short edits or single-section rewrites. Keywords: draft, outline, long_draft, writing, article, style guide, voice, reference posts, tone."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code"
 metadata:
