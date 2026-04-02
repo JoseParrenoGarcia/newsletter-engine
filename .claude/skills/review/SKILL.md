@@ -111,12 +111,14 @@ For each agent, substitute:
 > **Focus:** Is this post unmistakably written for data science leads and tech leads, or is it generic enough that any engineering blog could publish it?
 >
 > Check for:
-> - References to the reader's specific context (data science teams, ML models, A/B tests, production systems, sprint planning)
-> - Examples that only make sense if you've managed a technical team
-> - Language that assumes domain knowledge rather than explaining basics
-> - Personal grounding that connects to Jose's specific experience as a DS lead
+> - Does the framing signal this post is for data practitioners? (examples drawn from DS/ML teams, technical decisions, data work — not generic "leaders" or "managers")
+> - Would a data scientist or technical lead reading this feel it was written for them — even if the explanation starts simple?
+> - Is the pedagogical approach (building from basics) intentional and appropriate, or does it slide into a generic register that any non-technical manager could have written?
+> - Personal grounding: does Jose's specific experience as a DS lead appear anywhere, or is every claim abstract and role-agnostic?
 >
-> **Failure mode:** A post about "software engineering leaders" that never grounds its claims in the DS/ML context — every section could be transplanted to a generic SWE management post with no change.
+> **Failure mode:** A post where the framing, examples, and language could appear verbatim in a sales leadership or retail management blog — nothing signals the reader is a data practitioner.
+>
+> **Not a failure mode:** A post that builds from first principles or explains something simply. Pedagogical approach is intentional — starting simple for an expert audience is a feature, not a flaw. Do not penalise this.
 >
 > Score 1–5. If score ≤ 3, identify the section that feels most generic and note what specific grounding is missing.
 >

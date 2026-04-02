@@ -86,7 +86,7 @@
 **Score:** /5
 
 **Most generic section (if any):**
-[Section name] — [what specific DS/tech lead grounding is missing]
+[Section name] — [why it feels generic: what framing or example would ground it for DS practitioners]
 
 **Action:** [one line, or "None — score ≥ 4"]
 
