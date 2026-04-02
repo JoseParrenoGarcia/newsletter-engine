@@ -1,4 +1,4 @@
-# SEO Brief: Claude Code agents explained: what they are, how they work, and when to use them
+# SEO Brief: Claude Code agents: what they actually are
 
 **Post:** posts/claude-code-agents-explained/long_draft.md
 **Generated:** 2026-04-01
@@ -22,11 +22,11 @@
 ## 2. Meta Description
 
 **Recommended (≤160 chars):**
-> Claude Code agents aren't smarter prompts. They're isolated workers with their own context window. Here's what subagents are and how to build one.
+> Claude Code agents run in their own context window — not your main conversation. Here's what subagents are, how to build one, and when they're worth it.
 
 - Primary keyword included: Yes ("Claude Code agents")
-- Call to action present: Yes (implicit — "here's what they are and how to build one")
-- Character count: 149
+- Call to action present: Yes ("here's what subagents are, how to build one")
+- Character count: 152
 
 ---
 
@@ -34,15 +34,15 @@
 
 **Current slug:** claude-code-agents-explained
 **Recommended slug:** claude-code-agents-explained
-**Change needed:** No — slug contains the primary keyword and reads cleanly.
+**Change needed:** No — contains primary keyword, clean format.
 
 ---
 
 ## 4. H1 Recommendation
 
-**Current H1 (draft title):** Claude Code agents explained: what they are, how they work, and when to use them
-**Character count:** 80 — exceeds Medium's clean display limit of ~70 characters
-**Recommended H1:** Claude Code agents: what they actually are
+**Current H1:** Claude Code agents: what they actually are
+**Character count:** 43 — within Medium's clean display range
+**Recommended H1:** Claude Code agents: what they actually are (keep as-is)
 **Primary keyword in H1:** Yes
 
 ---
@@ -53,11 +53,11 @@
 |---|----------------|----------------|
 | 1 | What this post covers | keep as-is (structural) |
 | 2 | The naming problem: what do people mean by "Claude Code agents"? | keep as-is — strong, contains primary keyword |
-| 3 | Why agents exist at all | keep as-is — descriptive and clear |
-| 4 | The smallest useful mental model | keep as-is — section identity, not an SEO target |
-| 5 | Your first agent, end to end | keep as-is |
+| 3 | Why agents exist at all | reword to: "Why Claude Code subagents exist" — adds secondary keyword to an important H2 |
+| 4 | The smallest useful mental model | keep as-is |
+| 5 | Your first agent, end to end | reword to: "Your first Claude Code subagent, end to end" — adds secondary keyword |
 | 6 | Agents vs skills: the confusion everyone runs into | keep as-is — strong |
-| 7 | Best practices that actually matter | reword to: "Best practices for Claude Code subagents" — adds keyword variant to a high-value H2 with no SEO signal currently |
+| 7 | Best practices for Claude Code subagents | keep as-is — strong, secondary keyword present |
 | 8 | A quick look at agent teams | keep as-is |
 | 9 | When agents are the wrong tool | keep as-is |
 | 10 | Closing thoughts | keep as-is |
@@ -71,34 +71,34 @@
 
 | Position | Present? |
 |----------|----------|
-| H1 / Title | ✓ — "Claude Code agents" in working title and recommended H1 |
-| First 100 words | ✗ — "agents" and "Claude Code" appear separately; exact phrase appears as "agents in Claude Code" (reversed) |
+| H1 / Title | ✓ — "Claude Code agents: what they actually are" |
+| First 100 words | ✓ — "Most people encounter Claude Code agents" (sentence 3) |
 | At least one H2 | ✓ — "The naming problem: what do people mean by 'Claude Code agents'?" |
 | Meta description | ✓ — included in recommended meta description |
 | URL slug | ✓ — "claude-code-agents-explained" |
 
-**Score: 4 / 5**
+**Score: 5 / 5**
 
 ---
 
 ## 7. Readability Assessment
 
-- **Estimated reading level:** Grade 8-10 — appropriate for the target audience (technically literate practitioners)
-- **Average sentence length:** ~18 words (sampled across 15 sentences)
-- **Long sentences (>30 words):** ~5 genuine prose sentences exceed 30 words — within acceptable range. The parsing tool flagged 19, but most are bolded definition constructions (`**Term.** Explanation sentence.`), not run-on prose.
-- **Passive voice instances:** 3 genuine instances ("disabled by default", "check these into version control", "a description you wrote") — well within acceptable range; no action needed.
-- **Paragraph length:** Good — most paragraphs are 2–4 sentences. A few definition paragraphs in "Your first agent" and "Best practices" run 5–6 sentences but remain readable due to structure.
-- **Jargon density:** Medium — terms include: context window, frontmatter, YAML, system prompt, agentic, permissionMode, CLI. All appropriate for the stated audience; no simplification needed.
-- **Overall:** Good — clean rhythm, consistent active voice, well-varied sentence length. The labelled bold definition pattern (`**Term.** Explanation.`) works well throughout and mirrors the reference post style.
+- **Estimated reading level:** Grade 8-10 — appropriate for technically literate practitioners
+- **Average sentence length:** ~19 words (sampled across 15 representative sentences)
+- **Long sentences (>30 words):** ~6 genuine prose sentences exceed 30 words — within acceptable range. The parsing tool flagged 19, but most are heading/frontmatter constructions and bolded definition sentences, not run-on prose.
+- **Passive voice instances:** 3 genuine instances — within acceptable range; no action needed.
+- **Paragraph length:** Good — most paragraphs are 2–4 sentences. The "Your first agent" walkthrough has a few 5-sentence blocks but structure (bold labels) makes them scannable.
+- **Jargon density:** Medium — context window, frontmatter, YAML, system prompt, permissionMode, agentic, CLI. All appropriate for the stated audience; no simplification needed.
+- **Overall:** Good — strong rhythm, active voice throughout, well-varied sentence length. The post reads cleanly at a technical-but-accessible level.
 
 ---
 
 ## 8. Content Quality Signals
 
-- **Word count:** 3,045 (~12.2 min read)
+- **Word count:** 3,891 (~15.6 min read)
 - **Target word count:** 3,750 (15 min × 250)
-- **On target:** Off by ~19% — approximately 700 words short. Sections are complete and not thin; most of the gap is in the "Best practices" and "Your first agent" sections which could be expanded with more concrete examples without padding.
-- **External links:** 6 unique URLs cited (18 total link instances including inline + references section). All 6 URLs confirmed in research_brief.md. All from authoritative sources (3 from official Claude Code docs, 2 from Anthropic Engineering, 1 community repository).
+- **On target:** Yes — within 4% of target
+- **External links:** 6 unique URLs (multiple inline references + numbered references section). All 6 confirmed in research_brief.md. All authoritative: 3 official Claude Code docs, 2 Anthropic Engineering posts, 1 community repository.
 
 ---
 
@@ -112,7 +112,7 @@
 | Contrarian | Claude Code agents are not smarter skills | They run in their own context window. Here's the real difference. |
 | Authority | I built a full pipeline with Claude Code agents | What subagents are, when to use them, and when not to. |
 
-**Recommended:** Contrarian — "Claude Code agents are not smarter skills" directly mirrors the post's core thesis ("agents ≠ skills"), includes the primary keyword, and creates curiosity without overstating. At 41 characters it fits Medium cleanly.
+**Recommended:** Contrarian — "Claude Code agents are not smarter skills" (41 chars) directly mirrors the post's thesis, includes the primary keyword, and creates curiosity without overstating. Fits Medium cleanly.
 
 **Medium-specific notes:**
 - Optimal title length: 40-60 characters
@@ -122,11 +122,11 @@
 
 ## 10. Quick Wins
 
-1. **Add "Claude Code agents" as a connected phrase in the first 100 words.** Currently the opening reads "encounter the word 'agents' in Claude Code" — the phrase is split and reversed. Replacing with something like "When you first encounter Claude Code agents..." in the opening sentence completes position 2 of the keyword placement checklist (4/5 → 5/5).
+1. **Reword H2 "Why agents exist at all" → "Why Claude Code subagents exist".** Currently only 2 of the 10 content H2s contain a keyword variant. Adding the secondary keyword "Claude Code subagents" to this prominent early section strengthens secondary keyword presence without changing meaning.
 
-2. **Retitle "Best practices that actually matter" → "Best practices for Claude Code subagents".** This is one of the longest sections and a primary keyword variant has zero presence in its H2. The reword adds discoverability without changing the section content.
+2. **Reword H2 "Your first agent, end to end" → "Your first Claude Code subagent, end to end".** Same logic — this is the hands-on section readers will scan for first. Adding the secondary keyword improves discoverability for searches on "Claude Code subagents tutorial" and related phrases.
 
-3. **Shorten the H1 to ≤70 characters.** Current title is 80 characters — it will wrap or truncate on Medium post cards. Recommended: "Claude Code agents: what they actually are" (43 chars) retains the primary keyword, the factual-noun-phrase heading style, and fits cleanly.
+3. **The subtitle/deck line currently reads "Claude Code's in-product agent primitive".** Updating to "Claude Code's custom subagent primitive" adds the exact secondary keyword "Claude Code subagents" to the very first line readers see below the H1, which is indexed by Medium and Substack.
 
 ---
 
