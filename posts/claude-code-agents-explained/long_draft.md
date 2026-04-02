@@ -4,6 +4,8 @@
 
 ---
 
+The first time I saw Claude spawn a subagent in our newsletter pipeline, I assumed it was just running a better-scoped prompt. I watched it work through a dozen files, return a clean summary, and leave the main conversation untouched. I didn't fully understand what had happened until I read the architecture more carefully.
+
 Most people encounter Claude Code agents and reach for the nearest available mental model. A skill with extra steps. A smarter prompt. Something that behaves more autonomously because the instructions are written differently.
 
 That mental model is wrong — and it matters that it's wrong. **Subagents** — the actual in-product agent primitive — do not run inside your main conversation. They run in their own context window, with their own system prompt, their own tool access, and their own permissions. They work separately and return a result. Your main conversation never accumulates their intermediate steps.
@@ -172,7 +174,11 @@ Claude reads subagent descriptions to decide when to delegate. It does not read 
 
 Write in specific, behavioural terms. Describe what the agent does and when to use it. Include the kinds of tasks it handles well and, if useful, the kinds it shouldn't handle. The phrase "use proactively after code changes" is a tested pattern — the documentation mentions it specifically as a way to encourage delegation without waiting for an explicit request. Leave it out for agents you want activated only on direct invocation.
 
+The first agent I configured for this repo had a description I thought was clear — something like "helps with content review and editorial tasks." It fired on some tasks and sat silent on others, with no obvious pattern. The fix was rewriting it in routing terms: what it handles, what it doesn't, under what conditions Claude should call it. Twenty minutes of confusion, one rewrite, and it selected reliably from then on.
+
 One thing to avoid: writing descriptions that describe the agent's identity ("You are an expert code reviewer with 20 years of experience...") rather than its activation conditions. The former belongs in the system prompt. The description is for the routing model, not for the agent itself.
+
+A concrete contrast. **Too vague:** "Helps with code quality and review tasks." **Routing description:** "Reviews staged code changes for security issues, logic bugs, and style violations. Use proactively after each significant edit. Does not generate code or make file edits." The second version tells Claude when to fire, when not to, and what it excludes — the model has something to route against.
 
 ### Restrict tools deliberately
 
@@ -186,7 +192,7 @@ The `disallowedTools` field lets you inherit the main session's tool set and the
 
 The [sub-agents documentation](https://code.claude.com/docs/en/sub-agents) is direct: each subagent should excel at one specific task. An agent with a description like "reviews code, writes tests, updates documentation, and handles deployment checks" has four descriptions competing in one field. Claude will route to it inconsistently, and the system prompt will try to handle four modes of operation simultaneously — none of them as well as a focused agent would.
 
-Narrow the scope. A code reviewer. A test generator. A documentation updater. Three separate files, each with a single clear description. This is easier to maintain, easier to test, and easier to replace when requirements change.
+Narrow the scope. Three separate files, each with a single clear description — and each replaced or updated without touching the others. In a data science context: a model validation agent, a data quality checker, a notebook reviewer. In a software context: a code reviewer, a test generator, a documentation updater. The principle is the same regardless of domain: one job, one file, one description that routes cleanly.
 
 ### Use the model field as a cost lever
 
@@ -243,6 +249,8 @@ That framing matters because most people approach them as a capability upgrade �
 Once you see that distinction clearly, the whole Claude Code primitive stack starts to make sense as a design. Memory sets always-on context. Rules scope it. Skills load it on demand. Hooks enforce behaviour at lifecycle events. Subagents move work out of the main context entirely. Each primitive solves a different problem. None of them substitutes for the others.
 
 **One agent, configured carefully, is a reasonable afternoon's work.** You don't need an orchestration system to get value from the feature. A focused description, a restricted tool set, a single clear job — that's a subagent that will select reliably and perform consistently. The complexity can grow from there, but it doesn't have to start there.
+
+If you're leading a data science or ML engineering team, the pattern lands fast. A data quality checker that runs on every pipeline definition. A model validation agent that reads experiment logs and flags regressions. A notebook reviewer that checks for hardcoded credentials and unreproducible cells. Each one narrow, each one isolated, each one doing exactly one thing so it can be trusted to do it every time.
 
 ---
 

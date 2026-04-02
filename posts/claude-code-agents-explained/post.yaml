@@ -74,7 +74,7 @@ stages:
     completed_at: "2026-04-01"
   review:
     status: complete
-    completed_at: "2026-04-01"
+    completed_at: "2026-04-02"
   promote:
     status: complete
     completed_at: "2026-04-02"
