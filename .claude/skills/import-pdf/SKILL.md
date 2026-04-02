@@ -2,7 +2,6 @@
 name: import-pdf
 description: "Converts a PDF reference post to clean markdown. DO trigger: when importing a Substack PDF export as a reference post — strips date headers, page numbers, UI noise, and subscription prompts; restores heading hierarchy, bold, blockquotes, and visual placeholders; writes frontmatter; moves the PDF to a pdf/ subfolder. DO NOT trigger: for non-PDF files; for files already in markdown; when the goal is content editing rather than format conversion. Keywords: import, PDF, convert, markdown, Substack, reference post, pdftotext."
 argument-hint: "[path/to/file.pdf]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code; requires poppler (pdftotext) installed"
 metadata:

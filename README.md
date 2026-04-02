@@ -7,14 +7,15 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 ## Pipeline
 
 ```mermaid
-flowchart LR
+flowchart TD
     A([notes.md]) --> B["/brainstorm"]
     B --> C["/research"]
     C --> D["/draft"]
     D --> E["/seo"]
     E --> F["/revise"]
-    F --> G["/promote"]
-    G --> H([bundle])
+    F --> G["/review"]
+    G --> H["/promote"]
+    H --> I([bundle])
 ```
 
 Each skill is independently invocable. `/new-post` chains all stages unattended.
@@ -26,6 +27,7 @@ Each skill is independently invocable. `/new-post` chains all stages unattended.
 | `/draft` | `outline.md`, `long_draft.md` |
 | `/seo` | `seo_brief.md` |
 | `/revise` | `long_draft.md` (revised), `long_draft_v1.md` (backup) |
+| `/review` | `review_report.md` |
 | `/promote` | `promotion_posts.md` |
 
 ---
@@ -45,6 +47,7 @@ newsletter-engine/
 │       ├── draft/                 # /draft
 │       ├── seo/                   # /seo
 │       ├── revise/                # /revise
+│       ├── review/                # /review — multi-agent editorial gate
 │       └── promote/               # /promote
 ├── reference-docs/
 │   ├── prd-v1.md                  # Full product requirements
@@ -67,6 +70,7 @@ newsletter-engine/
         ├── long_draft.md
         ├── long_draft_v1.md       # Pre-revision backup (created by /revise)
         ├── seo_brief.md
+        ├── review_report.md       # Panel consensus + 6-dimension scores (created by /review)
         ├── promotion_posts.md
         └── decision_log.md        # Append-only pipeline run log
 ```
@@ -95,6 +99,6 @@ newsletter-engine/
 | M4 — SEO | `/seo` | ✓ Complete |
 | M5 — Promotion | `/promote` | ✓ Complete |
 | M6 — Full Pipeline | `/revise` + `/new-post` | ✓ Complete |
-| M7 — Ideation | `/ideate` | Next |
+| M7 — Review + Ideation | `/review` + `/ideate` | In Progress — review ✓, ideate pending |
 
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.

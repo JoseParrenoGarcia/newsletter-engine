@@ -2,7 +2,6 @@
 name: draft
 description: "Produces outline.md and long_draft.md from post.yaml, research_brief.md, notes.md, style guides, and reference posts. DO trigger: after brainstorm and research stages are both complete; when a full long-form draft is needed. DO NOT trigger: before brainstorm or research are complete; when the draft already exists and the goal is SEO review or revision (use /seo or /revise); for short edits or single-section rewrites. Keywords: draft, outline, long_draft, writing, article, style guide, voice, reference posts, tone."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code"
 metadata:
@@ -34,6 +33,7 @@ Read in full before writing anything:
 - `post.yaml` — all fields
 - `notes.md` — brainstorm summary and rough Table of Contents
 - `research_brief.md` — all sources with summaries, grouped by ToC section
+- `templates/post_template.md` — universal structural skeleton
 - Every file listed in `post.yaml → style_guides` — read in full
 - Every file listed in `post.yaml → reference_posts` — read in full
 
@@ -83,13 +83,11 @@ Apply these throughout — they are not optional:
 - Use the extracted style anchors from Step 1 as private calibration. Every section should reflect Jose's rhythm, not a generic AI register.
 - Vary sentence length. Short sentences land a point. Longer ones build context or nuance. Mix them.
 - No generic AI filler — refer to `style_guide/shared/anti_patterns.md` and actively avoid every pattern listed there.
-- **Before writing the opening paragraph:** check the Opening Pattern section of the type-specific style guide. For `series-genai`: open with a thesis statement or contrarian reframe — not personal anecdote or context-setting about the author's own experience.
-- **For management posts: always include a preview section** immediately after the opening (after the intro anecdote + thesis paragraph, before the first content H2). Use the labelled bullet format (`**Bold label.** Explainer.`), 4–7 bullets, one per major section. Use a heading from the variants listed in `style_guide/types/management.md`. For any other "What this covers" section: use the same labelled preview bullet format from `shared/voice.md` — not plain unlabelled bullets.
-- **For management posts: always include a named closing section** with a `##` heading (e.g. "Closing thoughts", "Summary", "Final thoughts: …"). This is a distinct section — not the final paragraphs of the last content section. Apply the closing pattern from `style_guide/types/management.md`.
-- **For management posts: add a `## Now, I want to hear from you` section** after the closing section — named `##` heading, 2–4 specific questions (bullets or short prose) tied to the post's argument. See `style_guide/types/management.md` Reader Engagement section for spec and examples.
+- **Structure:** follow the skeleton in `templates/post_template.md` — intro → preview section → main body → closing section → "Now, I want to hear from you". See the type-specific style guide for any overrides.
+- **Before writing the opening paragraph:** check the opening rules in the type-specific style guide. `series-genai`: open with a thesis statement or contrarian reframe — not personal anecdote. `paper-explainer`: open with paper attribution, not anecdote.
 - **Explanation depth:** the Register rule in `shared/voice.md` is a tone rule, not a depth rule. For complex or non-obvious concepts, build from first principles. Do not skip scaffolding on the assumption the reader already knows the internals.
 - **Transitions:** close each section with a claim or observation that implies the natural next question. Open the following section by answering it directly. Do not use meta-commentary transitions ("Now that we've explored X...").
-- Follow the type-specific style guide for all remaining structural conventions (closing pattern, technical depth, formatting, tone).
+- Follow the type-specific style guide for all remaining structural conventions (technical depth, formatting, tone).
 - Do not pad to hit word count. If a section is done, it is done. Aim for the target, not a mechanical fill.
 
 ### Reference guardrails

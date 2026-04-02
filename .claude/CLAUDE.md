@@ -3,7 +3,7 @@
 A repo-based, Claude-first writing system for creating blog and newsletter content. Claude operates from durable repo files rather than chat memory, coordinating specialised agents across a repeatable content workflow.
 
 **Primary user:** Jose
-**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | M5 — Complete ✓ | M6 — Complete ✓ | Next: M7
+**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | M5 — Complete ✓ | M6 — Complete ✓ | M7 — In Progress (review ✓, ideate pending)
 
 ---
 
@@ -21,7 +21,8 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `reference-docs/` | PRD, milestones, planning docs | Active |
 | `reference_posts/` | Jose's real posts (series, standalone, short_technical) | M0 |
 | `style_guide/` | Voice, anti-patterns (shared/), per-type rules, promotion_formats.md | **Done (M0, M5)** |
-| `.claude/agents/` | Custom subagent definitions (one per agent) | M1+ |
+| `.claude/skills/` | Skill instruction files (one per skill) | M1+ |
+| `.claude/rules/` | Behavioural guardrails, auto-loaded each session | Active |
 | `templates/` | Post folder template (`post.yaml`, `notes.md`, `placeholder.md`) | **Done (M1)** |
 | `posts/` | Per-post working folders with artefacts | M1+ |
 
@@ -38,9 +39,9 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `/draft` | Style-grounded outline + long-form draft | **Live (M3)** |
 | `/seo` | SEO brief + title variants (any draft) | **Live (M4)** |
 | `/revise` | SEO-driven draft revision (any draft + brief pair) | **Live (M6)** |
-| `/review` | Editorial quality gate — 6-dimension rubric + publish readiness verdict | **Live (M7)** |
+| `/review` | 3-critic multi-agent debate → 6-dimension rubric + panel consensus + publish readiness verdict | **Live (M7)** |
 | `/promote` | LinkedIn + Substack bundle (any draft) | **Live (M5)** |
-| `/ideate` | Trend-aware content ideas, standalone | M7 |
+| `/ideate` | Trend-aware content ideas, standalone | M8 |
 
 ---
 

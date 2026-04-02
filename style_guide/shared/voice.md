@@ -6,14 +6,23 @@ These rules apply to every post type. Load this file alongside the relevant `typ
 
 ## Register
 
-**Peer-to-peer, not teacher-to-student.** The reader is a fellow data scientist or technical leader — capable, busy, and already experienced. Write as if explaining something to a sharp colleague, not instructing a beginner.
+**Warm and pedagogical in method, peer-level in attitude.**
 
-- Do: "If you've ever had to choose between two approaches with no clear winner, this is the framework I use."
-- Avoid: "Let me walk you through this concept step by step."
+Warm: the register is approachable, self-disclosing, and never cold or authoritative. Pedagogical: ideas are sequenced carefully — each section builds on the last, analogies precede abstractions, and the reader always ends up knowing more than when they started.
 
-**This is a TONE rule, not a depth rule.** For genuinely complex or non-obvious concepts, build the explanation from first principles — don't skip scaffolding on the assumption the reader already knows the internals. The rule prohibits condescension, not careful explanation. A post that walks through a three-layer loading architecture step by step is not treating the reader like a beginner — it is respecting the complexity of the topic.
+Peer-level is a tone constraint, not a depth constraint. Do not water down complex explanations to seem approachable — that is condescension in disguise. Build from first principles when the topic demands it. The rule prohibits lecturing, not careful explanation.
 
 **First-person is natural, not performative.** Use "I" when grounding a claim in lived experience. Avoid "I" when it adds no information ("I think that X is important" → "X is important").
+
+---
+
+## Narrative arc
+
+Every post builds up. The reader's understanding at the end is materially richer than at the start.
+
+Myth-busting and contrarian framing are permitted — but only as a setup device. Name the misconception, then dismantle it in service of the constructive claim that follows. The post always ends on what to think or do, not on what is wrong. A post structured as "everyone gets X wrong" where the whole argument is the demolition is not the pattern.
+
+Sections should feel inevitable — each one answering the natural question the previous section raises. Never leave a section without advancing the argument.
 
 ---
 
@@ -70,26 +79,6 @@ Avoid paragraph-length sentences. Avoid stringing three or more clauses with com
 **Blockquotes** = named attribution only. A direct quote from a named person, book page, or paper. Never used for callouts, highlights, or emphasis.
 
 **Bullet lists** = taxonomies, frameworks, steps. Not for prose that would flow naturally as sentences.
-
-**Preview bullet lists** (used in "What this covers" sections) use a labelled format:
-```
-- **Bold label.** One to two sentence explainer of what will be covered and why it matters.
-```
-Plain unlabelled bullets are for taxonomies, steps, and conditions. Labelled bullets are for topic previews only.
-
-**Visual placeholders** = required wherever a diagram, screenshot, or image was referenced or would serve the post. Format:
-```
-[Visual: <type> | <source> | <role> — description]
-```
-- Type: `diagram`, `screenshot`, `photo`, `chart`
-- Source: `post figure`, `Dall-E`, `Napkin.AI`, `ChatGPT demo`, `Karpathy tutorial`, etc.
-- Role: `concept illustration`, `section separator`, `comparison`, etc.
-
-Examples from the corpus:
-```
-[Visual: diagram | post figure | RLHF process — showing generate → rank → reward model → PPO loop]
-[Visual: photo | Dall-E | section separator — image representing trust in a team]
-```
 
 ---
 

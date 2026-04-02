@@ -1,0 +1,80 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "claude-code-agents-explained"
+working_title: "Claude Code agents explained: what they are, how they work, and when to use them"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Agents are not skills — they are isolated execution contexts with their own context window, prompt, tools, and permissions. One agent is simple and approachable; full multi-agent orchestration exists but belongs in a separate conversation."
+target_audience: "Practitioners close to the tech who have not yet tried Claude Code agents and want to fully understand what they are, how they differ from skills, and when to use them."
+target_reading_time_minutes: 15
+topics_to_cover:
+  - "Naming clarification: in Claude Code, the custom agent primitive is subagents (not agent teams, not Agent SDK)"
+  - "Why agents exist: context isolation, specialisation, and parallelism when relevant"
+  - "Minimal mental model: an isolated worker with its own context window, prompt, tools, and permissions"
+  - "Anatomy of a subagent: the AGENT.md file, required and optional frontmatter fields, directory location"
+  - "Agents vs skills: the core distinction (isolated worker vs reusable knowledge/workflow in main context)"
+  - "Best practices: description quality, tool restriction, single focus, verification"
+  - "Light touch on agent teams: what they are, when they help, experimental status"
+  - "When agents are the wrong tool"
+topics_to_exclude:
+  - "Deep multi-agent orchestration patterns and architectures"
+  - "Fully orchestrated multi-agent systems (orchestrator–worker, swarms, etc.)"
+  - "Claude Agent SDK deep dive"
+  - "Implementation of agent teams beyond a brief mention"
+open_research_questions:
+  - "Validate all 12 source URLs from the research notes (official docs may have moved or been updated)"
+  - "Confirm current frontmatter fields for subagent AGENT.md — check if background, memory, skills fields are stable"
+  - "Verify whether context:fork / agent: field in skills is still documented as described"
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "Ground-up explainer of Claude Code subagents for practitioners who are close to the tech but have not yet tried the feature. The post teaches from first principles: what the feature is called, why it exists, what it looks like in practice, and how it fits alongside the other Claude Code primitives. The tone is calm and precise — it guides the reader to understanding rather than challenging their assumptions. It is closely related to the existing skills post and the memory/rules posts, but is fully standalone. Two-part core takeaway: (1) agents are not skills because they run in an isolated execution context with their own context window, prompt, tools, and permissions — skills inject reusable knowledge or workflow into the main context; (2) one agent is simple and approachable, full orchestration exists and is acknowledged, but belongs in a dedicated future post."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - "reference_posts/standalone/genai-ai/what-the-docs-dont-tell-you-about-claude-code-skills.md"
+  - "reference_posts/standalone/genai-ai/claude-code-memory-explained-how-it-really-works.md"
+  - "reference_posts/standalone/genai-ai/how-claude-code-rules-actually-work.md"
+style_guides:
+  - "style_guide/shared/voice.md"
+  - "style_guide/shared/anti_patterns.md"
+  - "style_guide/types/series-genai.md"
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-04-01"
+  research:
+    status: complete
+    completed_at: "2026-04-01"
+  draft:
+    status: complete
+    completed_at: "2026-04-01"
+  seo:
+    status: complete
+    completed_at: "2026-04-01"
+  revise:
+    status: complete
+    completed_at: "2026-04-01"
+  review:
+    status: complete
+    completed_at: "2026-04-02"
+  promote:
+    status: complete
+    completed_at: "2026-04-02"

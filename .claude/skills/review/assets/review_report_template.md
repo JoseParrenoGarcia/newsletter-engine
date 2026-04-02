@@ -6,6 +6,18 @@
 
 ---
 
+## Panel Consensus
+
+| Critic | Covers | Preliminary verdict |
+|--------|--------|---------------------|
+| Voice & Audience | Voice fidelity, Audience specificity | [Ready / Revise first / Major rework needed] |
+| Structure & Depth | Structural completeness, Section depth | [Ready / Revise first / Major rework needed] |
+| Impact & Argument | Argument build-up, Actionability | [Ready / Revise first / Major rework needed] |
+
+**Consensus:** [Unanimous: <verdict> / Split — resolved by: <decisive criterion and reason>]
+
+---
+
 ## Pass 1 — Structural Completeness
 
 | Element | Status | Note |
@@ -74,7 +86,7 @@
 **Score:** /5
 
 **Most generic section (if any):**
-[Section name] — [what specific DS/tech lead grounding is missing]
+[Section name] — [why it feels generic: what framing or example would ground it for DS practitioners]
 
 **Action:** [one line, or "None — score ≥ 4"]
 

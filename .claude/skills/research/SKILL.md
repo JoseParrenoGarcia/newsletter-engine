@@ -2,7 +2,6 @@
 name: research
 description: "Validates existing URLs and fills research gaps with targeted web searches to produce research_brief.md grouped by ToC section. DO trigger: after brainstorm is complete and post.yaml exists; when URLs in notes.md need validation; when sources are needed to support draft sections. DO NOT trigger: before brainstorm is complete; when research is already marked complete and no redo is requested; for tasks that do not involve sourcing external references. Keywords: research, web search, URL validation, sources, research_brief, WebSearch, WebFetch, ToC gaps."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
-disable-model-invocation: true
 license: proprietary
 compatibility: "Claude Code; requires WebSearch and WebFetch MCP tools"
 metadata:
