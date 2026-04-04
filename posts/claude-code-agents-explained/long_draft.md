@@ -113,7 +113,30 @@ Focus on what matters. Don't restate what the code does — say what's wrong
 or good about it. Flag security issues first, then logic problems, then style.
 ```
 
-Let's walk through what each part is doing.
+### Where it lives: folder structure
+
+Save the example above as `.claude/agents/code-reviewer.md` in your project. Here's what that looks like:
+
+```
+your-project/
+├── .claude/
+│   ├── agents/
+│   │   └── code-reviewer.md          ← your new agent file
+│   ├── skills/
+│   └── rules/
+├── src/
+├── tests/
+├── README.md
+└── package.json
+```
+
+Once saved, Claude will detect the agent. Use it by asking Claude to review code changes — it will delegate to `code-reviewer` automatically based on the description match.
+
+For personal agents (available across all projects), move the file to `~/.claude/agents/code-reviewer.md` instead. The format and content stay the same; only the location changes.
+
+### Walking through each field
+
+Let's break down what each part is doing:
 
 **`name`** is the unique identifier. Lowercase, hyphens only. It's how the agent appears in logs and how Claude refers to it internally.
 
@@ -145,6 +168,59 @@ The functional difference is about where the work happens. A skill loads into yo
 | **What it provides** | Reusable knowledge or workflow logic | Task delegation to an isolated worker |
 | **Runs in** | Main conversation context | Own context window |
 | **Main context cost** | Skill content is loaded | Only the returned summary |
+
+### How context flows differently: a diagram
+
+Here's what happens to your main conversation context in each case:
+
+```mermaid
+graph TD
+    A["Ask Claude a Question"]
+
+    A -->|Path 1: Skill| B["Load Skill<br/>(enters main context)"]
+    A -->|Path 2: Subagent| C["Delegate to Subagent"]
+
+    B --> D["Follow Skill Instructions<br/>(steps accumulate)"]
+    D --> E["Read Files<br/>(stays in context)"]
+    E --> F["Run Searches<br/>(stays in context)"]
+    F --> G["Add Comments<br/>(stays in context)"]
+
+    C --> H["Spawn Agent Branch"]
+    H --> I["Agent gets:<br/>- Own context window<br/>- Own system prompt<br/>- Task details"]
+
+    I --> J["Agent Work<br/>(isolated)"]
+    J --> K["Read Files"]
+    K --> L["Run Searches"]
+    L --> M["Process Results"]
+    M --> N["Generate Summary"]
+
+    G --> O["Main Context Status:<br/>GROWING 📈<br/>Available tokens ↓"]
+    N --> P["Return Summary<br/>to Main Branch"]
+    P --> Q["Main Context Status:<br/>CLEAN ✓<br/>Available tokens →"]
+
+    O --> R["Next Task<br/>(cramped)"]
+    Q --> S["Next Task<br/>(plenty of room)"]
+
+    style B fill:#ffcccc
+    style D fill:#ffcccc
+    style E fill:#ffcccc
+    style F fill:#ffcccc
+    style G fill:#ffcccc
+    style O fill:#ff9999
+    style R fill:#ff9999
+
+    style I fill:#ccccff
+    style J fill:#ccccff
+    style K fill:#ccccff
+    style L fill:#ccccff
+    style M fill:#ccccff
+    style N fill:#ccccff
+    style P fill:#ccccff
+    style Q fill:#99ff99
+    style S fill:#99ff99
+```
+
+**The key difference**: Skills load their content into your main context and leave it there. Every step, file read, and search result stays and takes up tokens. Subagents do all their work in a separate context window — your main conversation only receives the summary, staying clean and ready for the next task.
 | **Invoked by** | Slash command or automatic selection | Claude delegating based on description |
 | **Best for** | Repeatable workflows, domain knowledge, reference material | Context-heavy investigation, specialist execution, constrained work |
 
