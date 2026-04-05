@@ -14,6 +14,7 @@
   ```
   Then convert the `.txt` to a clean `.md` file. Move the original PDF to `scratch/`.
 - Reason: reading a PDF via the Read tool costs ~30x more tokens than plain text (73,500 vs ~2,400 for a 44-page document). Reference: https://github.com/anthropics/claude-code/issues/20223
+- When fetching arXiv papers remotely, always use the HTML version URL (`https://arxiv.org/html/<id>`) not the PDF URL (`https://arxiv.org/pdf/<id>`). The PDF URL returns raw binary that indexes as garbage via `ctx_fetch_and_index`; the HTML version converts cleanly to searchable markdown.
 
 ## Workflow guardrails
 - Every skill reads from and writes to predictable files only. No side effects outside the post folder.
