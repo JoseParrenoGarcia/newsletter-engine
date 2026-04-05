@@ -1,0 +1,114 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "ds-star-data-science-agent"
+working_title: "DS-STAR: How Google Built a Data Science Agent That Actually Works"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "paper-explainer"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: >
+  DS-STAR works not because Google used Gemini, but because they engineered a
+  deterministic harness connecting every step of the data science lifecycle —
+  proving that agent architecture matters more than model choice.
+target_audience: >
+  Data scientists and ML engineers who work with or want to build agentic AI
+  systems. Data scientists are the primary lens: the post emphasises the
+  scientific rigour (formulas, ablations, module importance) as well as the
+  practitioner takeaways.
+target_reading_time_minutes: 20
+
+topics_to_cover:
+  - Personal intro anecdote: searching for open-source agentic data science tools as a heavy Claude Code user; frustration with superficial analysis; discovering DS-STAR
+  - Goal of the paper: answer ANY data science question across heterogeneous formats and open-ended queries
+  - System overview: what DS-STAR and DS-STAR+ are, why two components exist, how they relate
+  - DS-STAR deep dive (high level → formulas → algorithm): Analyzer, Planner, Coder, Debugger, Verifier, Router, Finalyzer modules; the missing pieces from Figure 1 (Debugger between Coder and Verifier, binary Router decision, Add/Remove step logic)
+  - DS-STAR+ deep dive (same structure): sub-question decomposition, writer agent, refinement loop
+  - The prompts (from paper Appendix L): Google published every prompt; they are short and focused; this section replaces the code walkthrough — shows how deterministic thinking is baked into prompt design; link to community implementation (JulesLscx/DS-Star)
+  - Ablation tests: module importance table — Analyzer is the most critical; step-by-step verifier vs full-plan-at-once; Router contribution
+  - More rounds for harder problems: short section showing the diagram of accuracy vs refinement rounds
+  - Google's example report (Appendix G, Report 3): data preparation report for payment fee optimisation — feature engineering, data quality, validation
+  - Cool highlight: DS-STAR works with GPT-5, DeepSeek-V3, and Ollama — it is model-agnostic
+  - Limitations and open questions: no official open-source release from Google; integrating with Claude Code (MCPs, CLIs for data access, WebSearch); more powerful data profiling (e.g. pandas-profiler for tabular data)
+  - Brief closing note: planning to test DS-STAR on real datasets (Kaggle follow-up post)
+
+topics_to_exclude:
+  - Detailed code walkthrough of the community GitHub implementation (JulesLscx/DS-Star) — mention and link only
+  - Kaggle dataset experiments (reserved for a follow-up post)
+  - Mathematical derivations beyond what maps to the agent diagram
+  - DABStep leaderboard politics or comparison tables beyond the key numbers
+
+open_research_questions:
+  - Could pandas-profiler or ydata-profiling replace/enhance the Analyzer agent for tabular data?
+  - How would DS-STAR integrate with Claude Code via MCP or CLI data connectors?
+  - Why did Google not release an official open-source implementation?
+  - Does the deterministic Python harness approach scale, or will LLM-native orchestration (e.g. prompt-driven flows) eventually outperform it?
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: >
+  Jose came to this paper from a practitioner's need: finding an open-source
+  agentic system capable of serious data science work — not just averages, but
+  p-values, confidence intervals, time-series comparisons, and bias detection.
+  DS-STAR from Google (KAIST collaboration) answered that need. The central
+  thesis of the post is that DS-STAR succeeds because of its harness, not its
+  model — a point Jose draws directly from the paper and maps to his own
+  experience with Claude Code outperforming competitors despite not always
+  having the best underlying model. The post is a full technical breakdown
+  aimed at data scientists and ML engineers who want to understand both the
+  science (formulas, ablations) and the engineering (prompt design, deterministic
+  pipeline). The structure mirrors the paper's own logic: system overview →
+  DS-STAR deep dive → DS-STAR+ deep dive → evidence (ablations, examples) →
+  practical takeaways. A key pivot from the original notes: Google did not
+  release official code, so section 5 shifts from a GitHub walkthrough to an
+  analysis of the prompts Google published in Appendix L, with a pointer to the
+  community implementation. The post ends with limitations and a teaser for a
+  follow-up Kaggle testing post.
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/paper-explainers/how-airbnb-learned-listing-embeddings-part-1.md
+  - reference_posts/standalone/paper-explainers/how-airbnb-optimized-search-rankings-with-deep-learning.md
+  - reference_posts/standalone/paper-explainers/airbnbs-2013-location-model-lessons-in-feature-engineering.md
+  - reference_posts/standalone/genai-ai/claude-code-agents-explained.md
+
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/paper-explainer.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: null
+  outline: null
+  long_draft: null
+  long_draft_backup: null
+  seo_brief: null
+  review_report: null
+  promotion_posts: null
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-04-05"
+  research:
+    status: pending
+    completed_at: null
+  draft:
+    status: pending
+    completed_at: null
+  seo:
+    status: pending
+    completed_at: null
+  revise:
+    status: pending
+    completed_at: null
+  review:
+    status: pending
+    completed_at: null
+  promote:
+    status: pending
+    completed_at: null
