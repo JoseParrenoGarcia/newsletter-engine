@@ -82,12 +82,12 @@ style_guides:
 artefacts:
   notes: notes.md
   research_brief: research_brief.md
-  outline: null
-  long_draft: null
-  long_draft_backup: null
-  seo_brief: null
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  seo_brief: seo_brief.md
   review_report: null
-  promotion_posts: null
+  promotion_posts: promotion_posts.md
 
 # ── Pipeline stages ───────────────────────────────────────────────────
 stages:
@@ -98,17 +98,17 @@ stages:
     status: complete
     completed_at: "2026-04-05"
   draft:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-04-05"
   seo:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-04-05"
   revise:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-04-05"
   review:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-04-05"
   promote:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-04-05"

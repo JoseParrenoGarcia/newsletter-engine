@@ -4,6 +4,12 @@ No issues encountered in the research subagent execution itself. All 3 notes.md 
 
 ---
 
+## 2026-04-05 — /promote
+
+No issues encountered. All inputs were available, the promotion_formats.md and section-selection-criteria.md files loaded cleanly, and the 3 sections selected themselves clearly from the content. The subagent wrote the file and updated post.yaml in one pass without retries.
+
+---
+
 ## 2026-04-05 — /brainstorm (main session)
 
 **Stuck / adapted:**
