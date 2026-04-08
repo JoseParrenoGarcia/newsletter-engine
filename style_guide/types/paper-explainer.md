@@ -43,3 +43,9 @@ Skip levels only when the audience clearly does not need them. Never show a form
 ## Validation-consciousness
 
 Always acknowledge how results were tested — offline metrics, A/B tests, sanity checks. Do not skip the validation section. Practitioners do not trust claims without evidence; the post should reflect that.
+
+---
+
+## Epistemic framing before formulas
+
+Before presenting any formula section, explain what role the formulas serve in the paper's argument — are they parameterisation for tuning? Compact representation of a loop? A description language rather than a derivation? The reader should know *why* the formulas exist before reading them. This extends the "never show a formula before explaining what it is trying to achieve" rule: the framing must address the paper's motivation for formalising at all, not just the individual equation.

@@ -27,15 +27,12 @@ Wait for explicit confirmation before proceeding.
 If `long_draft.md` is missing or is a placeholder, stop and say:
 > "No draft found at `<path>/long_draft.md`. Run `/draft` (and optionally `/revise`) before reviewing."
 
-### 4. Read all inputs silently
-Read in full before spawning any critics:
-- `long_draft.md` — required
-- `post.yaml` — optional; extract `thesis`, `target_audience`, `content_type`, `style_guides`
-- Every file listed in `post.yaml → style_guides` — read in full
-- `style_guide/shared/anti_patterns.md` — required for Voice & Audience Critic
-- `style_guide/shared/voice.md` — required for Voice & Audience Critic
+### 4. Read `post.yaml` silently
+Read `post.yaml` if present. Extract:
+- `thesis` — pass to Impact & Argument Critic
+- Confirm the resolved post folder path
 
-Note the resolved post folder path, thesis, and style guide paths — you will embed these in each critic's prompt.
+This is all the main session needs. The critic agents read all other files themselves.
 
 ---
 
@@ -59,227 +56,34 @@ For structural completeness: **✓** present and correct, **~** present but weak
 
 Spawn all 3 agents **in parallel** using the Agent tool. Do not wait for one to complete before starting the others.
 
-For each agent, substitute:
-- `POST_FOLDER` with the resolved post folder path (e.g. `posts/my-post/`)
-- `THESIS` with the thesis extracted from `post.yaml`, or `"(not available)"` if absent
-- `ANTI_PATTERNS_PATH` with the path to `style_guide/shared/anti_patterns.md`
-- `VOICE_PATH` with the path to `style_guide/shared/voice.md`
+Use the resolved `POST_FOLDER`, `THESIS` (from `post.yaml`, or `"(not available)"`), and the known paths to the shared style guide files.
 
 ---
 
 ### Agent 1 — Voice & Audience Critic
 
-**Prompt:**
+Invoke the `voice-critic` agent with this task prompt (substitute values before spawning):
 
-> You are the Voice & Audience Critic for a newsletter post review.
->
-> **Post folder:** `POST_FOLDER`
->
-> **Your job:** Run 2 scoring passes on `POST_FOLDER/long_draft.md` and return a structured result. Read all required files before scoring.
->
-> **Files to read:**
-> - `POST_FOLDER/long_draft.md` (required)
-> - `ANTI_PATTERNS_PATH`
-> - `VOICE_PATH`
->
-> ---
->
-> ### Pass 2 — Voice Fidelity
->
-> **Focus:** Does every paragraph sound like Jose, or does any passage slip into generic AI register?
->
-> Work through the draft section by section. Cross-reference `anti_patterns.md` explicitly — name the specific pattern if a violation is found.
->
-> **Positive voice markers to confirm are present** (from `voice.md`):
-> - Short declarative sentences that land a point
-> - Self-disclosing first person ("I've seen this", "In my team", "You can imagine my face…")
-> - Cultural references or humour used naturally — not forced
-> - Concrete specifics: numbers, roles, named tools, real scenarios
->
-> **Failure modes to catch:**
-> - Any phrase on the `anti_patterns.md` list
-> - Hedging language ("it is important to note", "it is worth mentioning", "in today's landscape")
-> - Abstract claims with no concrete grounding — a paragraph that makes a point anyone could make
-> - Passages that could appear in any management blog with no change to tone or content
->
-> Score 1–5. Cite at least one positive example. Flag the worst offending passage (if any). If score ≤ 3, quote the specific phrase or sentence that fails.
->
-> ---
->
-> ### Pass 6 — Audience Specificity
->
-> **Focus:** Is this post unmistakably written for data science leads and tech leads, or is it generic enough that any engineering blog could publish it?
->
-> Check for:
-> - Does the framing signal this post is for data practitioners? (examples drawn from DS/ML teams, technical decisions, data work — not generic "leaders" or "managers")
-> - Would a data scientist or technical lead reading this feel it was written for them — even if the explanation starts simple?
-> - Is the pedagogical approach (building from basics) intentional and appropriate, or does it slide into a generic register that any non-technical manager could have written?
-> - Personal grounding: does Jose's specific experience as a DS lead appear anywhere, or is every claim abstract and role-agnostic?
->
-> **Failure mode:** A post where the framing, examples, and language could appear verbatim in a sales leadership or retail management blog — nothing signals the reader is a data practitioner.
->
-> **Not a failure mode:** A post that builds from first principles or explains something simply. Pedagogical approach is intentional — starting simple for an expert audience is a feature, not a flaw. Do not penalise this.
->
-> Score 1–5. If score ≤ 3, identify the section that feels most generic and note what specific grounding is missing.
->
-> ---
->
-> **Return your result in exactly this format:**
->
-> ```
-> VOICE_SCORE: [1-5]
-> VOICE_POSITIVE_EXAMPLE: [one quoted sentence or phrase]
-> VOICE_WORST_OFFENDER: [quoted phrase, or "None"]
-> VOICE_ACTION: [one-line fix, or "None — score ≥ 4"]
->
-> AUDIENCE_SCORE: [1-5]
-> AUDIENCE_GENERIC_SECTION: [section name + one-line note, or "None"]
-> AUDIENCE_ACTION: [one-line fix, or "None — score ≥ 4"]
->
-> PRELIMINARY_VERDICT: [Ready / Revise first / Major rework needed]
-> VERDICT_REASON: [one sentence]
-> ```
+> Post folder: `POST_FOLDER`
+> Anti-patterns path: `style_guide/shared/anti_patterns.md`
+> Voice guide path: `style_guide/shared/voice.md`
 
 ---
 
 ### Agent 2 — Structure & Depth Critic
 
-**Prompt:**
+Invoke the `structure-critic` agent with this task prompt:
 
-> You are the Structure & Depth Critic for a newsletter post review.
->
-> **Post folder:** `POST_FOLDER`
->
-> **Your job:** Run 2 scoring passes on `POST_FOLDER/long_draft.md` and return a structured result. Read all required files before scoring.
->
-> **Files to read:**
-> - `POST_FOLDER/long_draft.md` (required)
-> - `POST_FOLDER/post.yaml` (optional — for content_type if present)
->
-> ---
->
-> ### Pass 1 — Structural Completeness
->
-> **Focus:** Is every required structural element present, in the right place, and correctly formatted?
->
-> Do not score prose quality here — that is for other passes. Check presence and placement only.
->
-> Required elements for management posts:
->
-> | Element | What to check |
-> |---------|---------------|
-> | Intro: anecdote → framing → thesis | Opens with a specific personal scene; thesis is explicit before the first H2 |
-> | Subtitle/deck line | An italicised one-liner immediately under the H1 |
-> | Preview section | Named `##` heading ("What will we cover?" or variant); uses labelled bullet list (`**Bold label.** Explainer.`) |
-> | Main body H2 sections | 5–8 sections present; headings are noun-phrase or verb-phrase declarations |
-> | Closing thoughts | Named `##` section (e.g. "Closing thoughts: …"); synthesis prose — not the last paragraphs of a content section |
-> | Now, I want to hear from you | Named `##` section; 2–4 specific questions tied to the post's argument |
->
-> Record ✓, ~, or ✗ and a one-line note for each element.
->
-> ---
->
-> ### Pass 4 — Section Depth
->
-> **Focus:** Does each section deliver insight and resolution, or does it only describe a problem the reader already knew?
->
-> For each H2 section, check:
-> - Does it move beyond naming the problem to offering a frame, insight, or observation the reader didn't have before?
-> - Does it close in a way that leaves the reader with something — a realisation, a reframe, a specific implication?
->
-> **Failure mode:** A section that spends 3+ paragraphs describing a recognisable problem, then ends without adding any new way to think about it or act on it.
->
-> Score 1–5. Call out the shallowest section by name. One line on what it's missing.
->
-> ---
->
-> **Return your result in exactly this format:**
->
-> ```
-> STRUCT_INTRO: [✓/~/✗] — [one-line note]
-> STRUCT_SUBTITLE: [✓/~/✗] — [one-line note]
-> STRUCT_PREVIEW: [✓/~/✗] — [one-line note]
-> STRUCT_H2_SECTIONS: [✓/~/✗] — [one-line note]
-> STRUCT_CLOSING: [✓/~/✗] — [one-line note]
-> STRUCT_READER_QUESTIONS: [✓/~/✗] — [one-line note]
->
-> DEPTH_SCORE: [1-5]
-> DEPTH_SHALLOWEST_SECTION: [section name] — [what it's missing]
-> DEPTH_ACTION: [one-line fix, or "None — score ≥ 4"]
->
-> PRELIMINARY_VERDICT: [Ready / Revise first / Major rework needed]
-> VERDICT_REASON: [one sentence]
-> ```
+> Post folder: `POST_FOLDER`
 
 ---
 
 ### Agent 3 — Impact & Argument Critic
 
-**Prompt:**
+Invoke the `impact-critic` agent with this task prompt:
 
-> You are the Impact & Argument Critic for a newsletter post review.
->
-> **Post folder:** `POST_FOLDER`
-> **Thesis:** `THESIS`
->
-> **Your job:** Run 2 scoring passes on `POST_FOLDER/long_draft.md` and return a structured result. Read all required files before scoring.
->
-> **Files to read:**
-> - `POST_FOLDER/long_draft.md` (required)
->
-> ---
->
-> ### Pass 3 — Argument Build-up / Logical Flow
->
-> **Focus:** Does the thesis get proven? Does each section earn the next?
->
-> Work through the post's argumentative structure:
->
-> 1. State the thesis from the intro in one sentence.
-> 2. For each H2 section: does it advance the argument toward that thesis, or is it tangential?
-> 3. Check transitions: does the end of each section imply the natural next question? Does the following section answer it directly?
-> 4. Check the closing: does it synthesise the full argument, or just restate a summary?
->
-> **Failure modes to catch:**
-> - A section that could be removed without weakening the argument
-> - A section that duplicates a point made earlier
-> - A transition that announces the next topic ("Now let's look at…") rather than earning it
-> - A closing that doesn't connect back to the opening anecdote or thesis
->
-> Score 1–5. Name the weakest transition or the section with the weakest argumentative role. One-line note on why.
->
-> ---
->
-> ### Pass 5 — Actionability of Practical Guidance
->
-> **Focus:** Would a tech lead reading this know what to do on Monday morning?
->
-> Locate the primary "what to do" section (or equivalent). For each recommendation:
-> - Is it specific enough to act on, or is it a category of action?
-> - Is it tied to the specific argument of this post, or could it appear in any AI-and-management article?
->
-> **Too specific enough:** "Set a PR size limit — 400 lines as a soft ceiling. Track time-to-review as a weekly metric."
-> **Too vague:** "Strengthen review systems."
->
-> Score 1–5. Quote any recommendation that is too vague and note what specificity is missing. If no practical guidance section exists, mark N/A and note this.
->
-> ---
->
-> **Return your result in exactly this format:**
->
-> ```
-> ARGUMENT_SCORE: [1-5]
-> ARGUMENT_THESIS: [one sentence as stated in the intro]
-> ARGUMENT_WEAKEST: [section name or transition] — [one-line note]
-> ARGUMENT_ACTION: [one-line fix, or "None — score ≥ 4"]
->
-> ACTION_SCORE: [1-5 or N/A]
-> ACTION_WEAKEST_REC: [quoted recommendation, or "None"]
-> ACTION_ACTION: [one-line fix, or "None — score ≥ 4 or N/A"]
->
-> PRELIMINARY_VERDICT: [Ready / Revise first / Major rework needed]
-> VERDICT_REASON: [one sentence]
-> ```
+> Post folder: `POST_FOLDER`
+> Thesis: `THESIS`
 
 ---
 

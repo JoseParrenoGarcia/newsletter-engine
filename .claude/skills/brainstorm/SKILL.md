@@ -14,7 +14,7 @@ Run an interactive brainstorm session for the post in `$ARGUMENTS` (or the curre
 ## Before you start
 
 ### 1. Locate the post folder
-If `$ARGUMENTS` is provided, that is the post folder. Otherwise look for a `post.yaml` in the current directory. If neither exists, tell Jose to either provide a folder path or run `/new-post` first.
+If `$ARGUMENTS` is provided, that is the post folder. Otherwise look for a `post.yaml` in the current directory. If neither exists, Jose may want to brainstorm before a folder exists — this is normal when starting from a paper, idea, or rough notes rather than a slug. In that case: proceed with the brainstorm conversation as normal. At the output step, derive the slug from the working title agreed during wrap-up, create the folder `posts/<slug>/`, then write `post.yaml` and `notes.md` into it.
 
 ### 2. Check stage guard
 Read `post.yaml`. If `stages.brainstorm.status` is `complete`, say:
