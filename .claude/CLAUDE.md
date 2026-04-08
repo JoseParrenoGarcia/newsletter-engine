@@ -3,7 +3,7 @@
 A repo-based, Claude-first writing system for creating blog and newsletter content. Claude operates from durable repo files rather than chat memory, coordinating specialised agents across a repeatable content workflow.
 
 **Primary user:** Jose
-**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | M5 — Complete ✓ | M6 — Complete ✓ | M7 — In Progress (review ✓, ideate pending)
+**Active milestone:** M0 — Complete ✓ | M1 — Complete ✓ | M2 — Complete ✓ | M3 — Complete ✓ | M4 — Complete ✓ | M5 — Complete ✓ | M6 — Complete ✓ | M7 — Complete ✓ | M8 — In Progress (ideate pending)
 
 ---
 
@@ -22,6 +22,8 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `reference_posts/` | Jose's real posts (series, standalone, short_technical) | M0 |
 | `style_guide/` | Voice, anti-patterns (shared/), per-type rules, promotion_formats.md | **Done (M0, M5)** |
 | `.claude/skills/` | Skill instruction files (one per skill) | M1+ |
+| `.claude/agents/` | Critic agent definitions invoked by `/review` (voice, structure, impact) | **Live (M7)** |
+| `.claude/hooks/` | Automation hooks: skill-reflector (reflection log), detect-skill-complete | **Live (M7)** |
 | `.claude/rules/` | Behavioural guardrails, auto-loaded each session | Active |
 | `templates/` | Post folder template (`post.yaml`, `notes.md`, `placeholder.md`) | **Done (M1)** |
 | `posts/` | Per-post working folders with artefacts | M1+ |
@@ -41,7 +43,7 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 | `/revise` | SEO-driven draft revision (any draft + brief pair) | **Live (M6)** |
 | `/review` | 3-critic multi-agent debate → 6-dimension rubric + panel consensus + publish readiness verdict | **Live (M7)** |
 | `/promote` | LinkedIn + Substack bundle (any draft) | **Live (M5)** |
-| `/ideate` | Trend-aware content ideas, standalone | M8 |
+| `/ideate` | Trend-aware content ideas, standalone | Pending (M8) |
 
 ---
 

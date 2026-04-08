@@ -8,17 +8,39 @@ A repo-based, Claude-first writing system for creating blog and newsletter conte
 
 ```mermaid
 flowchart TD
-    A([notes.md]) --> B["/brainstorm"]
-    B --> C["/research"]
-    C --> D["/draft"]
-    D --> E["/seo"]
-    E --> F["/revise"]
-    F --> G["/review"]
-    G --> H["/promote"]
-    H --> I([bundle])
+    PDF([PDF]) --> IP["/import-pdf"]
+    IP --> RP([reference_posts/])
+
+    NOTES([notes.md]) --> NP
+
+    subgraph NP ["/new-post  ·  stage-skip orchestrator"]
+        B["/brainstorm"] --> C["/research"]
+        C --> D["/draft"]
+        D --> E["/seo"]
+        E --> F["/revise"]
+        F --> RLOOP
+
+        subgraph RLOOP ["/review  ·  max 3 iterations"]
+            direction LR
+            G["/review"] --> VRD{Verdict?}
+            VRD -- "Not ready · fix + retry" --> G
+        end
+
+        VRD -- Ready --> PR["/promote"]
+    end
+
+    G -.->|spawns| CRITICS(["voice-critic · structure-critic · impact-critic"])
+    CRITICS -.->|verdicts| G
+
+    PR --> BUNDLE([promotion_posts.md])
+
+    classDef skill fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    classDef agent fill:#F5A623,stroke:#C47D0E,color:#fff
+    class B,C,D,E,F,G,PR,IP skill
+    class CRITICS agent
 ```
 
-Each skill is independently invocable. `/new-post` chains all stages unattended.
+Each skill is independently invocable. `/new-post` chains all stages unattended with stage-skip logic. `/import-pdf` is a standalone utility for importing reference posts.
 
 | Stage | Produces |
 |-------|----------|
@@ -29,6 +51,7 @@ Each skill is independently invocable. `/new-post` chains all stages unattended.
 | `/revise` | `long_draft.md` (revised), `long_draft_v1.md` (backup) |
 | `/review` | `review_report.md` |
 | `/promote` | `promotion_posts.md` |
+| `/new-post` | `decision_log.md`, `skill_reflection_log.md` (via hooks) |
 
 ---
 
@@ -39,6 +62,8 @@ newsletter-engine/
 ├── .claude/
 │   ├── CLAUDE.md                  # Session context and repo index
 │   ├── rules/                     # Behavioural rules, auto-loaded
+│   ├── agents/                    # Critic agent definitions (voice, structure, impact)
+│   ├── hooks/                     # Automation hooks (skill-reflector, detect-skill-complete)
 │   └── skills/                    # Skill instruction files
 │       ├── import-pdf/            # /import-pdf
 │       ├── new-post/              # /new-post — full pipeline orchestrator
@@ -72,7 +97,8 @@ newsletter-engine/
         ├── seo_brief.md
         ├── review_report.md       # Panel consensus + 6-dimension scores (created by /review)
         ├── promotion_posts.md
-        └── decision_log.md        # Append-only pipeline run log
+        ├── decision_log.md        # Append-only pipeline run log
+        └── skill_reflection_log.md  # Appended by skill-reflector hook after each stage
 ```
 
 ---
@@ -99,6 +125,7 @@ newsletter-engine/
 | M4 — SEO | `/seo` | ✓ Complete |
 | M5 — Promotion | `/promote` | ✓ Complete |
 | M6 — Full Pipeline | `/revise` + `/new-post` | ✓ Complete |
-| M7 — Review + Ideation | `/review` + `/ideate` | In Progress — review ✓, ideate pending |
+| M7 — Review | `/review` | ✓ Complete |
+| M8 — Ideation | `/ideate` | Pending |
 
 See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.
