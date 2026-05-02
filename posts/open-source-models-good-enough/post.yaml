@@ -1,0 +1,79 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "open-source-models-good-enough"
+working_title: "Open Source Models Are Good Enough: Stop Overpaying for Intelligence You Don't Need"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: standalone
+content_type: series-genai
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Open source models (especially Chinese ones like DeepSeek and Qwen) lag frontier models by 6–12 months, but for the vast majority of real-world tasks that gap is irrelevant. Renting intelligence from Anthropic and OpenAI is expensive; the pragmatic move is to match the model to the task — and start experimenting with open source today, before you need to."
+target_audience: "Tech-aware readers with a pinch of technicality — engineers, PMs, founders, and technical managers who make or influence AI tooling decisions."
+target_reading_time_minutes: 15
+topics_to_cover:
+  - "The capability gap between frontier and open source models (6–12 month lag framing)"
+  - "Why the gap is overhyped: most production tasks don't need frontier-level reasoning"
+  - "Task taxonomy: what genuinely needs frontier models vs what doesn't"
+  - "Cost comparison: inference costs of Anthropic/OpenAI vs self-hosted/third-party open source"
+  - "Overview of leading Chinese open source models (DeepSeek, Qwen, etc.)"
+  - "The Vegetius argument: 'in times of peace, prepare for war' — start experimenting now"
+  - "Practical first steps for evaluating open source models on your own tasks"
+topics_to_exclude:
+  - "Deep dives into fine-tuning methodology"
+  - "Detailed infrastructure/deployment setup"
+  - "Security and data privacy compliance specifics"
+open_research_questions:
+  - "Specific benchmark comparisons (MMLU, HumanEval, etc.) between frontier and open source models"
+  - "Concrete cost-per-token comparisons across providers"
+  - "Real-world case studies or anecdotes of teams switching to open source"
+  - "Current state of leading Chinese open source models and their release cadence"
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "The post argues against the default assumption that every AI use case requires the latest frontier model. The framing starts with an acknowledged fact — open source models, particularly Chinese ones like DeepSeek and Qwen, trail US frontier models (GPT-4o, Claude 3.5/3.7, Gemini Ultra) by roughly 6–12 months on capability benchmarks. Jose's provocation is: 'so what?' Most organisations are not doing the tasks that require that last 10% of capability. The gap that exists on hard reasoning benchmarks rarely manifests in day-to-day production use cases like summarisation, classification, extraction, code review, or customer support.\n\nThe cost angle is real and underappreciated. Renting inference from Anthropic and OpenAI at scale is expensive. Open source models hosted via providers like Together AI, Fireworks, or self-hosted on cloud VMs are meaningfully cheaper for high-volume workloads. The post will give readers a mental model for deciding when the premium is justified and when it is waste.\n\nThe structural spine is a task taxonomy: a simple framework that lets readers classify their own use cases by complexity/reasoning demand, and understand where the frontier premium pays off versus where it doesn't. This gives the post practical utility beyond the argument.\n\nThe emotional and rhetorical core is the Vegetius quote — 'in times of peace, prepare for war.' The call to action is not 'switch everything to open source today' but rather 'start experimenting now, while there is no pressure.' Teams that have never evaluated open source models will be caught flat-footed when costs or geopolitical supply chain concerns force the issue. The post ends with concrete first steps.\n\nTone is pragmatic and pedagogic throughout — Jose is not contrarian for its own sake, but making a reasoned case with data from his research."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/genai-ai/claude-code-agents-explained.md
+  - reference_posts/standalone/genai-ai/what-the-docs-dont-tell-you-about-claude-code-skills.md
+  - reference_posts/standalone/genai-ai/claude-code-agent-teams-when-and-how-to-go-multi-agent.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: null
+  seo_brief: null
+  review_report: null
+  promotion_posts: null
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-05-02"
+  research:
+    status: complete
+    completed_at: "2026-05-02"
+  draft:
+    status: complete
+    completed_at: "2026-05-02"
+  seo:
+    status: pending
+    completed_at: null
+  revise:
+    status: pending
+    completed_at: null
+  review:
+    status: pending
+    completed_at: null
+  promote:
+    status: pending
+    completed_at: null
