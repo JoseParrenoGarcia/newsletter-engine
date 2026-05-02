@@ -1,0 +1,79 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "claude-code-agent-teams"
+working_title: "Claude Code agent teams: when and how to go multi-agent"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"     # workaround — no standalone-genai type exists yet
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Add more agents only when you have a clear reason — context isolation, specialisation, parallel work, or independent critique. This post explains when that threshold is reached, the four patterns for combining agents, how they communicate, and why teams fail in practice."
+target_audience: "Claude Code practitioners who already understand subagents and want to know when and how to combine multiple agents together into a coordinated system."
+target_reading_time_minutes: 17
+topics_to_cover:
+  - When to upgrade from one agent (the real triggers)
+  - The Anthropic stack ladder — Messages API through agent teams, with honest maturity labels
+  - Four team paradigms: orchestrator, sequential pipeline, parallel specialists, swarm (provider-agnostic)
+  - Claude Code agent teams architecture — how they relate to subagents, skills, hooks, shared task list, mailbox
+  - How agents communicate: three forms (plain language, structured invocation, shared artefacts), four timing patterns, what to pass between agents
+  - Failure modes section — eight failure modes with practical mitigations
+  - Decision framework: native managed vs DIY vs hybrid, with honest trade-offs
+topics_to_exclude:
+  - OpenAI Agents SDK specifics
+  - Google ADK specifics
+  - A2A and MCP protocol deep dives (mention only as labels, not detailed)
+  - Managed Agents multiagent deep dive (Research Preview, too early)
+  - Re-explaining what subagents are (reader has read the previous post)
+open_research_questions:
+  - Claude Code agent teams are experimental and disabled by default as of 2026-04-29 — date-stamp any claims about this status
+  - Managed Agents multiagent is Research Preview with one coordinator level only — wording caution needed
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "This post is the natural follow-on from the subagents post — it picks up at the moment one subagent stops being enough. The core argument is anti-hype: most systems should start with one well-configured agent plus good tools, and only add more agents when there is a specific, nameable reason to do so. The four legitimate triggers are context isolation, specialisation, parallel work, and independent critique. The post is standalone but assumes the reader has already read the subagents post and does not need basic agent concepts re-explained. The scope is deliberately focused on Claude Code and provider-agnostic patterns; cross-provider framework specifics (OpenAI, Google ADK) and protocol deep dives (A2A, MCP) are excluded to keep the post tight. The failure modes section is a full section because that is the part most posts in this space skip, and it is where the practical value is. The post closes with a decision framework that treats native-managed vs DIY vs hybrid as architecture trade-offs rather than ideology."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/genai-ai/claude-code-agents-explained.md
+  - reference_posts/standalone/genai-ai/what-the-docs-dont-tell-you-about-claude-code-skills.md
+  - reference_posts/standalone/genai-ai/claude-code-memory-explained-how-it-really-works.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-04-29"
+  research:
+    status: complete
+    completed_at: "2026-04-29"
+  draft:
+    status: complete
+    completed_at: "2026-04-29"
+  seo:
+    status: complete
+    completed_at: "2026-04-29"
+  revise:
+    status: complete
+    completed_at: "2026-04-29"
+  review:
+    status: complete
+    completed_at: "2026-04-29"
+  promote:
+    status: complete
+    completed_at: "2026-04-29"
