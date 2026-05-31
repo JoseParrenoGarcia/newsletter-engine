@@ -54,15 +54,17 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > **Step 2 — Parse revision targets from `seo_brief.md`**
 > Extract a concrete, numbered list of changes to apply. Work through these sections in order:
 >
-> From section 6 — Keyword placement checklist: For every position marked ✗:
+> From section 6 — AI Discoverability: For each H2 flagged as not question-format, apply the suggested question rewrite. Note each H2 original text and its planned replacement — you will need this list in Step 5 for TOC sync.
+>
+> From section 7 — Keyword placement checklist: For every position marked ✗:
 > - H1/Title — note the H1 recommendation from section 4
 > - First 100 words — plan where to insert the primary keyword naturally
 > - At least one H2 — identify the best H2 to update per section 5 recommendations
 > - Meta description and URL slug — skip (not in the draft body)
 >
-> From section 10 — Quick Wins: List all 3 Quick Wins verbatim.
+> From section 11 — Quick Wins: List all Quick Wins verbatim.
 >
-> From section 7 — Readability issues: Only extract items where the verdict is "needs work". Plan sentence breaks and passive-to-active voice conversions.
+> From section 8 — Readability issues: Only extract items where the verdict is "needs work". Plan sentence breaks and passive-to-active voice conversions.
 >
 > From section 5 — H2/H3 structure review: Apply reword recommendations only if additive (adds a keyword without changing meaning). Skip if the proposed change would alter the section's intent.
 >
@@ -87,6 +89,8 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - Do not remove content — shorten sentences by cutting redundant clauses, not ideas
 > - Preserve Jose's voice — no generic AI filler phrases, no "it's important to note" or "in conclusion"
 > - One change at a time — apply each planned edit exactly as described; do not improvise
+> - **Heading capitalisation** — all H2 and H3 headings must use title case (capitalise the first letter of every word). If any existing heading uses sentence case, correct it as part of the revision pass.
+> - **TOC sync** — after applying any H2 heading change, find the "What will we cover in this post?" section (or equivalent TOC/preview list near the top of the draft). For each changed H2, locate the bullet whose `**bold phrase**` corresponds to that section and update the bold phrase to match the new H2 text exactly. If a bullet has no clear match, leave it unchanged and note it in the revision plan as skipped.
 >
 > **Step 6 — Update `post.yaml`**
 > If `post.yaml` exists, update:

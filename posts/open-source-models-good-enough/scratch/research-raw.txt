@@ -1,0 +1,833 @@
+Verifiable research notes on the practical gap
+between frontier LLMs and near-frontier open
+models
+Executive summary
+•
+
+•
+
+•
+
+•
+
+•
+
+•
+
+•
+
+Verified fact — closest public CAISI source. The closest public, primary CAISI source I
+could validate for the claim in your screenshot is NIST CAISI’s Evaluation of
+DeepSeek AI Models, organisation-authored by the Center for AI Standards and
+Innovation, National Institute of Standards and Technology, published 30
+September 2025. It is a benchmark report comparing 3 DeepSeek models with 4 U.S.
+reference models across 19 benchmarks.
+Verified fact — the public CAISI material retrieved here does not publish an “8
+months behind” number. In the validated CAISI/NIST documents I retrieved, CAISI
+reports benchmark-level performance gaps, not a public “months behind”
+conversion. The report says DeepSeek lags leading U.S. models, with the largest gaps
+in software engineering and cyber, but it does not expose a public formula
+translating that into “6–8 months behind”.
+Verified fact — an explicit month-lag estimate exists, but from Epoch AI, not the
+validated CAISI report. Epoch AI’s public analysis states that Chinese AI models have
+lagged the U.S. frontier by an average of 7 months since 2023, with a 4–14
+month range, using the Epoch Capabilities Index rather than Elo or CAISI’s
+benchmark table.
+Verified fact — different evaluation systems measure different things. CAISI
+measures task success on selected benchmarks plus security/censorship/adoption;
+LMSYS/Arena measures human preference from pairwise votes using a Bradley–
+Terry / Elo-like framework; Epoch AI uses a benchmark-stitching latent capability
+index; Artificial Analysis uses a weighted composite index across 10 evaluations.
+These are not interchangeable scales.
+Verified fact — the practical gap is strongly task-dependent. In CAISI’s own data,
+the gap is large on cyber and software-engineering tasks, but much narrower on
+question-answer style knowledge benchmarks. Example: SWE-bench Verified 66.7 vs
+54.8, but MMLU-Pro 90.2 vs 89.0 for best U.S. model vs DeepSeek V3.1. CAISI itself
+says the question-answer benchmarks are “not by a wide margin” and are less
+indicative of real-world performance than cyber and software-engineering tasks.
+Verified fact — current open or open-weight models can get surprisingly close on
+some coding leaderboards. On Arena’s HTML code leaderboard, the top proprietary
+model in the retrieved snapshot is Claude Opus 4.7 at 1556, while the strongest
+open-weight/open-licensed entries shown include GLM-5.1 at 1538, Kimi K2.6 at
+1506, and DeepSeek V4 Pro Thinking at 1468. That is not parity, but neither is it a
+comic-opera collapse into irrelevance.
+Verified fact — for retrieval/search-enabled tasks, the retrieved public
+leaderboard remains proprietary-heavy. In Arena’s Search leaderboard snapshot, the
+top search-enabled models are proprietary, such as Claude Opus 4.6 Search at
+
+•
+
+1255 and GPT-5.5 Search at 1235; the only open model shown in the top 28 snippet
+is Diffbot Small XL at 1024. That suggests the gap matters more when
+search/retrieval orchestration is central.
+Interpretation — the headline claim is directionally plausible, but source
+attribution is shaky. “Near-frontier/open models are ~6–8 months behind” is well
+aligned with Epoch AI’s explicit public analysis, but not directly substantiated by
+the public CAISI documents retrieved here. The second half of the claim — “this may
+not matter in practice” — is partially supported by the narrower gaps on Q&A-style
+tasks and by coding leaderboards where strong open-weight models are close on
+some slices, but it does not hold uniformly across cyber, retrieval/search, or agentic
+engineering workloads.
+
+CAISI study validation
+Source identity
+Item
+Extracted note
+Title
+Evaluation of DeepSeek AI Models
+Authors / organisation Center for AI Standards and Innovation, National Institute of Standards and Technology
+30 September 2025
+Publication date
+NIST-hosted PDF and NIST news release
+Original source
+• Verified fact — source metadata. Evaluation of DeepSeek AI Models is a NIST-hosted
+
+•
+
+•
+
+CAISI report; the PDF cover identifies Center for AI Standards and
+Innovation and National Institute of Standards and Technology, and the NIST news
+page dates the release to 30 September 2025.
+Verified fact — related public CAISI follow-up. A later NIST update, CAISI
+Evaluation of Kimi K2 Thinking, published 12 December 2025, states that Kimi K2
+Thinking was the most capable PRC-based model at the time of release, while still
+lagging leading U.S. models.
+Verified fact — unresolved attribution issue. The chart in your screenshot appears
+to use an Elo-style “overall capability” trajectory, but the validated public CAISI PDF
+uses benchmark success percentages, security results, censorship results, and
+adoption metrics; I did not find a public CAISI report in this pass that reproduces the
+screenshot’s specific Elo chart and labels.
+
+What CAISI actually measures
+•
+
+•
+
+Verified fact — CAISI capability metric is benchmark success, not Elo. The report
+evaluates models across four capability domains — cyber, software engineering,
+science and knowledge, mathematical reasoning — and reports accuracy /
+percentage of tasks solved on the included benchmarks.
+Verified fact — benchmark set. The report uses 19 benchmarks in total, including
+public and CAISI/private benchmarks. The capability table includes CVE-Bench,
+Cybench, CTF-Archive, SWE-bench Verified, Breakpoint, MMLU-Pro, MMMLU,
+GPQA, HealthBench, Humanity’s Last Exam, SMT 2025, OTIS-AIME 2025, and
+PUMaC 2024.
+
+•
+
+•
+
+Verified fact — agentic evaluations were normalised. For cyber and software tasks,
+CAISI used a standardised ReAct-style agent loop, a common Linux/Docker
+environment, and a fixed 500,000 weighted-token budget per agentic task.
+Verified fact — uncertainty modelling. CAISI estimates benchmark uncertainty
+using mixed-effects logistic regression, treating model as a fixed effect and task as a
+random effect; it reports error bars as estimated standard errors.
+
+What “months behind” does and does not mean in CAISI
+•
+
+•
+
+•
+
+Verified fact — public CAISI wording. CAISI says DeepSeek performance “lags
+behind” leading U.S. models; the best U.S. model outperforms DeepSeek V3.1 on
+almost every benchmark, with the largest gaps in software engineering and cyber.
+Verified fact — public CAISI does not quantify lag in months. The retrieved public
+CAISI materials do not state “8 months behind” and do not publish a method for
+converting benchmark gaps into elapsed calendar time.
+Interpretation — likely source confusion. The phrase “about 8 months behind” is
+more plausibly a secondary interpretation or a borrowing from other benchmark
+frameworks such as Epoch AI’s 7-month estimate, rather than a direct quotation from
+the validated NIST CAISI report.
+
+Method assumptions and limitations
+•
+
+•
+
+•
+
+•
+
+Verified fact — server path matters. CAISI evaluated proprietary U.S.
+models through APIs, but downloaded DeepSeek weights from Hugging Face and
+ran them on CAISI cloud servers. The report explicitly says evaluations on DeepSeek
+APIs or third-party hosts may yield different results, especially for security and
+censorship.
+Verified fact — the report is partial and preliminary. CAISI’s disclaimer says the
+findings are preliminary, limited to specific domains, model versions,
+and evaluation methods, and may not generalise to other tasks. It also notes
+benchmark limitations, including relevance to practical tasks and possible overlap with
+training data.
+Verified fact — cost comparison caveat. CAISI compares end-to-end expense, not
+just token price, and explicitly notes that DeepSeek’s lower pricing came with higher
+latency and a smaller maximum prompt size (64k vs “many U.S. cloud providers”
+at 128k), which may make its analysis conservative in DeepSeek’s favour.
+Verified fact — the report does not address all strategic questions. CAISI says it
+does not investigate how models were developed, the cost of development, or
+whether they were trained on distilled data.
+
+Alternative analyses
+Comparison table
+Source
+
+Primary metric
+
+LMSYS / Human-preference Bradley–
+Arena
+Terry / Elo-like score from
+anonymous pairwise votes
+
+Public conclusion relevant to your
+claim
+Useful for “how good does it feel in
+practice?” on open-ended tasks; not a
+month-lag estimate
+
+Raw data / methodology
+availability
+Method paper + public
+leaderboard dataset
+
+Public conclusion relevant to your
+claim
+Epoch AI Epoch Capabilities Index from Chinese models lagged U.S. frontier
+by 7 months on averagesince 2023
+stitched benchmark scores
+Gap to leading U.S. proprietary models
+Artificial Weighted Intelligence
+is narrower than in earlier periods;
+Analysis Indexacross 10 evals
+Chinese open-weight models have
+periodically led the openweight frontier
+
+Source
+
+Primary metric
+
+Raw data / methodology
+availability
+Public methodology page +
+public code repo
+Public methodology + live
+leaderboard/evaluation
+pages
+
+LMSYS / Arena
+•
+
+•
+
+•
+
+•
+
+•
+•
+
+Verified fact — methodology. The Chatbot Arena paper describes an open platform
+for evaluating LLMs by human preference via pairwise comparisons collected from
+users; Arena’s current FAQ says rankings are computed with the Bradley–Terry rating
+system, similar to Elo.
+Verified fact — what it measures. Arena is strongest as a measure of user-perceived
+quality on open-ended prompts, rather than “objective capability” in the CAISI/Epoch
+sense. Arena itself now refers to the score as Arena score rather than “Elo”, because it
+is reporting Bradley–Terry coefficients on an Elo-like scale.
+Verified fact — style confounds are real. Arena has published a technical note
+showing that rankings can be affected by response length and markdown/style, and
+that it uses style control in Bradley–Terry regression to reduce that confounding.
+Verified fact — current evidence from one task slice. On Arena’s HTML code
+leaderboard snapshot, proprietary leaders still occupy the top positions, but
+open/open-weight models are close: Claude Opus 4.7 1556, GLM-5.1 1538, Kimi
+K2.6 1506, DeepSeek V4 Pro Thinking 1468.
+Agreement with CAISI. Frontier proprietary models still dominate the overall top of
+the leaderboard.
+Disagreement or non-overlap with CAISI. Arena is not a security/censorship
+benchmark and does not provide a country-level month-lag estimate. It may show
+smaller practical differences on user-facing tasks than CAISI’s cyber/softwareengineering tables.
+
+Epoch AI
+•
+
+•
+
+•
+
+Verified fact — explicit month-lag result. Epoch AI’s analysis states that since 2023,
+Chinese AI models have trailed the U.S. frontier by an average of 7 months, with
+a minimum of 4 and a maximum of 14 months.
+Verified fact — methodology. Epoch computes lag using the Epoch Capabilities
+Index, which stitches benchmarks into a single capability scale. For the country-gap
+analysis, it tracks the best model from each country on each day, then asks how long
+since the leading U.S. model last had an ECI score as low as the best Chinese model’s
+score on that day, treating scores within 1 ECI point as equivalent.
+Verified fact — what ECI is. ECI uses Item Response Theory-style modelling with
+benchmark difficulty and slope parameters; the current methodology page says it
+draws on 37 distinct benchmarks and is fit by non-linear least squares with ridge
+regularisation.
+
+•
+
+•
+•
+
+Verified fact — benchmark breadth. Epoch’s current methodology page lists a broad
+mix of internal evaluations, independent leaderboards, and developer-reported
+benchmarks, including GPQA Diamond, FrontierMath, SimpleQA Verified, Aider
+polyglot, SWE-bench (Bash Only), Terminal-Bench, Cybench, MMLU, OSWorld,
+and others.
+Agreement with the headline claim. This is the cleanest public source in the retrieved
+material for the “~6–8 months behind” statement.
+Disagreement with CAISI. Epoch’s lag is a composite statistical translation across
+many benchmarks, whereas CAISI publishes task-specific gaps and adds nationalsecurity evaluations such as hijacking, jailbreaking, and censorship. The two sources are
+complementary, not directly comparable.
+
+Artificial Analysis
+•
+
+•
+
+•
+
+•
+
+•
+
+•
+
+Verified fact — methodology. Artificial Analysis’ current Intelligence Index v4.0.4 is
+a weighted average over 10 evaluations: GDPval-AA, τ²-Bench Telecom, TerminalBench Hard, SciCode, AA-LCR, AA-Omniscience, IFBench, Humanity’s Last Exam,
+GPQA Diamond, and CritPt, grouped into four equally weighted categories.
+Verified fact — current live snapshot. In the retrieved live leaderboard
+snapshot, GPT-5.5 (xhigh) scores 60, while leading Chinese/open-weight or nearfrontier models include Kimi K2.6 at 54, DeepSeek V4 Pro (Max) at 52, Qwen3.6
+Max Preview at 52, and gpt-oss-120B (high) at 33.
+Verified fact — prior China report. Artificial Analysis’ Q2 2025 China report says the
+U.S.–China frontier gap had become “as narrow now as it has ever been”, and that
+the Chinese open-weight frontier surpassed the U.S. open-weight
+frontier in November 2024.
+Verified fact — explicit caveat. Artificial Analysis’ China report says that some results
+were estimated based on company claims and comparable results, rather than all
+being independently benchmarked at the moment of publication.
+Agreement with the headline claim. Artificial Analysis supports the view that strong
+Chinese/open-weight models are now near-frontier on several dimensions,
+especially in the open-weight segment.
+Disagreement with CAISI in emphasis. CAISI stresses security, censorship, and
+cyber/software gaps; Artificial Analysis places more weight on general capability
+composites, coding, agentic workflows, and price/performance.
+
+Capability gaps by task type
+Quantitative examples
+Task category
+
+Metric
+
+Reasoning and coding
+
+SWE-bench
+Verified
+Breakpoint
+OTIS-AIME 2025
+MMLU-Pro
+
+Reasoning and coding
+Math reasoning
+General knowledge /
+chat-adjacent
+
+Frontier / best-U.S. Near-frontier / open
+Extracted gapSource
+example
+example
+66.7 54.8(DeepSeek V3.1)
+11.9 pts CAISI
+98.0 78.5(DeepSeek V3.1)
+91.9 77.6(DeepSeek V3.1)
+90.2 89.0(DeepSeek V3.1)
+
+19.5 pts CAISI
+14.3 pts CAISI
+1.2 pts CAISI
+
+Task category
+
+Metric
+
+GPQA
+General knowledge /
+chat-adjacent
+Humanity’s Last
+General knowledge /
+Exam
+hard synthesis
+Arena Search
+Search / retrievalscore
+enabled
+Coding in a user-facing Arena HTML
+code score
+arena
+
+Frontier / best-U.S. Near-frontier / open
+Extracted gapSource
+example
+example
+86.9 79.3(DeepSeek V3.1)
+7.6 pts CAISI
+26.6 13.0(DeepSeek V3.1)
+
+13.6 pts CAISI
+
+1255 (Claude Opus 4.6
+1024 (Diffbot Small
+231 Arena- Arena
+Search)
+XL, open)
+score pts
+1556 (Claude Opus 1538 (GLM-5.1, MIT) 18 Arena-score Arena
+4.7)
+pts
+
+Reasoning and coding
+•
+
+•
+
+•
+
+•
+
+•
+
+Verified fact — CAISI shows large practical gaps on software engineering. In
+CAISI’s table, the best U.S. model scores 66.7 on SWE-bench Verified versus 54.8 for
+DeepSeek V3.1, and 98.0 vs 78.5 on Breakpoint. CAISI’s summary says the gap is
+largest for software engineering and cyber.
+Verified fact — CAISI shows moderate-to-large gaps on maths. On CAISI’s maths
+benchmarks, the best U.S. model scores 91.9 vs 77.6 on OTIS-AIME 2025, 85.9 vs
+77.7 on PUMaC 2024, and 91.8 vs 86.2 on SMT 2025.
+Verified fact — GPT-5 also improved materially over OpenAI’s prior
+frontier.OpenAI’s GPT-5-for-developers launch states GPT-5 scores 74.9% on SWEbench Verified versus o3 at 69.1%, and 88% on Aider polyglot.
+Verified fact — but open/open-weight models can be close on some live coding
+arenas. On Arena’s HTML code leaderboard snapshot, GLM-5.1 (MIT) is only 18
+Arena-score points behind Claude Opus 4.7, while Kimi K2.6 and DeepSeek V4 Pro
+Thinking are also in the upper tier.
+Interpretation. For coding, the gap is real but not uniform: frontier advantage is
+clearer on curated engineering benchmarks and some agentic tasks than on all userfacing coding arenas.
+
+General chat and summarisation
+•
+
+•
+
+•
+
+•
+
+Verified fact — CAISI’s narrowest gaps are on Q&A-style knowledge
+benchmarks.The best U.S. model scores 90.2 vs 89.0 on MMLU-Pro, 87.7 vs
+82.2 on MMMLU, and 63.0 vs 52.5 on HealthBench relative to DeepSeek V3.1.
+Verified fact — CAISI’s own interpretation is that these gaps are narrower. CAISI
+says U.S. and DeepSeek models achieve similar performance on question-answerstyle science and knowledge benchmarks, with frontier models only slightly more
+performant, and “not by much”.
+Verified fact — human-preference frameworks are relevant here. LMSYS/Arena’s
+entire methodology is based on human preference in pairwise chat comparisons,
+making it a useful complement for general-chat use cases that fixed multiple-choice
+benchmarks often miss.
+Interpretation. This is the strongest support in the retrieved material for the claim that
+“the gap may not matter in practice” — if the application is mostly drafting,
+summarising, or knowledge synthesis rather than hard agentic coding or cyber tasks.
+
+RAG and retrieval-based systems
+
+•
+
+•
+
+•
+
+•
+
+Verified fact — Search Arena is a direct benchmark for search-enabled
+assistants.Arena’s Search leaderboard evaluates search-enabled AI systems and in the
+retrieved snapshot is led by proprietary models such as Claude Opus 4.6 Search
+(1255), GPT-5.5 Search (1235), and Claude Sonnet 4.6 Search (1221).
+Verified fact — open presence in that snapshot is thin. The retrieved top-28 Search
+Arena snippet includes Diffbot Small XL (Apache 2.0) at 1024, well below the leading
+proprietary search-enabled systems.
+Interpretation. If your “RAG system” is really a search-and-browse assistant with
+tool use, the grade-school slogan “all good models are basically the same” looks
+rather less convincing. If it is classic enterprise RAG over a stable private corpus with
+light synthesis, the retrieved packet here is less conclusive.
+Open gap in this research pass. I did not retrieve a high-confidence, primary-source
+benchmark in this pass that cleanly compares frontier vs open models on enterprise
+private-corpus RAG with identical retrieval stacks. That should be treated
+as unspecified / still needed.
+
+Structured tasks
+•
+
+•
+
+•
+
+Verified fact — Artificial Analysis includes a structured instruction-following
+benchmark. The Intelligence Index includes IFBench, with 294 tasks, 5 repeats, ruledriven assessment, and pass@1 scoring.
+Verified fact — but per-model IFBench scores were not retrieved in this pass. The
+methodology is available, but I did not retrieve the corresponding per-model score
+table here. That detail should be marked unspecified in this pass rather than
+guessed.
+Best proxy from retrieved evidence. CAISI’s small gap on MMLU-Pro and moderate
+gap on MMMLU suggest that structured knowledge/classification-like tasks may
+compress the frontier advantage, but HLE shows that the gap widens again as task
+difficulty rises.
+
+Cost and operational notes
+What is directly verified in the retrieved sources
+Type
+End-to-end cost
+Latency / context tradeoff
+Current blended live
+prices
+
+Extracted fact
+Status
+GPT-5-mini was 35% less costly on averagethan
+Verified
+DeepSeek V3.1 at similar performance across CAISI’s
+13 capability benchmarks
+CAISI says DeepSeek’s lower price came with higher Verified
+latency and 64k context, vs many U.S. providers
+at 128k
+AA snapshot shows GPT-5.5 (xhigh) $11.25 blended / Verified, third-party live
+1M tokens, DeepSeek V4 Pro (Max) $2.17, Kimi
+aggregator, not official
+K2.6 $1.71, gpt-oss-120B (high) $0.26
+pricing page
+Arena HTML shows Opus 4.7 $5 / $25, GLM-5.1
+Verified, leaderboard$1.40 / $4.40, DeepSeek V4 Pro Thinking $0.43 /
+captured public prices, not
+$0.87, MiniMax-M2.7 $0.30 / $1.20
+official pricing page
+
+Current coding
+price/performance
+examples
+• Verified fact — measured user cost can reverse a “cheap open model”
+
+story.CAISI’s cost analysis explicitly uses end-to-end expense per task, not list token
+
+•
+
+•
+
+•
+
+price, and finds GPT-5-mini cheaper than DeepSeek V3.1 on 11 of 13 capability
+benchmarks, averaging 35% lower expense despite similar overall performance class.
+Verified fact — latency and context are part of the economic story. CAISI says
+DeepSeek makes user-experience trade-offs to lower price, including higher
+latencyand a smaller prompt limit, and warns that its end-to-end expense estimate
+may therefore underestimate DeepSeek’s effective cost disadvantage.
+Verified fact — live market prices still show large price dispersion. Artificial
+Analysis’ live snapshot shows a very wide spread between frontier proprietary and
+open/open-weight models in blended per-token cost, from $11.25 for GPT-5.5
+(xhigh)down to $0.26 for gpt-oss-120B (high) and low single-digit dollars for several
+strong Chinese/open-weight models.
+Interpretation. For a blog post, do not treat “open-weight = cheaper in practice” as a
+universal law. The strongest quantitative evidence retrieved here supports a subtler
+statement: token price can be much lower, but end-to-end task cost may still favour
+a smaller or better-optimised frontier API on specific workloads.
+
+Operational complexity
+•
+
+•
+
+•
+
+•
+
+Verified fact — evaluating agentic systems is operationally heavy. CAISI’s appendix
+shows that agentic evaluation required a Docker/Linux environment, persistent
+shells, Python execution, file tools, model-specific tool-calling optimisation, and a
+standardised token budget.
+Verified fact — fair evaluation itself needs engineering controls. Arena publishes
+dedicated work on style control in its Bradley–Terry regression, showing that response
+formatting and verbosity can bias outcomes if not corrected.
+Verified fact — Artificial Analysis’ agentic benchmarks require tool and sandbox
+orchestration. For GDPval-AA, Artificial Analysis runs models inside an E2B
+sandboxand exposes tools such as web fetch, web search, shell execution,
+and finish, then grades outputs pairwise with Elo-style scoring.
+Interpretation. In real deployments, the operational burden often shifts from “which
+model is smartest?” to “which stack is easiest to run, monitor, secure, and pay for?” It is
+annoyingly mundane, which is exactly why it matters.
+
+What remains incomplete
+•
+
+•
+
+Open gap — official pricing pages. I did not retrieve the official pricing pages
+for Anthropic, Together, Groq, AWS, GCP, or Azure GPU rental in this pass, so
+those should be marked unspecified / still needed rather than inferred. The cost
+notes above therefore rely on CAISI’s measured cost comparison and live thirdparty leaderboard snapshots, not a complete official-pricing audit.
+Open gap — self-hosting economics. I did not retrieve high-confidence source
+material in this pass for A100/H100 rental prices, purchase prices, throughput
+assumptions, or 1M / 100M request self-hosting estimates. Those items
+remain unfilled.
+
+Strategic implications and open questions
+
+Grounded examples
+•
+
+•
+
+•
+
+•
+
+•
+
+Verified fact — frontier model usage in knowledge work. OpenAI’s GPT-5.5 launch
+article says more than 85% of OpenAI uses Codex every week. It also reports
+internal deployments where the Comms team analysed six months of speakingrequest data, the Finance team reviewed 24,771 K-1 tax forms across 71,637 pages,
+finishing two weeks faster than the prior year, and a go-to-market workflow saved 5–
+10 hours per week on weekly reporting.
+Verified fact — frontier buyers cite autonomy and persistence. In the same OpenAI
+source, early testers such as Cursor and MagicPath attribute GPT-5.5’s value to
+stronger reasoning, tool use, persistence on long-running tasks, and the ability to
+carry changes through larger systems with less correction required.
+Verified fact — open-weight models have strong ecosystem adoption
+evidence.CAISI reports that DeepSeek model downloads on model-sharing platforms
+rose by nearly 1000% since January 2025; DeepSeek API usage on OpenRouter
+increased by over 5,900% from January to September 2025; and models derived from
+PRC base models uploaded to Hugging Face now outnumber those derived from U.S.
+developers, driven mainly by Alibaba and DeepSeek.
+Verified fact — open-weight ecosystem competition is not theoretical. CAISI’s
+benchmark summary says the U.S. open-weight model it evaluated, gpt-oss,
+outperformed the best DeepSeek models on most agentic tasks, while the best
+DeepSeek models slightly outperformed gpt-oss
+on science/knowledge and mathematics.
+Verified fact — Artificial Analysis also attributes Chinese adoption partly to
+openness. Its China report says DeepSeek and Alibaba have both embraced openweight strategies, supporting widespread domestic and international adoption; it also
+states that China’s open-weight frontier surpassed the U.S. open-weight frontier in late
+2024.
+
+Interpretable takeaways for your later blog
+•
+
+•
+
+•
+
+Interpretation — when the gap probably matters. The retrieved evidence says the
+gap matters more for agentic coding, cyber/security-sensitive
+tasks, search/retrieval-heavy assistants, and very difficult reasoning benchmarks
+such as HLE.
+Interpretation — when the gap may matter less. The gap is smaller for questionanswer style knowledge tasks, some general drafting/summarisation-like
+workloads, and some UI/web coding arenas where well-tuned open/open-weight
+models remain very competitive.
+Interpretation — the strongest careful formulation. A rigorous claim supported by
+the retrieved material would be: “Near-frontier and open-weight models often trail
+frontier proprietary models on broad capability composites and agentic
+benchmarks; however, for many knowledge-heavy and some coding workloads,
+the observed gap is substantially smaller than headline ‘frontier gap’ narratives
+suggest.”
+
+Open questions and limitations
+
+•
+
+•
+
+•
+
+•
+
+Unresolved source-validation question. I did not validate a public CAISI/NIST
+document containing the screenshot’s Elo-style capability chart or the exact
+phrase “8 months behind”. The validated public CAISI materials retrieved here are
+the DeepSeek evaluation and the Kimi K2 Thinking update.
+Incomplete cost audit. Official pricing pages for Anthropic, Together, Groq, AWS,
+GCP, Azure, plus self-hosting rental/purchase/throughput evidence, were not
+retrieved in this pass. Use the current cost section as a partial evidence base, not a
+complete pricing chapter.
+Incomplete company case studies for open models. I retrieved strong ecosystem
+adoption evidence for open/open-weight models, but I did not retrieve enough highconfidence, company-specific case studies in this pass to satisfy a thorough “Which
+companies chose open models, and why?” section. Mark that as still needed.
+Metric non-equivalence warning. Do not compare CAISI percentages, Arena scores,
+Epoch ECI values, and Artificial Analysis index points as if they were commensurate.
+They answer different questions, with different data-generating processes. That way lies
+chart crime, and worse, a confident paragraph on LinkedIn.
+
+📚 Bibliography (Structured)
+1) Core “Frontier vs Open Models” Analysis
+Primary (claimed source to validate)
+•
+
+Center for AI Standards and Innovation (CAISI)
+o [Exact report name to confirm via research step]
+o Focus: Model capability gap vs time (“months behind” framing)
+
+Alternative / Supporting Analyses
+•
+
+•
+
+•
+
+LMSYS Chatbot Arena
+o https://chat.lmsys.org/?leaderboard
+o Method: Human preference rankings (pairwise voting)
+Epoch AI
+o https://epochai.org/
+o Focus: Compute trends, scaling laws, capability forecasting
+Artificial Analysis
+o https://artificialanalysis.ai/
+o Focus: Model benchmarks, pricing, latency comparisons
+
+2) Benchmarking and Capability Measurement
+•
+
+HELM Benchmark (Stanford CRFM)
+
+https://crfm.stanford.edu/helm/latest/
+MMLU Benchmark
+o https://arxiv.org/abs/2009.03300
+BIG-bench
+o https://github.com/google/BIG-bench
+Open LLM Leaderboards (Hugging Face)
+o https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard
+o
+
+•
+•
+•
+
+3) Cost and Infrastructure Sources
+API Pricing (Frontier Models)
+•
+•
+
+OpenAI Pricing
+o https://openai.com/pricing
+Anthropic Pricing
+o https://www.anthropic.com/pricing
+
+Open-weight / Inference Providers
+•
+•
+•
+
+Together AI
+o https://www.together.ai/pricing
+Groq
+o https://groq.com/
+Fireworks AI
+o https://fireworks.ai/
+
+Cloud GPU Pricing
+•
+•
+•
+
+AWS EC2 GPU Instances
+o https://aws.amazon.com/ec2/instance-types/
+Google Cloud GPUs
+o https://cloud.google.com/compute/gpus-pricing
+Azure GPU Pricing
+o https://azure.microsoft.com/en-us/pricing/details/virtual-machines/
+
+Hardware (On-premise estimates)
+•
+
+NVIDIA H100 / A100 specs
+o https://www.nvidia.com/en-us/data-center/
+
+4) Operational and Engineering Trade-offs
+•
+
+Google: “Rules of Machine Learning”
+o https://developers.google.com/machine-learning/guides/rules-of-ml
+
+•
+•
+
+Meta Engineering Blog (LLM infra)
+OpenAI System Cards (deployment insights)
+
+5) Industry Case Studies (Ranking, ML systems)
+Airbnb (core set you already analysed)
+•
+
+Applying Deep Learning to Airbnb Search (2018)
+→ Scaling simple architectures + data beats complexity
+•
+
+Improving Deep Learning for Airbnb Search (2020)
+→ Post-launch iteration, ICE plots, two-tower models, bias fixes
+•
+
+Real-time Personalisation with Embeddings (Part 1)
+→ Skip-gram embeddings from click sequences
+•
+
+Real-time Personalisation with Embeddings (Part 2)
+→ User modelling, sparsity handling, embedding features in ranking
+•
+
+Airbnb Location Model (2013)
+→ Feature engineering > brute-force modelling
+•
+
+Managing Diversity in Airbnb Search
+→ When relevance collapses diversity
+
+Booking.com
+•
+
+Beyond Algorithms: Ranking at Scale (2020)
+→ Bias correction, experimentation, large-scale ranking systems
+
+6) Key Themes You Can Cite Explicitly
+From these sources, you can anchor your blog around:
+•
+•
+•
+•
+•
+
+Capability gap exists but is contextual
+Cost scales non-linearly with frontier models
+Engineering complexity dominates model choice
+Simple models + good features still win in production
+Iteration and diagnostics matter more than architecture
+
+For example, Airbnb explicitly shows that:
+
+•
+•
+
+Scaling data + simple architectures beat complex hybrids
+Model improvements often come from problem reframing, not model upgrades
+
+Which, if you are being slightly cheeky, undermines half of Twitter.
+
+7) How to Use This in Your Blog
+A clean way to integrate this:
+•
+•
+•
+•
+•
+
+Section 1: “The 6–8 month gap” → cite CAISI + LMSYS
+Section 2: “What capability actually means” → benchmarks
+Section 3: “The cost reality” → pricing + GPUs
+Section 4: “Production reality” → Airbnb + Booking
+Section 5: “So what?” → your thesis
+
+
