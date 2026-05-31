@@ -57,7 +57,18 @@
 
 ---
 
-## 6. Keyword Placement Checklist
+## 6. AI Discoverability
+
+| # | H2 heading | Question format? | Answer block (50–80 w)? | Links in answer zone? |
+|---|-----------|-----------------|------------------------|-----------------------|
+| 1 | <heading> | ✓ / ✗ → suggested: "<rewrite>" | ✓ / ✗ | ✓ / ✗ |
+| … | | | | |
+
+**Score: X / <total H2s> headings pass all three checks**
+
+---
+
+## 7. Keyword Placement Checklist
 
 | Position | Present? |
 |----------|----------|
@@ -71,7 +82,7 @@
 
 ---
 
-## 7. Readability Assessment
+## 8. Readability Assessment
 
 - **Estimated reading level:** <Plain English / Grade 8-10 / Technical>
 - **Average sentence length:** ~<N> words
@@ -83,7 +94,7 @@
 
 ---
 
-## 8. Content Quality Signals
+## 9. Content Quality Signals
 
 - **Word count:** <N> (~<M> min read)
 - **Target word count:** <N words / n/a>
@@ -92,7 +103,7 @@
 
 ---
 
-## 9. Title Variants
+## 10. Title Variants
 
 | Style | Title | Suggested subtitle |
 |-------|-------|--------------------|
@@ -108,7 +119,7 @@
 
 ---
 
-## 10. Quick Wins
+## 11. Quick Wins
 
 1. <specific, actionable change>
 2. <specific, actionable change>

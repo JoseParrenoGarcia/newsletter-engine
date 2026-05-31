@@ -84,6 +84,7 @@ Apply these throughout — they are not optional:
 - Vary sentence length. Short sentences land a point. Longer ones build context or nuance. Mix them.
 - No generic AI filler — refer to `style_guide/shared/anti_patterns.md` and actively avoid every pattern listed there.
 - **Structure:** follow the skeleton in `templates/post_template.md` — intro → preview section → main body → closing section → "Now, I want to hear from you". See the type-specific style guide for any overrides.
+- **Heading capitalisation:** all H2 and H3 headings must use title case — capitalise the first letter of every word. Never use sentence case for headings.
 - **Before writing the opening paragraph:** check the opening rules in the type-specific style guide. `series-genai`: open with a thesis statement or contrarian reframe — not personal anecdote. `paper-explainer`: open with paper attribution, not anecdote.
 - **Explanation depth:** the Register rule in `shared/voice.md` is a tone rule, not a depth rule. For complex or non-obvious concepts, build from first principles. Do not skip scaffolding on the assumption the reader already knows the internals.
 - **Transitions:** close each section with a claim or observation that implies the natural next question. Open the following section by answering it directly. Do not use meta-commentary transitions ("Now that we've explored X...").

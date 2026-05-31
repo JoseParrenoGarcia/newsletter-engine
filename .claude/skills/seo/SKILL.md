@@ -56,7 +56,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - If `topics_to_exclude` is set, do not suggest any overlapping term.
 >
 > **Step 3 — Analyse the draft**
-> Work through each assessment area. Full definitions for each area are in `.claude/skills/seo/references/assessment-processes.md` — load that file. Assessment areas: meta description, URL slug, H1 recommendation, H2/H3 structure review, keyword placement checklist (5 positions, scored out of 5), readability assessment, content quality signals.
+> Work through each assessment area. Full definitions for each area are in `.claude/skills/seo/references/assessment-processes.md` — load that file. Assessment areas: meta description, URL slug, H1 recommendation, H2/H3 structure review, AI discoverability (question-format headings, answer blocks, links in answer zone — scored X / total H2s), keyword placement checklist (5 positions, scored out of 5), readability assessment, content quality signals.
 >
 > **Step 4 — Generate title variants**
 > Produce 5 titles, one per style. For each, write a suggested subtitle (1 sentence, ≤120 chars). Style definitions and guardrails are in `.claude/skills/seo/references/title-styles.md` — load that file.
@@ -83,6 +83,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > **Step 8 — Return summary**
 > Return:
 > - Keyword placement score (X/5) and which positions are missing
+> - AI discoverability score (X / total H2s) and the top flag (question format / answer block / links)
 > - Overall readability verdict (one sentence)
 > - Recommended title variant and why (one sentence)
 > - The single highest-impact Quick Win

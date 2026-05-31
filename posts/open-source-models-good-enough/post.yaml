@@ -50,6 +50,8 @@ artefacts:
   outline: outline.md
   long_draft: long_draft.md
   long_draft_backup: long_draft_v1.md
+  long_draft_v2: long_draft_v2.md
+  long_draft_v3: long_draft_v3.md
   seo_brief: seo_brief.md
   review_report: review_report.md
   promotion_posts: promotion/promotion_posts.md
@@ -67,10 +69,10 @@ stages:
     completed_at: "2026-05-02"
   seo:
     status: complete
-    completed_at: "2026-05-29"
+    completed_at: "2026-05-31"
   revise:
     status: complete
-    completed_at: "2026-05-29"
+    completed_at: "2026-05-31"
   review:
     status: complete
     completed_at: "2026-05-29"

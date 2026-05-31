@@ -1,3 +1,17 @@
+## 2026-05-31 — /seo
+
+**Context: redo run on a post that already had a completed seo+revise cycle**
+This was a deliberate redo to exercise newly added AI discoverability section. The stage guard correctly flagged the existing complete status; the orchestrator bypassed it based on explicit user instruction without asking again (user had already confirmed intent). No issue, but the skill instructions say to "wait for explicit confirmation" — in this case the user's original request was the confirmation. Skill could clarify whether a redo triggered with an argument counts as pre-confirmed.
+
+**New section (AI discoverability) worked correctly on first run**
+The new assessment produced a 0/6 score that surfaced a real gap (no question-format H2s) not flagged by the previous seo_brief.md. The subagent correctly read the updated `assessment-processes.md` and populated the section 6 table without any adaptation needed.
+
+**Revise skill customisation required for long_draft_v2.md**
+The revise skill as written always overwrites `long_draft.md` and backs up to `long_draft_v1.md`. Since `long_draft_v1.md` already existed (from the first revise pass), the orchestrator customised the subagent prompt to write output to `long_draft_v2.md` instead. This is a pattern the revise skill doesn't formally support — it has no versioning logic beyond the first backup. Skill could accept a `--output` argument or auto-increment the backup suffix.
+
+**Skipped change: NIST link relocation blocked by guardrail**
+Section 6 flagged a link inside the answer zone of H2 #1. The revise subagent correctly skipped it because moving the link would require prose restructuring, which the "do not restructure" guardrail prohibits. Correct behaviour — not a bug — but worth noting that the AI discoverability flag for "links in answer zone" will frequently be skippable when the link is embedded in a citation sentence rather than decorative inline text. The assessment process could note this as a low-priority flag in citation-heavy sections.
+
 ## 2026-05-02 — /research
 
 **Adaptation: user-provided URL not in notes.md**

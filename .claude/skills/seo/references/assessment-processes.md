@@ -25,6 +25,15 @@ Read all headings in `long_draft.md`. For each H2/H3:
 - Recommend a reword if the heading would benefit from keyword inclusion without sounding forced
 - Keep recommendation to "keep as-is" if it is already strong
 
+## AI discoverability
+
+For each H2 in `long_draft.md`, check three things:
+- **Question format**: does the heading start with How / What / Why / When / Which / Is / Can / Should? If not, suggest a question rewrite that preserves the keyword.
+- **Answer block**: do the first 50–80 words after the heading form a self-contained answer to the question? Flag if the opening is preamble or context-setting rather than a direct answer.
+- **Links in answer zone**: are there hyperlinks within those first 50–80 words? If yes, flag — links inside the answer block reduce AI extractability without affecting SEO (links after the block are fine).
+
+Score: count of H2s that pass all three checks. Report as X / <total H2s>.
+
 ## Keyword placement checklist
 
 Check each of the 5 positions:
