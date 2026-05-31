@@ -21,7 +21,7 @@ This post makes the case for a more deliberate approach: match the model to the 
 - **Why now is the right time to experiment.** The Vegetius argument: the teams that start today, under no pressure, will be the ones who adapt fastest when conditions change.
 - **A concrete first experiment.** Four steps. One week. Near-zero risk.
 
-## The Open Source Models Gap: What the Benchmarks Actually Show
+## The gap: what the benchmarks actually show
 
 The benchmarks are honest. On tasks that require sustained multi-step reasoning, complex software engineering, or adversarial security work, frontier models hold a real advantage.
 
@@ -59,7 +59,7 @@ The cost math is not subtle.
 
 Current output token pricing, as of May 2026:
 
-| Model | Output price per MTok (MTok = one million tokens, roughly 750,000 words) |
+| Model | Output price per MTok |
 |---|---|
 | GPT-5.5 (OpenAI) | $30.00 |
 | Claude Opus 4.7 (Anthropic) | $25.00 |
@@ -83,7 +83,7 @@ None of these risks are hypothetical. None of them require the scenario to be ex
 
 Diversification is table stakes in every other part of infrastructure. Model routing is not yet treated the same way. It should be.
 
-## Chinese Open Source Models: DeepSeek, Qwen, and What They Can Do
+## The Chinese open source landscape
 
 Two models are worth knowing in detail.
 
