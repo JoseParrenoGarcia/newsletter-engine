@@ -1,3 +1,17 @@
+## 2026-06-01 — /research
+
+**Context: skill updated mid-session to replace WebSearch with Chrome DevTools, then run as a live test**
+
+- **Stuck / adapted:** First subagent spawn failed immediately with a socket connection error. No change to the prompt — simply retried and it succeeded. No pattern to diagnose; appeared transient.
+
+- **Ambiguous instruction:** The updated Step 5 tells the subagent to call `new_page` to open DuckDuckGo "or navigate if a page is already open." In practice the subagent had to manage page state across multiple searches (one per gap) without explicit guidance on whether to reuse the same tab or open a new one each time. The subagent handled it correctly but the instruction could be more explicit: reuse the existing DDG tab by filling the search box again rather than opening a new page per query.
+
+- **Wrong assumption:** The original skill assumed `notes.md` would contain URLs to validate (Step 2–3). For this post, notes.md had zero URLs — the subagent correctly skipped to Step 4, but the skill's summary template ("X from notes.md, Y found via search") implies URLs in notes.md is the normal case. Worth noting that pure-search runs (0 existing URLs) are equally valid.
+
+- **Workaround applied:** None beyond the retry above. Chrome DevTools search → snapshot → extract → fetch loop worked on first attempt for all 10 sources.
+
+- **Compatibility line:** Updated from `WebSearch and WebFetch` to `ctx_fetch_and_index and Chrome DevTools MCP`. The skill description field in the frontmatter still references `WebSearch` and `WebFetch` keywords — those should be updated so the skill doesn't get mistrigger-blocked if a future linter checks keyword/compatibility alignment.
+
 ## 2026-05-31 — /seo
 
 **Context: redo run on a post that already had a completed seo+revise cycle**
