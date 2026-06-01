@@ -1,9 +1,9 @@
 ---
 name: research
-description: "Validates existing URLs and fills research gaps with targeted web searches to produce research_brief.md grouped by ToC section. DO trigger: after brainstorm is complete and post.yaml exists; when URLs in notes.md need validation; when sources are needed to support draft sections. DO NOT trigger: before brainstorm is complete; when research is already marked complete and no redo is requested; for tasks that do not involve sourcing external references. Keywords: research, web search, URL validation, sources, research_brief, WebSearch, WebFetch, ToC gaps."
+description: "Validates existing URLs and fills research gaps with targeted web searches to produce research_brief.md grouped by ToC section. DO trigger: after brainstorm is complete and post.yaml exists; when URLs in notes.md need validation; when sources are needed to support draft sections. DO NOT trigger: before brainstorm is complete; when research is already marked complete and no redo is requested; for tasks that do not involve sourcing external references. Keywords: research, web search, URL validation, sources, research_brief, ctx_fetch_and_index, Chrome DevTools, ToC gaps."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
 license: proprietary
-compatibility: "Claude Code; requires WebSearch and WebFetch MCP tools"
+compatibility: "Claude Code; requires ctx_fetch_and_index and Chrome DevTools MCP tools. WebSearch is not required — Chrome DevTools is used as the search fallback."
 metadata:
   author: jose-parreno-garcia
   version: "1.0"
@@ -45,9 +45,9 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 >
 > **Step 3 — Validate and enrich existing URLs**
 > For each URL in the incoming list:
-> - Fetch the page using WebFetch
+> - Fetch the page using `ctx_fetch_and_index` (source label = the URL domain)
 > - If unreachable or returns an error: drop silently
-> - If reachable: extract page title + write 1-3 sentence summary of what it covers and why relevant to the post's thesis + map to the most relevant ToC section
+> - If reachable: search the indexed content for the post thesis keywords to extract page title + write 1-3 sentence summary of what it covers and why relevant to the post's thesis + map to the most relevant ToC section
 >
 > Keep a running list of: `{ url, title, summary, toc_section }` for surviving sources.
 >
@@ -56,11 +56,18 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 >
 > **Step 5 — Fill gaps with targeted searches**
 > For each item in the gaps list (working through ToC order):
-> 1. Formulate a specific WebSearch query based on the section/concept and the post's thesis
-> 2. Scan the top results — select the most relevant, credible source not already in the list
-> 3. Check domain variety: if the selected domain already has 2 sources in the list, skip it and pick the next best result
-> 4. Fetch the selected URL. If unreachable: try the next result. If reachable: extract title + write 1-3 sentence summary, map to the gap section
-> 5. Add to the running list
+> 1. Formulate a specific search query based on the section/concept and the post's thesis
+> 2. Search using Chrome DevTools MCP:
+>    - Call `new_page` to open `https://duckduckgo.com` (or navigate if a page is already open)
+>    - Call `take_snapshot` to find the search input uid
+>    - Call `fill` with the search query on the combobox input
+>    - Call `press_key` with `Enter`
+>    - Call `wait_for` with `["results", "Web results"]` (timeout 5000ms)
+>    - Call `take_snapshot` to read the results page — extract the top result URLs and titles
+> 3. Scan the extracted results — select the most relevant, credible URL not already in the list
+> 4. Check domain variety: if the selected domain already has 2 sources in the list, skip it and pick the next best result
+> 5. Fetch the selected URL using `ctx_fetch_and_index`. If unreachable: try the next result. If reachable: search the indexed content to extract title + write 1-3 sentence summary, map to the gap section
+> 6. Add to the running list
 >
 > Hard cap: stop adding sources once the total reaches 10, even if gaps remain.
 > Variety rule: never exceed 2 sources from the same domain across the entire brief.

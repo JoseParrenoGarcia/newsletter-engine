@@ -63,7 +63,7 @@ stages:
     completed_at: "2026-05-02"
   research:
     status: complete
-    completed_at: "2026-05-02"
+    completed_at: "2026-06-01"
   draft:
     status: complete
     completed_at: "2026-05-02"
