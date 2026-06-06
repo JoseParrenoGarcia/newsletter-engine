@@ -52,6 +52,7 @@ Each skill is independently invocable. `/new-post` chains all stages unattended 
 | `/review` | `review_report.md` |
 | `/promote` | `promotion_posts.md` |
 | `/new-post` | `decision_log.md`, `skill_reflection_log.md` (via hooks) |
+| `/index` | `posts/INDEX.md` (appended) |
 
 ---
 
@@ -73,7 +74,8 @@ newsletter-engine/
 │       ├── seo/                   # /seo
 │       ├── revise/                # /revise
 │       ├── review/                # /review — multi-agent editorial gate
-│       └── promote/               # /promote
+│       ├── promote/               # /promote
+│       └── index/                 # /index — post ledger
 ├── reference_posts/               # Jose's real posts for style grounding
 │   ├── series/
 │   ├── standalone/
@@ -96,6 +98,8 @@ newsletter-engine/
         ├── promotion_posts.md
         ├── decision_log.md        # Append-only pipeline run log
         └── skill_reflection_log.md  # Appended by skill-reflector hook after each stage
+├── posts/
+│   └── INDEX.md                   # Post ledger — agent entry point for content discovery
 ```
 
 ---

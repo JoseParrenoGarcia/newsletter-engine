@@ -130,7 +130,7 @@ Present:
 
    After the run, read `review_report.md` and find the `### [verdict]` heading under `## Publish Readiness Verdict`.
 
-   - **If verdict is "Ready":** exit the loop and run `/promote posts/<slug>/`.
+   - **If verdict is "Ready":** exit the loop and run `/promote posts/<slug>/`. Then run `/index posts/<slug>/` to append the post to `posts/INDEX.md`.
    - **If verdict is "Revise first" or "Major rework needed"** AND this is run 1 or 2:
      - Read the numbered priority actions under `### Priority actions` in `review_report.md`
      - Apply targeted editorial fixes directly to `long_draft.md`, addressing the priority actions in order of impact. Name the section and what was changed.
@@ -171,6 +171,7 @@ When the full pipeline is requested (Mode A option 1, or Mode B option 1), run e
      Wait for Jose's instruction. Do not run `/promote` automatically.
 
 6. `/promote posts/<slug>/` — only if the loop exited with "Ready".
+7. `/index posts/<slug>/` — append the post to `posts/INDEX.md`.
 
 After each stage completes, append to `decision_log.md` — see [decision_log format](#decision_log-format) below.
 

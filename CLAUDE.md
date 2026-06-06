@@ -30,6 +30,8 @@ These govern every skill and orchestration design decision:
 | `.claude/rules/` | Behavioural guardrails, auto-loaded each session |
 | `templates/` | Post folder template (`post.yaml`, `notes.md`, `placeholder.md`) |
 | `posts/` | Per-post working folders with artefacts |
+| `posts/INDEX.md` | TOC only — read this before brainstorming or ideating to see all covered topics at a glance (cheap, ~50 lines) |
+| `posts/index/` | Per-topic card files — read the relevant `<topic>.md` for detailed summaries and paths; do NOT crawl post folders directly |
 
 ---
 
@@ -46,6 +48,7 @@ These govern every skill and orchestration design decision:
 | `/revise` | SEO-driven draft revision + post-revision SEO verification (any draft + brief pair) |
 | `/review` | 3-critic multi-agent debate → 6-dimension rubric + panel consensus + publish readiness verdict |
 | `/promote` | LinkedIn + Substack bundle (any draft) |
+| `/index` | Append-only post ledger — pipeline posts + reference posts → `posts/INDEX.md` |
 | `/ideate` | Trend-aware content ideas, standalone — pending |
 
 ---
