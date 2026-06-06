@@ -264,13 +264,13 @@ For architecture decisions, migrations, or any task where understanding the full
 The most reliable pattern for substantial work. Spend a turn getting the plan right, then execute it autonomously.
 
 ```
-/plan Inspect the auth service and propose a JWT migration plan. Include affected files, risks, rollback plan. Do not edit.
+/plan Inspect the feature engineering pipeline and propose a refactoring to reduce training time by 25%. Include affected modules, performance targets, and rollback strategy. Do not edit.
 ```
 
 Review the plan. Then:
 
 ```
-/goal Implement the approved JWT migration verified by passing tests/auth. Preserve public API. Only touch src/auth and tests/auth. If any test requires external infrastructure, stop and report.
+/goal Implement the approved feature pipeline refactoring verified by achieving ≤25% training time reduction while maintaining model F1 score above 0.89. Preserve the public feature API. Only modify src/features and tests/features. If model performance drops below threshold, stop and report which metric degraded and by how much.
 ```
 
 **Pattern 4: Goal with strict boundaries**
