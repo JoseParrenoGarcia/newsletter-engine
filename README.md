@@ -48,7 +48,7 @@ Each skill is independently invocable. `/new-post` chains all stages unattended 
 | `/research` | `research_brief.md` |
 | `/draft` | `outline.md`, `long_draft.md` |
 | `/seo` | `seo_brief.md` |
-| `/revise` | `long_draft.md` (revised), `long_draft_v1.md` (backup) |
+| `/revise` | `long_draft.md` (revised), `long_draft_v1.md` (backup), `seo_brief.md` (section 12 appended) |
 | `/review` | `review_report.md` |
 | `/promote` | `promotion_posts.md` |
 | `/new-post` | `decision_log.md`, `skill_reflection_log.md` (via hooks) |
@@ -74,9 +74,6 @@ newsletter-engine/
 │       ├── revise/                # /revise
 │       ├── review/                # /review — multi-agent editorial gate
 │       └── promote/               # /promote
-├── reference-docs/
-│   ├── prd-v1.md                  # Full product requirements
-│   └── milestones-v1.md           # Milestone plan and definitions of done
 ├── reference_posts/               # Jose's real posts for style grounding
 │   ├── series/
 │   ├── standalone/
@@ -128,4 +125,4 @@ newsletter-engine/
 | M7 — Review | `/review` | ✓ Complete |
 | M8 — Ideation | `/ideate` | Pending |
 
-See [reference-docs/milestones-v1.md](reference-docs/milestones-v1.md) for the full plan.
+See `CLAUDE.md` for architectural principles and `reference-docs/` history is archived in git.

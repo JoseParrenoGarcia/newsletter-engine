@@ -2,7 +2,7 @@
 
 Apply these after any significant change: new directory added, new agent created, milestone completed, new MCP or skill required.
 
-## Update `.claude/CLAUDE.md`
+## Update `CLAUDE.md`
 - Add new directories to the Repo Index table
 - Add new skills to the Available Skills table (with the milestone they're introduced in)
 - Update the **Active milestone** line at the top
