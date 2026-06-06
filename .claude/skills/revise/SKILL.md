@@ -109,5 +109,60 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - Keyword placement score before → after (e.g. "4/5 → 5/5")
 > - Readability verdict before → after
 > - Any planned changes that were skipped and why (1 line each)
+> - SEO verification: keyword placement before → after score, Quick Wins pass rate (N/3), any remaining ✗ items
+>
+> **Step 8 — SEO verification pass**
+> Spawn a second subagent to verify the revisions landed correctly. Pass it `POST_FOLDER` and the revision plan from Step 3.
+>
+> The verification subagent must:
+>
+> 1. Read `POST_FOLDER/long_draft.md` (the revised version) in full.
+> 2. Read `POST_FOLDER/seo_brief.md` and extract the original scores for:
+>    - Section 7 — Keyword Placement Checklist (original score X/5, positions marked ✗)
+>    - Section 6 — AI Discoverability (original score X/total H2s, headings flagged)
+>    - Section 11 — Quick Wins (the 3 specific changes listed)
+> 3. Re-score each item against the revised `long_draft.md`:
+>    - For each keyword placement position previously marked ✗: is it now present? ✓ or still ✗?
+>    - For each H2 previously not in question format: has it been reworded? ✓ or still ✗?
+>    - For each Quick Win: was it applied? ✓ applied / ✗ not applied / ~ partially applied
+> 4. Append the following section to `POST_FOLDER/seo_brief.md` (do not overwrite existing content — append only):
+>
+> ```
+> ---
+>
+> ## 12. Post-Revision Verification
+>
+> **Verified against:** long_draft.md (post-revise)
+> **Verified on:** <today YYYY-MM-DD>
+>
+> ### Keyword Placement — before → after
+> | Position | Before | After |
+> |----------|--------|-------|
+> | H1 / Title | ✓/✗ | ✓/✗ |
+> | First 100 words | ✓/✗ | ✓/✗ |
+> | At least one H2 | ✓/✗ | ✓/✗ |
+> | Meta description | ✓/✗ | ✓/✗ |
+> | URL slug | ✓/✗ | ✓/✗ |
+>
+> **Score: X/5 → Y/5**
+>
+> ### AI Discoverability — before → after
+> | H2 | Before | After |
+> |----|--------|-------|
+> | <heading> | ✗ not question format | ✓ reworded / ✗ unchanged |
+>
+> **Score: X/total → Y/total**
+>
+> ### Quick Wins — applied?
+> 1. <Quick Win 1 text> — ✓ / ✗ / ~
+> 2. <Quick Win 2 text> — ✓ / ✗ / ~
+> 3. <Quick Win 3 text> — ✓ / ✗ / ~
+>
+> ### Verification verdict
+> **All fixes applied:** Yes / No
+> **Remaining issues:** <list any ✗ items, or "None">
+> ```
+>
+> 5. Return the verification summary (before → after scores, any remaining ✗ items).
 
-Once the subagent completes, print its revision summary and confirm to Jose.
+Once the subagent completes, print its revision summary and the verification summary, then confirm to Jose.

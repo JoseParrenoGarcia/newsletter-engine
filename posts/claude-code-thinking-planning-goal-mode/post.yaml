@@ -1,0 +1,92 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "claude-code-thinking-planning-goal-mode"
+working_title: "Claude Code: thinking levels, planning mode, and goal mode explained"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Planning mode is the organizing discipline for working with coding agents — thinking levels and model selection are knobs you configure within it, and goal mode extends that discipline to long-running autonomous work."
+target_audience: "Practitioners using or exploring Claude Code (including series readers) who want to understand the actual mechanics behind reasoning effort, plan mode, and goal mode — and stop treating them as interchangeable features or magic words."
+target_reading_time_minutes: 15
+topics_to_cover:
+  - "Personal hook: curiosity about token cost of thinking level selectors → research into what they actually do"
+  - "What thinking levels are: budgeted deliberation, not magic intelligence; the cost/quality/speed trade-off"
+  - "When to use low vs high effort — examples from trivial inspection to ambiguous architecture work"
+  - "Planning mode: separating design from execution; why agents fail by acting too early"
+  - "Planning mode as José's default working practice — the case for making it yours too"
+  - "Planning mode as the umbrella concept: it encapsulates model selection (Opus vs Sonnet), effort level, and pre-execution discipline"
+  - "opusplan: Opus for planning, Sonnet for execution — the product expression of this idea"
+  - "ultraplan: cloud-based plan review (brief mention as the newest addition)"
+  - "Goal mode: the completion contract — keeps working until a verifiable condition is met"
+  - "/goal vs /loop vs Stop hooks — the clean three-way comparison from the official docs"
+  - "What makes a good goal: outcome + verification surface + constraints + boundaries + stop condition"
+  - "Weak vs strong goal examples"
+  - "Does Codex do the same? — brief comparison showing this is an industry-wide direction"
+  - "When NOT to use each mode — builds trust with the reader"
+  - "Practical patterns: four reusable patterns from low-effort inspect to plan → goal execution"
+  - "Closing: agentic coding is workflow design — ties back to the series arc"
+topics_to_exclude:
+  - "Deep Codex vs Claude Code feature comparison — this is a Claude Code post; Codex is a brief cameo"
+  - "ultrathink as the primary framing — frame as older community terminology, not current best practice"
+  - "Full autonomy / AI safety debates"
+  - "Claude Agent SDK or MCP-level orchestration"
+  - "Thinking levels as a way to force correctness — they are a budget, not a guarantee"
+open_research_questions:
+  - "Validate all official URLs from the research memo — docs may have moved or been updated"
+  - "Confirm current effort level values for latest Claude models (Opus 4.8+ if released)"
+  - "Verify /goal minimum version requirement (research memo says v2.1.139 — confirm current)"
+  - "Confirm plan_mode_reasoning_effort is still a valid Codex config key"
+  - "Verify opusplan is still the official model alias name in current Claude Code docs"
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "A standalone Claude Code explainer driven by a personal discovery: José noticed reasoning effort level selectors in Claude Code but had no real intuition for what they did or whether the token cost was justified. Research into thinking levels opened into a broader realisation: thinking levels, planning mode, and goal mode are three distinct control surfaces that solve different problems, and conflating them is the source of most vague agent prompting. The post is organised around planning mode as the organising discipline — the insight being that plan mode is not just one feature among many, but the meta-discipline that gives thinking levels and model selection their context. Goal mode then extends that discipline to long-running autonomous work. The Codex comparison is deliberately light: a brief section showing this is an industry-wide direction, not Claude-specific vocabulary. The tone is personal and grounded — José shares planning mode as a practice that transformed his own workflow, not just a feature to explain. The reader should finish knowing: how to choose effort level, why to default to plan mode, and how to write a goal that actually has a finish line."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - "reference_posts/standalone/genai-ai/claude-code-memory-explained-how-it-really-works.md"
+  - "reference_posts/standalone/genai-ai/claude-code-agents-explained.md"
+  - "reference_posts/standalone/genai-ai/how-claude-code-rules-actually-work.md"
+  - "reference_posts/standalone/genai-ai/claude-code-agent-teams-when-and-how-to-go-multi-agent.md"
+style_guides:
+  - "style_guide/shared/voice.md"
+  - "style_guide/shared/anti_patterns.md"
+  - "style_guide/types/series-genai.md"
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-06-01"
+  research:
+    status: complete
+    completed_at: "2026-06-01"
+  draft:
+    status: complete
+    completed_at: "2026-06-01"
+  seo:
+    status: complete
+    completed_at: "2026-06-01"
+  revise:
+    status: complete
+    completed_at: "2026-06-01"
+  review:
+    status: complete
+    completed_at: "2026-06-01"
+  promote:
+    status: complete
+    completed_at: "2026-06-01"
