@@ -42,3 +42,8 @@ Reference: https://code.claude.com/docs/en/memory#path-specific-rules
 - Keep the repo tree structure current
 - Update the pipeline mermaid diagram to reflect active skills in the current milestone
 - Update the Requirements table if a new MCP, plugin, or Claude Code skill is needed
+
+## Update `posts/INDEX.md`
+- After publishing a new post (promote complete), run `/index` to append the new entry
+- Do NOT manually edit index entries — the skill owns all content in that file
+- If a reference post is added to `reference_posts/`, run `/index` to pick it up
