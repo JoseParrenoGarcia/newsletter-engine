@@ -51,9 +51,11 @@ If `$ARGUMENTS` specifies a slug or path, restrict the candidate list to that en
 
 ## Step 2 — Diff against existing index
 
-Read `posts/INDEX.md`. For each candidate:
-- Pipeline post: grep for `<!-- slug: <slug> -->`. If found, skip.
-- Reference post: grep for `<!-- path: <relative-path> -->`. If found, skip.
+Read `posts/INDEX.md` (TOC only — no need to read per-topic files). Grep the TOC table for:
+- Pipeline post: `<!-- slug: <slug> -->` in `posts/index/<topic>.md` OR the anchor `#<slug>` in the TOC table.
+- Reference post: `<!-- path: <relative-path> -->` in any `posts/index/<topic>.md`.
+
+Fastest check: scan the TOC table rows in `posts/INDEX.md` for the title or anchor. If found, skip.
 
 Build a delta list of candidates not yet in the index.
 
@@ -63,11 +65,13 @@ If delta is empty, report "Index is up to date — no new entries to add." and s
 
 ## Step 3 — Summarise each new entry
 
-Spawn a subagent for each delta entry (batch by topic group if multiple). Each subagent must:
+**When invoked from `/new-post`:** the post's content is already in context. Do not re-read `long_draft.md`. Use the `working_title`, `thesis`, `target_audience`, and `topics_to_cover` already available from `post.yaml` to write the summary card directly.
+
+**When invoked standalone:** spawn a subagent for each delta entry (batch by topic group if multiple). Each subagent must:
 
 **For a pipeline post:**
-1. Read `posts/<slug>/post.yaml`. Extract: `working_title`, `content_type`, `structural_type`, `series_name`, `series_position`, `thesis`, `target_audience`, `topics_to_cover`.
-2. Read `posts/<slug>/long_draft.md`. Skim the H1, H2s, intro, and conclusion.
+1. Read `posts/<slug>/post.yaml` only. Extract: `working_title`, `content_type`, `structural_type`, `series_name`, `series_position`, `thesis`, `target_audience`, `topics_to_cover`.
+2. Do NOT read `long_draft.md` — `post.yaml` has everything needed.
 
 **For a reference post:**
 1. Read the `.md` file. Extract: H1 title, all H2 headings, first paragraph, last paragraph.
@@ -90,9 +94,9 @@ Spawn a subagent for each delta entry (batch by topic group if multiple). Each s
 
 For each new entry:
 
-1. Add a new row to the Table of Contents table (do not touch existing rows).
-2. Find the correct `## <Topic Group>` section. If it doesn't exist yet, append a new one at the end.
-3. Append the entry card inside that section using this format:
+1. Add a new row to the TOC table in `posts/INDEX.md` (do not touch existing rows).
+2. Find the correct `posts/index/<topic-group>.md` file. If it doesn't exist yet, create it with a heading and agent note matching the existing files.
+3. Append the entry card to that file using this format:
 
 ```
 <!-- slug: <slug> -->         ← pipeline posts

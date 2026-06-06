@@ -1,0 +1,109 @@
+# Claude Code — Post Cards
+
+> **Agent note:** do NOT read pipeline artefacts (`research_brief.md`, `outline.md`,
+> `seo_brief.md`, `review_report.md`, `promotion_posts.md`). Use the `Path` in each card.
+
+---
+
+<!-- slug: claude-code-plugins -->
+<a name="claude-code-plugins"></a>
+### Claude Code Plugins: How to Build, Version, and Maintain Them
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Experienced Claude Code users who already use skills, hooks, and CLAUDE.md and want to package and share their customisations across projects or with a team |
+| **Topics** | `claude-code` `skills` `agents` `hooks` `project-setup` `session-context` |
+| **Path** | `posts/claude-code-plugins/long_draft.md` |
+
+**Summary:** Claude Code plugins are not a new capability — they are the packaging and distribution layer for everything you already build with CLAUDE.md, skills, hooks, MCP servers, and agents. The post establishes that framing upfront, then walks through building a plugin from scratch: the scaffold command, directory structure, and writing a `plugin.json` manifest. Distribution mechanics are covered in full — source types, installation scopes, and how namespace prefixing prevents collisions between third-party plugins. The operational sections that most documentation skips are given equal weight: explicit semver vs commit-SHA versioning strategies, plugin dependencies and pinning, running `claude plugin validate` before release, and how auto-update and `/reload-plugins` push changes to users. Closes with the enterprise controlled-rollout pattern for teams that need staged adoption.
+
+---
+
+<!-- path: reference_posts/standalone/genai-ai/how-claude-code-rules-actually-work.md -->
+<a name="how-claude-code-rules-actually-work"></a>
+### How Claude Code rules actually work
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / genai-ai |
+| **Audience** | Developers and technical practitioners using Claude Code in real projects |
+| **Topics** | `claude-code` `rules` `claude-md` `session-context` `project-setup` |
+| **Path** | `reference_posts/standalone/genai-ai/how-claude-code-rules-actually-work.md` |
+
+**Summary:** Rules in Claude Code are markdown files that Claude discovers and loads automatically at session start — not configuration settings, not code. The post explains the full loading and prioritisation mechanism: how CLAUDE.md and scoped rules files work together, how Claude discovers context it wasn't explicitly pointed at, and how to verify what's actually being loaded. It works through a real data science project to show rules in practice across exploratory and production contexts, and closes with a clear warning about the failure modes that emerge when rules drift out of sync with the codebase they describe.
+
+---
+
+<!-- path: reference_posts/standalone/genai-ai/claude-code-memory-explained-how-it-really-works.md -->
+<a name="claude-code-memory-explained"></a>
+### You (probably) don't understand Claude Code memory.
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / genai-ai |
+| **Audience** | Developers and technical leads building with or configuring Claude Code |
+| **Topics** | `claude-code` `memory` `claude-md` `session-context` `project-setup` |
+| **Path** | `reference_posts/standalone/genai-ai/claude-code-memory-explained-how-it-really-works.md` |
+
+**Summary:** Claude Code memory is not a database or persistent state — it is a set of markdown files that Claude reads at the start of every session, injected into context before the first message. The post demystifies the full memory hierarchy: global `CLAUDE.md` for user-level defaults, project-level `CLAUDE.md` for repo-specific instructions, and how these layers stack and override each other. It covers what belongs at each level, how to structure project-level files for complex codebases, and real-world examples showing memory in practice. The post ends with a framework for evolving memory files deliberately over time rather than letting them drift into noise.
+
+---
+
+<!-- slug: claude-code-agents-explained -->
+<a name="claude-code-agents-explained"></a>
+### Claude Code agents: what they actually are
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Practitioners already using Claude Code who want to understand agents properly before using them |
+| **Topics** | `claude-code` `agents` `subagents` `context-isolation` `skills` |
+| **Path** | `posts/claude-code-agents-explained/long_draft.md` |
+
+**Summary:** Agents in Claude Code are not smarter prompts — they are isolated execution contexts with their own context window, system prompt, tool set, and permissions. The post resolves the naming confusion (subagents vs agent teams vs Agent SDK), explains why agents exist as a primitive (context isolation, specialisation, parallelism), and walks through building a first subagent end to end. The core distinction between agents and skills is given its own section — agents are isolated workers, skills are reusable workflows that run in the main context. Closes with a clear account of when agents are the wrong tool.
+
+---
+
+<!-- slug: claude-code-agent-teams -->
+<a name="claude-code-agent-teams"></a>
+### Claude Code agent teams: when and how to go multi-agent
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Claude Code practitioners who already understand subagents and want to combine them into coordinated systems |
+| **Topics** | `claude-code` `agents` `multi-agent` `orchestrator` `skills` |
+| **Path** | `posts/claude-code-agent-teams/long_draft.md` |
+
+**Summary:** Most teams don't need multiple agents yet — the post opens by making that case honestly before explaining when the threshold is genuinely crossed. It covers four team paradigms (orchestrator, sequential pipeline, parallel specialists, swarm), how Claude Code implements them via subagents, skills, hooks, and shared task lists, and the three forms of inter-agent communication. The failure modes section is the most practically useful part: eight ways agent teams break in production, each with a concrete mitigation. Closes with a decision framework for choosing between native managed, DIY, and hybrid architectures.
+
+---
+
+<!-- slug: claude-code-skills-explained -->
+<a name="claude-code-skills-explained"></a>
+### What the docs don't tell you about Claude Code skills
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Technical practitioners using Claude Code seriously — developers and data scientists who want to go deeper than the docs |
+| **Topics** | `claude-code` `skills` `agents` `multi-agent` `project-setup` |
+| **Path** | `posts/claude-code-skills-explained/long_draft.md` |
+
+**Summary:** The Claude Code docs explain how to create a skill; they don't explain what makes one good. This post covers the full anatomy of a SKILL.md beyond the obvious frontmatter — progressive disclosure, encoding edge cases, structuring outputs, and using scripts for reliability. The hidden gems section covers the design patterns that turn a skill from a prompt into a repeatable workflow. A dedicated section covers how skills compose with MCP servers and subagents, enabling multi-stage agentic pipelines. Closes with design principles drawn from treating skills as software artefacts that need testing, not just authoring.
+
+---
+
+<!-- slug: claude-code-thinking-planning-goal-mode -->
+<a name="claude-code-thinking-planning-goal-mode"></a>
+### You Don't Need Ultrathink. You Need a Plan.
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Practitioners using or exploring Claude Code who want to understand the mechanics behind reasoning effort, plan mode, and goal mode |
+| **Topics** | `claude-code` `planning` `agents` `goal-mode` `multi-agent` |
+| **Path** | `posts/claude-code-thinking-planning-goal-mode/long_draft.md` |
+
+**Summary:** Thinking levels, planning mode, and goal mode are three distinct concepts that most practitioners conflate. The post untangles them: thinking levels are budgeted deliberation with a cost/quality/speed trade-off; planning mode is the discipline of separating design from execution before an agent acts; goal mode extends that discipline to long-running autonomous work by specifying a verifiable completion condition. Planning mode is positioned as the umbrella concept — it encapsulates model selection (Opus for planning, Sonnet for execution), effort level, and pre-execution discipline. Closes with four reusable patterns for combining planning mode and goal mode in practice.
