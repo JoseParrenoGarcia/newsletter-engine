@@ -84,7 +84,9 @@ Apply these throughout — they are not optional:
 - Vary sentence length. Short sentences land a point. Longer ones build context or nuance. Mix them.
 - No generic AI filler — refer to `style_guide/shared/anti_patterns.md` and actively avoid every pattern listed there.
 - **Structure:** follow the skeleton in `templates/post_template.md` — intro → preview section → main body → closing section → "Now, I want to hear from you". See the type-specific style guide for any overrides.
-- **Heading capitalisation:** all H2 and H3 headings must use title case — capitalise the first letter of every word. Never use sentence case for headings.
+- **Heading capitalisation:** all H1, H2, and H3 headings must use sentence case — capitalise only the first word and proper nouns. Never use title case (capitalising every word).
+- **H2 headings — question format:** every H2 must be written as a question starting with How, What, Why, When, Which, Is, Can, or Should. Include the primary or a secondary keyword in the question where it reads naturally. This is an AI discoverability requirement — descriptive H2s will be flagged by `/seo` and rewritten by `/revise`, so get them right in the draft. Example: `## What are Claude Code plugins?` not `## Claude Code plugin overview`.
+- **"What will we cover in this post?" section:** this preview section heading must always be exactly `## What will we cover in this post?` — no variations, no paraphrasing. The bold phrase opening each bullet must match the exact text of the corresponding section H2. These phrases are the SEO anchor for that section — do not paraphrase or shorten them. Format: `**<exact H2 text>** — <one-line description of what the section covers>`.
 - **Before writing the opening paragraph:** check the opening rules in the type-specific style guide. `series-genai`: open with a thesis statement or contrarian reframe — not personal anecdote. `paper-explainer`: open with paper attribution, not anecdote.
 - **Explanation depth:** the Register rule in `shared/voice.md` is a tone rule, not a depth rule. For complex or non-obvious concepts, build from first principles. Do not skip scaffolding on the assumption the reader already knows the internals.
 - **Transitions:** close each section with a claim or observation that implies the natural next question. Open the following section by answering it directly. Do not use meta-commentary transitions ("Now that we've explored X...").
@@ -93,13 +95,13 @@ Apply these throughout — they are not optional:
 
 ### Reference guardrails
 - Only use URLs that appear in `research_brief.md`. No exceptions.
-- Prefer inline hyperlinks with natural anchor text:
-  `[the agentskills.io specification](url) defines this as...`
-- Use numbered citations `[N]` when inline anchor text would feel forced:
-  `...as documented in the official launch post[1].`
+- **Always use inline hyperlinks** — link the natural anchor phrase in the sentence directly to the source URL:
+  `The [scaffold command](url) produces a directory with the correct layout...`
+  `...as [documented in the official guide](url).`
+- Never use numbered citation markers `[1]`, `[2]` etc. in the prose body. They are harder to read and break the flow.
 - If drawing on model knowledge with no citable source: write in prose only. No URL, no invented citation, no hedging footnote.
-- Collect every cited source in a `## References` section at the end, numbered to match in-text citations:
-  `[1] [Title](url) — 1-sentence description of what this source covers`
+- Always include a `## References` section at the end listing every cited source:
+  `[Title](url) — 1-sentence description of what this source covers`
 
 ### Structure of `long_draft.md`
 Follow the template in `assets/long_draft_template.md`.

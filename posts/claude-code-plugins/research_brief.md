@@ -1,13 +1,15 @@
 # Research Brief: Claude Code Plugins: How to Build, Version, and Maintain Them
 
-**Generated:** 2026-06-06
+**Generated:** 2026-06-08
 
 ## Summary
 
-No URLs were present in `notes.md`. All 10 sources were found via targeted web searches and direct
-fetches of official Anthropic documentation. The four open research questions (complete `plugin.json`
-schema, community examples, semver-to-update-behaviour mapping, CI tooling) are all answered by the
-official docs. All 8 ToC sections have at least one source. No research gaps remain.
+No URLs were present in `notes.md`. The original brief was grounded in official Anthropic
+documentation, which still covers the core mechanics (`plugin.json` schema, versioning semantics,
+validation, marketplace structure). A second research pass found enough third-party signal to expand
+the brief: real public plugin repos and marketplaces, one substantial practitioner write-up, and a
+small but meaningful set of community-reported failure modes. Thin SEO pages that only restated the
+docs were discarded.
 
 ---
 
@@ -108,6 +110,93 @@ official docs. All 8 ToC sections have at least one source. No research gaps rem
 
 ---
 
+## Third-Party Sources With Genuine Signal
+
+### 1. Real published plugins and marketplaces
+
+- **[Postman Plugin for Claude Code — GitHub](https://github.com/Postman-Devrel/postman-claude-code-plugin)**
+  A real plugin repo with `.claude-plugin/plugin.json`, `.mcp.json`, `commands/`, `skills/`, and
+  `agents/` in one package. Adds something the Anthropic docs do not: a concrete example of a
+  multi-component production plugin that auto-configures an MCP server and exposes a real command
+  surface.
+
+- **[wshobson/agents — GitHub](https://github.com/wshobson/agents)**
+  A large community marketplace advertising 84 Claude Code plugins, 192 agents, 156 skills, and
+  parallel generation for Codex CLI, Cursor, OpenCode, Gemini CLI, and Copilot. Adds ecosystem
+  signal the docs do not cover: plugin publishing is already being used as a cross-harness
+  packaging layer, not just a Claude-only distribution mechanism.
+
+- **[feed-mob/claude-code-marketplace — GitHub](https://github.com/feed-mob/claude-code-marketplace)**
+  A team-run marketplace with agents, skills, commands, and install instructions via GitHub or
+  HTTPS URLs. Adds practical examples of how companies are structuring internal/public marketplaces
+  around concrete workflows rather than just shipping single plugins.
+
+- **[docker/claude-plugins — GitHub](https://github.com/docker/claude-plugins)**
+  Docker's focused marketplace repo showing a root `.claude-plugin/marketplace.json` and a plugin
+  with `.claude-plugin/plugin.json` plus `.mcp.json`. Adds a credible example of a vendor-specific,
+  narrow marketplace strategy.
+
+- **[danielrosehill/Claude-Code-Plugins — GitHub](https://github.com/danielrosehill/Claude-Code-Plugins)**
+  A very large personal marketplace organized by role and workflow, with install recipes for
+  full-stack, AI/ML, sysadmin, creator, and personal-productivity bundles. Adds community pattern
+  signal the docs do not cover: users are curating plugin sets as opinionated workflow stacks, not
+  just one-off tools.
+
+- **[Piebald-AI/claude-code-lsps — GitHub](https://github.com/Piebald-AI/claude-code-lsps)**
+  A dedicated marketplace for LSP plugins across many languages, with contributor workflows and
+  runtime setup instructions. Adds practical friction the docs do not surface clearly: some plugin
+  categories require external binaries, runtime validation, and additional setup beyond install.
+
+- **[duyet/codex-claude-plugins — GitHub](https://github.com/duyet/codex-claude-plugins)**
+  A shared Claude/Codex plugin collection that keeps `.claude-plugin/plugin.json` alongside
+  `.codex-plugin/plugin.json` and a Codex marketplace file. Adds evidence that plugin authors are
+  already co-packaging across agent environments.
+
+### 2. Practitioner write-ups and hands-on implementation notes
+
+- **[Announcing the Postman Plugin for Claude Code — Postman Blog](https://blog.postman.com/announcing-the-postman-plugin-for-claude-code/)**
+  A detailed first-party vendor write-up of why they built a Claude Code plugin, how it works under
+  the hood, and the concrete user workflows it enables. Adds practical usage scenarios and packaging
+  rationale beyond the Anthropic docs' generic examples.
+
+- **[Plugins Claude Code : Transformer Votre Workflow en 2025 — CC France](https://cc-france.org/blog/plugins-claude-code-transformer-votre-workflow-en-)**
+  A practitioner article from the author of WD Framework describing real production use, install
+  flow, and claimed gains on a newsletter feature and code review workflow. Adds firsthand adoption
+  and workflow framing the official docs do not provide.
+
+- **[engram/docs/PLUGINS.md — GitHub](https://github.com/Gentleman-Programming/engram/blob/main/docs/PLUGINS.md)**
+  Implementation notes for a real plugin, including a PowerShell fallback hook for locked-down
+  Windows environments. Adds operational detail the docs largely skip: cross-platform enterprise
+  constraints and fallback patterns for hook execution.
+
+### 3. Community discussion and failure modes
+
+- **[Made a simple plugin that feeds Claude Code its own documentation — Reddit](https://www.reddit.com/r/ClaudeCode/comments/1qhlrc9/made_a_simple_plugin_that_feeds_claude_code_its/)**
+  A plugin author explaining a documentation plugin's install path and why the skill does not flood
+  every session with all docs content. Adds a concrete "why build this" example and a practical
+  answer to context-pollution concerns.
+
+- **[[Bug] Adding fields to plugin.json silently breaks skills and commands — Reddit](https://www.reddit.com/r/ClaudeCode/comments/1qkygri/bug_adding_fields_to_pluginjson_silently_breaks/)**
+  A community bug report documenting a manifest failure mode: unrecognized fields in `plugin.json`
+  causing plugin skills and commands to stop working silently. Adds real-world validator/failure
+  pressure the official docs do not communicate.
+
+- **[# PSA: Your Claude Code plugins are probably loading every skill TWICE — here's how to check and fix it — Reddit](https://www.reddit.com/r/ClaudeAI/comments/1rij9tr/psa_your_claude_code_plugins_are_probably_loading/)**
+  A community debugging post linking plugin duplication to faster context compaction and recommending
+  auditing enabled plugins and unused MCP connectors. Adds operational failure-mode and adoption
+  pattern signal absent from the docs.
+
+- **[[Guide] Plugins Claude Code: 2 months testing WD Framework in production (85% time gain on Newsletter feature) — Reddit](https://www.reddit.com/r/ClaudeCode/comments/1o4ln5s/guide_plugins_claude_code_2_months_testing_wd/)**
+  A plugin author summarizing two months of production use, including package shape, install flow,
+  and claimed workflow impact. Adds firsthand practitioner adoption data rather than only platform
+  guidance.
+
+---
+
 ## Research Gaps
 
-None. All 8 ToC sections and all 4 open research questions are covered by sourced material.
+The core mechanics are well documented by Anthropic and now reinforced by community examples. The
+remaining gap is not "how do plugins work?" but "which community claims hold up over time?" Most
+third-party material is either repo-first (good for concrete examples) or promotional (less useful
+for neutral analysis). The strongest third-party signal comes from open repositories and
+firsthand bug/adoption reports rather than generic tutorials.
