@@ -89,8 +89,8 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - Do not remove content — shorten sentences by cutting redundant clauses, not ideas
 > - Preserve Jose's voice — no generic AI filler phrases, no "it's important to note" or "in conclusion"
 > - One change at a time — apply each planned edit exactly as described; do not improvise
-> - **Heading capitalisation** — all H2 and H3 headings must use title case (capitalise the first letter of every word). If any existing heading uses sentence case, correct it as part of the revision pass.
-> - **TOC sync** — after applying any H2 heading change, find the "What will we cover in this post?" section (or equivalent TOC/preview list near the top of the draft). For each changed H2, locate the bullet whose `**bold phrase**` corresponds to that section and update the bold phrase to match the new H2 text exactly. If a bullet has no clear match, leave it unchanged and note it in the revision plan as skipped.
+> - **Heading capitalisation** — all H1, H2, and H3 headings must use sentence case (capitalise only the first word and proper nouns). If any existing heading uses title case, correct it as part of the revision pass.
+> - **TOC sync** — after applying any H2 heading change, find the `## What will we cover in this post?` section (this heading must be exact — correct it if it differs). For each changed H2, locate the bullet whose `**bold phrase**` corresponds to that section and update the bold phrase to match the new H2 text exactly. If a bullet has no clear match, leave it unchanged and note it in the revision plan as skipped.
 >
 > **Step 6 — Update `post.yaml`**
 > If `post.yaml` exists, update:

@@ -4,7 +4,7 @@
 
 ---
 
-A few months ago, my team had built a solid Claude Code setup for experimentation work — an A/B testing agent that drafts statistical test plans, skills for power calculations and variant analysis, hooks that validate experiment configs before they run, and an MCP server that pulls live experiment data from our internal platform. It worked well. Then other teams noticed.
+A few months ago, my team had built a solid set of Claude Code plugins for experimentation work — an A/B testing agent that drafts statistical test plans, skills for power calculations and variant analysis, hooks that validate experiment configs before they run, and an MCP server that pulls live experiment data from our internal platform. It worked well. Then other teams noticed.
 
 The data engineering team wanted the experiment config validator. The product analytics team wanted the A/B testing agent. The ML platform team wanted the hooks. Word spread, and suddenly we were fielding the same request from five different directions: *can you share your setup?*
 
@@ -12,15 +12,15 @@ The honest answer was: share how, exactly? We could copy `.md` files into a Slac
 
 This is where plugins come in.
 
-A plugin is not a new kind of Claude capability. It is a packaging format for capabilities you already have. Every component inside a plugin — skills, agents, hooks, MCP servers, LSP servers, monitors — exists and works identically outside a plugin. What a plugin adds is distribution: a structured, versionable, installable container that other teams can install in one command and receive updates from automatically.
+A plugin is not a new kind of Claude capability. It is a packaging format for capabilities you already have. Every component inside a plugin — skills, agents, hooks, MCP servers, LSP servers, monitors — exists and works identically outside a plugin. What a plugin adds is distribution: a structured, versionable, installable container that other teams can [install in one command](https://github.com/Postman-Devrel/postman-claude-code-plugin) and receive updates from automatically.
 
-The experimentation plugin we eventually built contains all of it: the A/B testing agent, the statistical skills, the config validation hook, and the MCP server config. Other teams install it from our internal marketplace. When we update a skill, they get it on their next session start. No Slack messages, no copy-pasting, no version drift.
+The experimentation plugin we eventually built contains all of it: the A/B testing agent, the statistical skills, the config validation hook, and the MCP server config. Other teams install it from our [internal marketplace](https://github.com/feed-mob/claude-code-marketplace). When we update a skill, they get it on their next session start. No Slack messages, no copy-pasting, no version drift.
 
 That is the problem plugins solve. Everything else in this post is the mechanics of how.
 
 ---
 
-## What Does This Post Cover?
+## What will we cover in this post?
 
 - **What are Claude Code plugins?** — the six component families, the manifest structure, and why plugins are packaging rather than a new primitive.
 - **How do you build a Claude Code plugin?** — the scaffold command, directory layout, writing `plugin.json`, and testing locally before any install.
@@ -28,10 +28,11 @@ That is the problem plugins solve. Everything else in this post is the mechanics
 - **How should you version a Claude Code plugin?** — the two strategies (explicit semver vs commit-SHA), plugin dependencies, and when to pin.
 - **How do you validate a Claude Code plugin before release?** — what `claude plugin validate` catches, `--strict` for CI, and the local marketplace test workflow.
 - **How do you push updates to Claude Code plugin users?** — how auto-update actually works, `/reload-plugins`, and the enterprise controlled-rollout pattern.
+- **What breaks when building Claude Code plugins in practice?** — the failure modes practitioners hit most often and how to avoid them.
 
 ---
 
-## What Are Claude Code Plugins? — Primitives vs Packaging
+## What are Claude Code plugins?
 
 The [Claude Code documentation](https://code.claude.com/docs/en/plugins) calls plugins "a way to share skills, agents, hooks, and MCP servers across projects and teams." That is accurate and undersells the conceptual point.
 
@@ -63,17 +64,16 @@ The `plugin.json` manifest is where all of this is described and versioned. A mi
 
 Optional fields include `repository`, `license`, `dependencies`, and `options`. [Unrecognised fields are handled as warnings by the validator](https://code.claude.com/docs/en/plugins-reference) — which becomes relevant when using `--strict` mode in CI.
 
-The practical implication of "plugins are packaging": if you are building something for yourself in a single project, a plugin adds nothing. The plugin format pays off when you need distribution — multiple projects, multiple teammates, or external users. For a data science team, that might look like packaging a model-evaluation skill that scores LLM outputs against a rubric, so every analyst installs the same version rather than maintaining their own copy. When I first hit the copy-and-paste-your-`.claude`-folder phase of a new project, I knew there had to be a better answer — plugins are it.
+The practical implication of "plugins are packaging": if you are building something for yourself in a single project, a plugin adds nothing. The plugin format pays off when you need distribution — multiple projects, multiple teammates, or external users.
 
 ---
 
-## How Do You Build a Claude Code Plugin? — Directory Structure and Manifest
+## How do you build a Claude Code plugin?
 
-The scaffold command is the fastest way to get started. For a writing workflow the plugin is `my-writing-tools`; for a DS or ML team, the same pattern produces an `experiment-tools` plugin that packages skills for running prompt A/B tests, hooks for logging experiment results, and agents for comparing model outputs across projects:
+The scaffold command is the fastest way to get started:
 
 ```bash
 claude plugin create my-writing-tools --with skill --with hook
-claude plugin create experiment-tools --with skill --with hook --with agent
 ```
 
 The `--with` flags specify which component types to scaffold. Running that command produces a directory with the [correct layout, placeholder files, and a pre-populated `plugin.json`](https://code.claude.com/docs/en/plugins).
@@ -93,6 +93,8 @@ my-writing-tools/
 
 Components live in the same relative paths they would occupy in a regular `.claude/` folder. A skill goes in `.claude/skills/`. An agent goes in `.claude/agents/`. [The plugin format does not introduce a new directory convention](https://code.claude.com/docs/en/plugins-reference) — it wraps the existing one.
 
+Real plugins in the wild usually bundle several component types at once. [Postman's plugin repo](https://github.com/Postman-Devrel/postman-claude-code-plugin) combines `.claude-plugin/plugin.json`, `.mcp.json`, commands, skills, and an agent in one package, while [Engram's plugin docs](https://github.com/Gentleman-Programming/engram/blob/main/docs/PLUGINS.md) document a PowerShell hook fallback for locked-down Windows environments.
+
 Two environment variables are available inside plugin components at runtime: [`CLAUDE_PLUGIN_ROOT`](https://code.claude.com/docs/en/plugins-reference) (the directory containing your `plugin.json`) and `CLAUDE_PLUGIN_DATA` (a persistent per-plugin data directory, separate from the plugin source). These are useful when hooks or scripts need to reference files inside the plugin without hardcoding paths.
 
 Once the structure is in place, testing locally requires no installation. Point Claude Code at the directory with `--plugin-dir`:
@@ -101,7 +103,7 @@ Once the structure is in place, testing locally requires no installation. Point 
 claude --plugin-dir ./my-writing-tools
 ```
 
-The plugin is active for that session only. Skills are available as slash commands. Hooks fire normally. [Nothing is written to your user or project settings.](https://code.claude.com/docs/en/plugins) This is the right development loop: iterate with `--plugin-dir`, validate before publishing. In this newsletter engine repo, I package skills and hooks as a plugin so any new post folder gets them automatically — the same principle applies if you are building a shared prompt-engineering agent or an `experiment-tools` plugin for your analytics team.
+The plugin is active for that session only. Skills are available as slash commands. Hooks fire normally. [Nothing is written to your user or project settings.](https://code.claude.com/docs/en/plugins) This is the right development loop: iterate with `--plugin-dir`, validate before publishing.
 
 Validation catches two categories of issues:
 
@@ -116,11 +118,9 @@ The `/plugin inspect` command (available inside a session) lets you introspect a
 
 ---
 
-## How Do You Distribute Claude Code Plugins?
+## How do you distribute Claude Code plugins?
 
-Once a Claude Code plugin is tested locally, distribution comes down to two decisions: where to host the plugin source and which installation scope to target. For most public or team plugins, that means a GitHub repository as the source and either the `user` or `project` scope for install. For enterprise rollouts, managed settings handle distribution automatically — no manual install required from users.
-
-There are [five source types](https://code.claude.com/docs/en/plugin-marketplaces):
+Once the plugin is tested locally, the question is how users install it. There are [five source types](https://code.claude.com/docs/en/plugin-marketplaces):
 
 - **Relative path** — a local directory path. For development and team members who clone the same repo.
 - **`github`** — `owner/repo` format, resolved as a GitHub repository. The default install method for public plugins.
@@ -134,7 +134,7 @@ Users install a plugin with:
 claude plugin install owner/my-writing-tools
 ```
 
-### Installation Scopes
+### Installation scopes
 
 Every plugin install targets a [scope, which controls which settings layer is updated](https://code.claude.com/docs/en/plugin-marketplaces):
 
@@ -143,11 +143,11 @@ Every plugin install targets a [scope, which controls which settings layer is up
 - **local** — project-level but gitignored (written to `.claude/settings.local.json`).
 - **managed** — set by an organisation administrator, typically via MDM or deployment tooling. Users cannot modify managed settings.
 
-The `managed` scope is the enterprise distribution path. An administrator writes a marketplace configuration to the managed settings file, and every user in the organisation picks up the plugins automatically — without needing to install anything manually. This is particularly useful for data teams distributing data-quality hooks that validate dataframe schemas before any pipeline step runs.
+The `managed` scope is the enterprise distribution path. An administrator writes a marketplace configuration to the managed settings file, and every user in the organisation picks up the plugins automatically — without needing to install anything manually.
 
-### Marketplace Mechanics
+### Marketplace mechanics
 
-For team or public distribution, the right approach is a marketplace rather than pointing users at a single repository. A [marketplace is a `marketplace.json` file](https://code.claude.com/docs/en/plugin-marketplaces) hosted on GitHub (or any git provider) that lists available plugins and their sources:
+For team or public distribution, the right approach is a [marketplace](https://github.com/wshobson/agents) rather than pointing users at a single repository. A [marketplace is a `marketplace.json` file](https://code.claude.com/docs/en/plugin-marketplaces) hosted on GitHub (or any git provider) that lists available plugins and their sources:
 
 ```json
 {
@@ -175,31 +175,35 @@ Anthropic maintains two official marketplaces: `claude-plugins-official` (curate
 
 The [`skill-bundle` pattern](https://github.com/anthropics/claude-plugins-official) is worth noting: repositories that contain only skills (no `plugin.json`) can still be listed in a marketplace using this pattern. It is how simpler skill-only distributions avoid the plugin manifest overhead while still participating in marketplace discovery.
 
-This is what "distribution" means concretely: a controlled, repeatable path that a copied `.claude/` folder cannot provide. On this project I use `project` scope for the newsletter engine plugin — it stays in source control and every clone gets it, without touching my user-level settings for unrelated projects.
+### What the community has built so far
+
+The ecosystem has already moved beyond a single official directory. Focused catalogs like [Docker's marketplace](https://github.com/docker/claude-plugins), [FeedMob's marketplace](https://github.com/feed-mob/claude-code-marketplace), and [Daniel Rosehill's workflow catalog](https://github.com/danielrosehill/Claude-Code-Plugins) are using the same packaging model for very different distribution goals.
+
+At the larger end, [wshobson/agents](https://github.com/wshobson/agents) ships 84 Claude Code plugins from one marketplace and generates parallel artifacts for Codex CLI, Cursor, OpenCode, Gemini CLI, and Copilot from the same source tree. That is a useful signal about where the packaging layer is heading: plugins are already becoming a cross-agent distribution format, not just a Claude-only convenience.
+
+Specialized marketplaces have emerged too. [Piebald-AI's LSP marketplace](https://github.com/Piebald-AI/claude-code-lsps) exists purely to distribute language-server plugins, which is a good example of the ecosystem fragmenting by workflow rather than by generic "plugin store" logic.
 
 ---
 
-## How Should You Version a Claude Code Plugin?
+## How should you version a Claude Code plugin?
 
-Two strategies cover most cases: explicit semver for production plugins shared with teams, commit-SHA tracking for internal or single-user plugins where you want changes to propagate without a release process. Teams should default to semver — it gives users a stable reference point and makes rollback straightforward. Commit-SHA is only appropriate when stability is not a concern and a broken push affecting all users is an acceptable risk. If your team shares a RAG evaluation workflow as a plugin, a broken commit silently replacing a previously stable rubric is the kind of regression that is hard to diagnose after the fact.
-
-The most non-obvious thing about plugin versioning: **pushing a commit does not trigger an update for users.** I ran into exactly this when I pushed a hook change to an `experiment-tools` plugin and a colleague reported stale behaviour hours later — their session had never picked up the new commit because there was no version bump to detect. What triggers an update is [a version bump in `plugin.json`](https://code.claude.com/docs/en/plugins-reference) — or, under the commit-SHA strategy, every push. The first time you push a commit and watch a teammate's Claude Code silently update mid-session is enough to convince you that explicit semver is worth the extra step.
+The most non-obvious thing about plugin versioning: **pushing a commit does not trigger an update for users.** What triggers an update is [a version bump in `plugin.json`](https://code.claude.com/docs/en/plugins-reference) — or, under the commit-SHA strategy, every push.
 
 There are two approaches, and choosing between them is a deliberate policy decision.
 
-### Explicit Semver
+### Explicit semver
 
 Include a `version` field in `plugin.json`. Follow MAJOR.MINOR.PATCH conventions. Maintain a `CHANGELOG.md`. When you are ready to release a new version, bump the version field and push. Claude Code sees the new version and updates users who have auto-update enabled.
 
 Under this strategy, users on a pinned version stay on that version until they explicitly update or you force a bump. This is the right model for plugins used in production workflows where stability matters.
 
-### Commit-SHA Strategy
+### Commit-SHA strategy
 
 Omit the `version` field. [Claude Code tracks the latest commit SHA.](https://code.claude.com/docs/en/plugins-reference) Every push to the repository is treated as a new version. Users always run the latest commit.
 
 This is appropriate for development or for low-stakes plugins where you want changes to propagate without a release process. The tradeoff: there is no stable reference point. If a commit breaks something, all users are immediately affected.
 
-### Plugin Dependencies
+### Plugin dependencies
 
 When one plugin depends on another, declare it in the `dependencies` array:
 
@@ -218,13 +222,11 @@ When one plugin depends on another, declare it in the `dependencies` array:
 
 The [`{plugin-name}--v{version}` git-tag convention](https://code.claude.com/docs/en/plugin-dependencies) is how Claude Code resolves semver ranges. A repository with tags `writing-tools--v2.0.0`, `writing-tools--v2.1.0`, and `writing-tools--v2.2.0` allows a downstream plugin to pin `~2.1.0` and receive patch updates while staying on the 2.x minor line.
 
-Claude Code resolves and auto-reinstalls missing dependencies via `/reload-plugins` and background auto-update. The dependency resolution happens at install time — users who install `advanced-writing-tools` get its dependencies pulled in automatically. The same pattern applies in an ML context: if you push a new version of your `experiment-tools` plugin that changes how a hook logs results, teammates running live experiments get a silent schema change mid-session unless you pin the version in any downstream dependency that reads those logs.
+Claude Code resolves and auto-reinstalls missing dependencies via `/reload-plugins` and background auto-update. The dependency resolution happens at install time — users who install `advanced-writing-tools` get its dependencies pulled in automatically.
 
 ---
 
-## How Do You Validate a Claude Code Plugin Before Release?
-
-Each step in the sequence catches a distinct failure class the previous step cannot see — manifest errors, runtime errors, install-path errors, and load-discovery errors respectively. Run them in order.
+## How do you validate a Claude Code plugin before release?
 
 The validation sequence before any publish step:
 
@@ -234,7 +236,7 @@ The validation sequence before any publish step:
 claude plugin validate ./my-writing-tools --strict
 ```
 
-Fix every error. Treat every warning as a potential user-facing failure. [`--strict` is the right default for a release check](https://code.claude.com/docs/en/plugins-reference) — the base validator's warning-only mode is too permissive for stable distribution. This step catches manifest errors — mistyped field names, missing required fields, and unrecognised keys that would reach users as silent load failures.
+Fix every error. Treat every warning as a potential user-facing failure. [`--strict` is the right default for a release check](https://code.claude.com/docs/en/plugins-reference) — the base validator's warning-only mode is too permissive for stable distribution. That caution is not theoretical: [one community bug report](https://www.reddit.com/r/ClaudeCode/comments/1qkygri/bug_adding_fields_to_pluginjson_silently_breaks/) documents skills and commands breaking silently after an unrecognised field was added to `plugin.json`.
 
 **Step 2: Test locally with `--plugin-dir`.**
 
@@ -242,7 +244,7 @@ Fix every error. Treat every warning as a potential user-facing failure. [`--str
 claude --plugin-dir ./my-writing-tools
 ```
 
-Run each slash command and verify the output matches the expected behaviour. Confirm each hook fires by triggering the relevant lifecycle event and checking the log. Run `/plugin inspect` and verify the metadata (version, commands, agents) matches your manifest. If the plugin includes MCP servers, confirm they start and respond correctly. This step catches runtime failures that the validator cannot see — skills that error on invocation, hooks that fire but do nothing, MCP servers that fail to start.
+Manually exercise every skill. Confirm each slash command appears in the suggestions. Trigger hooks and verify they fire. If the plugin includes MCP servers, confirm they start and respond correctly. For plugins that wrap external tooling, also verify the runtime assumptions: [Piebald-AI's LSP marketplace](https://github.com/Piebald-AI/claude-code-lsps) has to document per-language binaries and even a patch step to make Claude Code's built-in LSP support usable.
 
 **Step 3: Test via a local marketplace.**
 
@@ -251,7 +253,7 @@ Run each slash command and verify the output matches the expected behaviour. Con
 /plugin install my-writing-tools@local-marketplace
 ```
 
-This simulates the full install path a user will follow. [Step 3 catches install-path failures](https://code.claude.com/docs/en/plugin-marketplaces) that `--plugin-dir` masks because it bypasses the install mechanism entirely — missing files, incorrect source references in `plugin.json`, dependency resolution failures.
+This simulates the full install path a user will follow. Testing with `--plugin-dir` skips the install mechanism. [Testing via a local marketplace catches install-specific issues](https://code.claude.com/docs/en/plugin-marketplaces) — missing files, incorrect source references in `plugin.json`, dependency resolution failures.
 
 **Step 4: Inspect post-install.**
 
@@ -259,22 +261,13 @@ This simulates the full install path a user will follow. [Step 3 catches install
 /plugin inspect
 ```
 
-Confirms that all declared components were discovered and loaded. Any component missing here is a component that will be silently missing for users. This step catches the gap between what `plugin.json` declares and what Claude Code actually loaded after install.
+Confirms that all declared components were discovered and loaded. Any component missing here is a component that will be silently missing for users.
 
-For CI, the minimal check is `claude plugin validate --strict` on every pull request:
-
-```yaml
-- name: Validate plugin manifest
-  run: |
-    claude plugin validate ./my-plugin --strict
-  shell: bash
-```
-
-Add this as a PR check step so mistyped fields and missing required keys are caught before the branch merges. [More thorough pipelines run an automated install into a scratch project](https://code.claude.com/docs/en/plugins-reference) and execute a smoke test for each skill — for example, invoking `/draft` and asserting exit code 0 before treating the skill as verified. The first time I skipped the local marketplace test and went straight to a GitHub install, a missing file reference in `plugin.json` reached two colleagues before I caught it — Step 3 now runs every time.
+For CI, the minimal check is `claude plugin validate --strict` on every pull request. [More thorough pipelines run an automated install into a scratch project](https://code.claude.com/docs/en/plugins-reference) and execute a smoke test for each skill.
 
 ---
 
-## How Do You Push Updates to Claude Code Plugin Users?
+## How do you push updates to Claude Code plugin users?
 
 Once a plugin is distributed, Claude Code handles updates in the background. When a new version is detected — either a new semver tag or a new commit SHA under the commit strategy — [Claude Code queues a reinstall](https://code.claude.com/docs/en/plugin-dependencies). The update takes effect on the next `/reload-plugins` or session start.
 
@@ -286,7 +279,7 @@ claude plugin marketplace update --scope user
 
 The [`--scope` flag targets a specific settings layer](https://code.claude.com/docs/en/plugin-marketplaces). Without it, the command updates the catalog for all scopes.
 
-### Controlled Rollout for Teams
+### Controlled rollout for teams
 
 The enterprise pattern for staged rollouts uses two marketplace repositories and managed settings to split users into groups.
 
@@ -305,11 +298,19 @@ To add a marketplace via managed settings:
 }
 ```
 
-If the [last-scope declaration for a marketplace is removed from settings, dependent plugins auto-uninstall](https://code.claude.com/docs/en/plugin-marketplaces) on the next sync. This is the clean removal path — no manual cleanup required from users. The two-marketplace pattern — `stable` and `early-access` — solved a real rollout problem for me: without it, a single broken push to the newsletter engine plugin hit every project at once; splitting the channels meant I could validate on one before promoting to the other.
+One operational detail worth noting: if the [last-scope declaration for a marketplace is removed from settings, dependent plugins auto-uninstall](https://code.claude.com/docs/en/plugin-marketplaces) on the next sync. This is the clean removal path — no manual cleanup required from users.
 
 ---
 
-## Closing Thoughts
+## What breaks when building Claude Code plugins in practice?
+
+Two community failure modes are worth keeping in mind. One is manifest fragility: [plugin authors have reported](https://www.reddit.com/r/ClaudeCode/comments/1qkygri/bug_adding_fields_to_pluginjson_silently_breaks/) that an unrecognised `plugin.json` field can break skills and commands silently if it slips through.
+
+The other is context bloat. A widely shared [community PSA](https://www.reddit.com/r/ClaudeAI/comments/1rij9tr/psa_your_claude_code_plugins_are_probably_loading/) traced repeated compaction to plugins loading every skill twice, with the practical fix being to audit enabled plugins and disconnect MCP connectors you are not using for the current project.
+
+---
+
+## Closing thoughts
 
 The plugin system is a graduation, not a foundation.
 
@@ -317,13 +318,13 @@ Everything in this post assumes you already have working skills, agents, hooks, 
 
 **Plugins pay off under three conditions.** First, when the same configuration needs to live in more than one project. A plugin eliminates the copy-paste problem and gives you a single source of truth with a version history. Second, when distribution across teammates requires reproducibility. Everyone on the team installs the same version; updates propagate through a controlled path rather than a shared folder. Third, when you are building for external users or contributing to the community marketplace, where the install experience matters.
 
-**Plugins add overhead that is not worth it** for a solo data practitioner maintaining a single project. A well-structured `.claude/` folder with skills, rules, and hooks is entirely sufficient. There is no capability gap between standalone and packaged — only a distribution gap. Where the overhead pays off is the DS lead or analytics team lead who needs the same evaluation harness, data-quality hooks, or prompt-engineering agents running consistently across every team member's environment.
+**Plugins add overhead that is not worth it** for solo practitioners maintaining a single project. A well-structured `.claude/` folder with skills, rules, and hooks is entirely sufficient. There is no capability gap between standalone and packaged — only a distribution gap.
 
-The key move this system enables is treating Claude Code configuration the way you treat code: versioned, tested, distributed, and maintained with the same rigour you would apply to any production data pipeline. For a DS team, that means the evaluation harness that scores LLM outputs against a rubric, or the data-quality hooks that validate dataframe schemas before any pipeline step runs, ship to every analyst's environment the same way a library release does — tagged, tested, and rolled back if they break something. That shift — from `.claude/` folder to installable, versionable package — is what the plugin format makes possible.
+The key move this system enables is treating Claude Code configuration the way you treat code: versioned, tested, distributed, and maintained with the same rigour you would apply to any shared library. That shift — from `.claude/` folder to installable, versionable package — is what the plugin format makes possible.
 
 ---
 
-## Now, I Want to Hear from You
+## Now, I want to hear from you
 
 - Have you found a use case where the standalone `.claude/` approach broke down and plugins were the right fix? What specifically triggered the move?
 - If you manage a team using Claude Code, how are you currently sharing configuration? Are you using the managed scope, or something else?
@@ -342,3 +343,23 @@ The key move this system enables is treating Claude Code configuration the way y
 [4] [anthropics/claude-plugins-official — GitHub](https://github.com/anthropics/claude-plugins-official) — The official Anthropic plugin directory showing real marketplace structure, the `skill-bundle` pattern, and the community submission workflow.
 
 [5] [Constrain plugin dependency versions — Claude Code Docs](https://code.claude.com/docs/en/plugin-dependencies) — Documents the `dependencies` array in `plugin.json`, the `{plugin-name}--v{version}` git-tag convention for semver range resolution, auto-reinstall behaviour on `/reload-plugins`, and the enterprise pattern of stable vs early-access marketplace channels.
+
+[6] [Announcing the Postman Plugin for Claude Code — Postman Blog](https://blog.postman.com/announcing-the-postman-plugin-for-claude-code/) — A vendor write-up explaining why Postman packaged its Claude Code integration as a plugin, how it bundles MCP configuration with commands and skills, and the real API workflows it enables.
+
+[7] [Postman Plugin for Claude Code — GitHub](https://github.com/Postman-Devrel/postman-claude-code-plugin) — A real multi-component plugin repo with `.claude-plugin/plugin.json`, `.mcp.json`, commands, skills, and an agent in one package.
+
+[8] [engram/docs/PLUGINS.md — GitHub](https://github.com/Gentleman-Programming/engram/blob/main/docs/PLUGINS.md) — Implementation notes for a real plugin, including PowerShell fallback hooks for locked-down Windows environments.
+
+[9] [docker/claude-plugins — GitHub](https://github.com/docker/claude-plugins) — A focused third-party marketplace repo showing how a company can publish a narrow, domain-specific Claude Code plugin catalog.
+
+[10] [feed-mob/claude-code-marketplace — GitHub](https://github.com/feed-mob/claude-code-marketplace) — A team-run marketplace with real plugin install flows, mixed component types, and a concrete `marketplace.json` structure in the wild.
+
+[11] [wshobson/agents — GitHub](https://github.com/wshobson/agents) — A large community marketplace with 84 Claude Code plugins and a notable cross-harness generation strategy spanning Claude Code, Codex, Cursor, OpenCode, Gemini CLI, and Copilot.
+
+[12] [Piebald-AI/claude-code-lsps — GitHub](https://github.com/Piebald-AI/claude-code-lsps) — A dedicated LSP-plugin marketplace that adds practical evidence about runtime dependencies, validation workflows, and specialized plugin distribution.
+
+[13] [danielrosehill/Claude-Code-Plugins — GitHub](https://github.com/danielrosehill/Claude-Code-Plugins) — A large personal marketplace that organizes plugins by role and workflow, illustrating how the community is curating bundles rather than only one-off plugins.
+
+[14] [[Bug] Adding fields to plugin.json silently breaks skills and commands — Reddit](https://www.reddit.com/r/ClaudeCode/comments/1qkygri/bug_adding_fields_to_pluginjson_silently_breaks/) — A community bug report documenting a real manifest failure mode that reinforces why strict validation matters before release.
+
+[15] [# PSA: Your Claude Code plugins are probably loading every skill TWICE — here's how to check and fix it — Reddit](https://www.reddit.com/r/ClaudeAI/comments/1rij9tr/psa_your_claude_code_plugins_are_probably_loading/) — A community debugging write-up linking duplicated plugin skill loads to context compaction and offering concrete mitigation steps.
