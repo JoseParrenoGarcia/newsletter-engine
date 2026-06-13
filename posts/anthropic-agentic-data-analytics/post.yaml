@@ -1,0 +1,61 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "anthropic-agentic-data-analytics"
+working_title: "Anthropic's Agentic Data Analytics: Why It Isn't Just Text-to-SQL"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: ""
+content_type: ""
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: ""
+target_audience: ""
+target_reading_time_minutes: null
+topics_to_cover: []
+topics_to_exclude: []
+open_research_questions: []
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: ""
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts: []
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: null
+  seo_brief: seo_brief.md
+  review_report: null
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: pending
+    completed_at: null
+  research:
+    status: pending
+    completed_at: null
+  draft:
+    status: pending
+    completed_at: null
+  seo:
+    status: pending
+    completed_at: null
+  revise:
+    status: pending
+    completed_at: null
+  review:
+    status: pending
+    completed_at: null
+  promote:
+    status: pending
+    completed_at: null
