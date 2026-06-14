@@ -4,11 +4,11 @@
 
 ---
 
-Anthropic's [June 3, 2026 post on self-service analytics](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude) lands on a truth many AI analytics products prefer not to foreground: the hard part is not writing SQL. The hard part is making sure the system knows what the question means, which metric definition is official, which table is current, and whether the final answer deserves trust.
+Anthropic's June 3, 2026 post on self-service analytics lands on a truth many AI analytics products prefer not to foreground: the hard part is not writing SQL. The hard part is making sure the system knows what the question means, which metric definition is official, which table is current, and whether the final answer deserves trust.
 
 If you reduce agentic analytics to query generation, you narrow the problem too early. You start evaluating the visible last mile and ignore the infrastructure that determines whether the answer is useful or dangerous. Anthropic's own architecture makes that impossible to miss. Their stack puts data foundations, sources of truth, skills, and validation ahead of the moment when Claude ever touches a query.
 
-My read is that this is the real contribution in the piece. The impressive number is that [Anthropic says Claude now automates 95% of business analytics queries at roughly 95% aggregate accuracy](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude). The more useful lesson is why that became possible. SQL sits downstream of meaning.
+My read is that this is the real contribution in the piece. The impressive number is that Anthropic says Claude now automates 95% of business analytics queries at roughly 95% aggregate accuracy. The more useful lesson is why that became possible. SQL sits downstream of meaning.
 
 ---
 
@@ -43,27 +43,11 @@ That is why a valid query and correct analytics are different things. A query ca
 
 If the category stays trapped inside text-to-SQL, teams will keep optimizing the wrong thing. They will celebrate query generation while leaving ambiguity, provenance, and validation underdesigned.
 
-[Create diagram: "Naive text-to-SQL vs production-grade agentic analytics"]
-Left side:
-User question -> LLM -> SQL -> Warehouse -> Answer
-Right side:
-User question -> intent clarification -> semantic layer -> curated examples -> skills -> governed query execution -> validation -> provenance -> feedback loop
-
-[Add table: "Valid SQL vs correct analytics"]
-Columns:
-Output looks good because... | But it may still be wrong because...
-Rows:
-SQL executes successfully | Wrong source table
-Query returns a number | Wrong business definition
-Chart renders cleanly | Wrong grain or denominator
-Explanation sounds confident | Missing caveats or exclusions
-Result matches user wording | User wording was ambiguous
-
 ## What did Anthropic actually build for self-service analytics?
 
 Anthropic did not describe a model connected directly to a warehouse. They described a layered analytics system with Claude at the front.
 
-The [article](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude) organizes that system into four parts. First come **data foundations**: canonical datasets, data models, transforms, tests, freshness checks, and metadata. Then come **sources of truth**: the semantic layer, lineage, business context, and curated reference material that helps the agent map a question onto governed meaning. Then come **skills**: domain procedures that tell the model how to work, not just what data exists. Finally comes **validation**: offline evals, online checks, provenance, and maintenance loops.
+The article organizes that system into four parts. First come **data foundations**: canonical datasets, data models, transforms, tests, freshness checks, and metadata. Then come **sources of truth**: the semantic layer, lineage, business context, and curated reference material that helps the agent map a question onto governed meaning. Then come **skills**: domain procedures that tell the model how to work, not just what data exists. Finally comes **validation**: offline evals, online checks, provenance, and maintenance loops.
 
 Notice where SQL sits in that sequence: downstream of all the hard decisions. By the time the model writes a query, the stack should already have narrowed what the question means and which governed path deserves trust.
 
@@ -83,7 +67,7 @@ Coding agents have plenty of failure modes, but they also inherit unusually stro
 
 Analytics work fails differently. In Anthropic's framing, there is often one correct answer from one correct source, yet no deterministic way to prove that answer is correct from the final output alone. The system can write perfect SQL and still miss the business meaning entirely.
 
-Anthropic [groups most of the risk into three failure modes](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude).
+Anthropic groups most of the risk into three failure modes.
 
 **Concept/entity ambiguity.** The user says "active users" or "revenue" or "retention," and the agent has to choose among multiple plausible implementations. Those choices are often subtle enough that the wrong answer still looks professional.
 
@@ -96,17 +80,6 @@ This is why the warehouse alone is not enough. Warehouses store data. They do no
 Think again about the simple question from earlier: "What was active customer revenue last month?" The hard part is not producing a `GROUP BY`. The hard part is deciding whether "active" means one purchase in the last 30 days, non-fraud paid usage in the billing period, or some domain-specific threshold defined in the semantic layer and nowhere else.
 
 Once the meaning is settled, the SQL is often ordinary. That is the uncomfortable implication for teams selling query generation as the centerpiece. In analytics, syntax is frequently the easy part.
-
-[Add table: "Coding agents vs analytics agents"]
-Columns:
-Dimension | Coding agent | Analytics agent
-Rows:
-Main ambiguity | What should the system do? | What does the business question mean?
-Natural verification | Tests, compilation, runtime behavior | Ground truth, trusted dashboards, human review
-Failure mode | Broken code or failing tests | Plausible but wrong answer
-Context needed | Repository, docs, APIs, tests | Semantic layer, metadata, lineage, examples, skills
-Human reviewer | Engineer | Analyst, data scientist, metric owner
-Dangerous outcome | App fails | Wrong number becomes accepted truth
 
 ## What does an agentic analytics stack need before it writes SQL?
 
@@ -127,29 +100,7 @@ That has practical implications:
 
 This is one reason I do not buy the lazy narrative that AI analytics will make data engineering less important. The opposite feels closer to the truth. As more questions get routed through models, the quality of the modeling layer becomes more visible, not less.
 
-That pattern shows up outside Anthropic too. The [dbt Semantic Layer](https://docs.getdbt.com/docs/use-dbt-semantic-layer/dbt-sl) exists to centralize metric definitions and make them reusable across tools. Microsoft's [Power BI guidance for Copilot](https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-prepare-data-ai) recommends AI-ready schemas, verified answers, and explicit instructions so the model has grounded context before it responds. Even [Snowflake's Cortex Analyst architecture](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst) leans on semantic models, verified queries, and monitored behavior around the SQL generation layer. Different products, same lesson: prepared context is part of the answer.
-
-[Create diagram: "Data foundations for agentic analytics"]
-Layered stack:
-Dimensional / relational models
-Data quality and freshness checks
-Canonical datasets
-Metadata and ownership
-Semantic layer
-Query examples
-Skills
-Evals and validation
-
-[Add table: "Old data engineering practice, new agentic value"]
-Columns:
-Old-school practice | Why it mattered before | Why it matters for agents
-Rows:
-Dimensional modeling | Easier reporting | Clear grain and entity structure
-Canonical datasets | Consistent reporting | Reduces source ambiguity
-Freshness checks | Avoid stale dashboards | Prevents stale answers
-Metadata | Helps analysts onboard | Gives the agent business context
-Ownership | Accountability | Escalation and review path
-Deprecation | Reduces clutter | Reduces retrieval failure
+That pattern shows up outside Anthropic too. The [dbt Semantic Layer](https://docs.getdbt.com/docs/use-dbt-semantic-layer/dbt-sl) exists to centralize metric definitions and make them reusable across tools. Microsoft's [Power BI guidance for Copilot](https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-prepare-data-ai) recommends AI-ready schemas, verified answers, and explicit instructions so the model has grounded context before it responds. Different products, same lesson: prepared context is part of the answer.
 
 Once you accept that, the next layer becomes even more important. If the warehouse is the terrain, the semantic layer is the map.
 
@@ -159,7 +110,7 @@ Because it tells the model what the business has already decided.
 
 The semantic layer defines official metrics, valid dimensions, join paths, grain, standard filters, and preferred source entities. In other words, it turns a vague business question into a governed route through the data model.
 
-[Anthropic says its agents are structurally required to consult the semantic layer first](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude). That is a strong operating principle. The model should begin from governed meaning, not from open exploration of raw tables.
+Anthropic says its agents are structurally required to consult the semantic layer first. That is a strong operating principle. The model should begin from governed meaning, not from open exploration of raw tables.
 
 That design choice matters more than it might sound. Many teams assume an LLM can help bootstrap the semantic layer itself by reading raw tables and old queries. Anthropic tried a version of that and found it net-negative on evals. The generated definitions looked plausible, but they reproduced the same ambiguity the semantic layer was supposed to remove.
 
@@ -168,10 +119,6 @@ That result deserves to be stated plainly: let the model help document the busin
 This is another place where the market is converging. Snowflake's [semantic model layer in Cortex Analyst](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst) exists to bridge business questions and database structure. Databricks' [Genie](https://docs.databricks.com/aws/en/genie) asks domain experts to provide datasets, instructions, sample SQL, and business context. dbt's semantic layer centralizes metric logic so downstream tools stop reinventing it. Microsoft pushes verified answers and AI instructions into the BI model itself.
 
 The shared pattern is easy to miss if you focus only on the chat interface. All of these systems are trying to narrow the space of legitimate interpretations before the model gets creative.
-
-[Add side box / callout here: "Side note: DS-STAR found the same thing"]
-Suggested point:
-DS-STAR's strongest ablation result was that removing the Analyzer sharply degraded performance because the planner lost structured information about the data. Anthropic shows the same lesson in production analytics form: reasoning quality depends on structured context before execution begins.
 
 | Platform | Grounding layer | What it contributes |
 |---|---|---|
@@ -204,7 +151,7 @@ They carry procedural knowledge:
 - how to review the result adversarially
 - what provenance to include in the final answer
 
-Anthropic's strongest number appears in this section. According to the [article's skills section](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude), Claude did not exceed 21% on their analytics evals without skills. With the skill layer in place, accuracy moved above 95% in aggregate and reached roughly 99% in some domains.
+Anthropic's strongest number appears in this section. According to the article, Claude did not exceed 21% on their analytics evals without skills. With the skill layer in place, accuracy moved above 95% in aggregate and reached roughly 99% in some domains.
 
 That is the moment when the whole category description has to change. If the largest performance jump comes from procedural guidance rather than from better SQL generation, then the system is not fundamentally a text-to-SQL product. It is an analytics workflow product with query execution inside it.
 
@@ -214,23 +161,6 @@ This also explains why so many analytics demos feel thin. They give the model ac
 
 That is the real threshold for calling something agentic in this domain. The agent is not just retrieving context and generating syntax. It is following a workflow with domain-specific judgment embedded into it.
 
-[Add table: "Semantic layer vs examples vs skills"]
-Columns:
-Layer | Question it answers | Example
-Rows:
-Semantic layer | What does this metric mean? | Revenue excludes refunds and uses recognized date
-Query examples | How has this been queried before? | Monthly revenue by segment query
-Reference docs | What should I know about this domain? | Tables, grain, exclusions, gotchas
-Skill | How should I perform this task? | Clarify request, use semantic layer, run query, review, report provenance
-
-[Create diagram: "From data access to analytical judgment"]
-Flow:
-Warehouse access -> can query data
-Semantic layer -> can understand official meaning
-Curated examples -> can follow known patterns
-Skills -> can apply domain procedures
-Evals -> can be trusted and improved
-
 ## Why do evals and maintenance matter as much as prompts?
 
 Because even a well-grounded analytics agent decays.
@@ -239,9 +169,9 @@ Anthropic treats validation and maintenance as first-class layers of the system,
 
 Once you have semantic layers, curated examples, and skills, the next failure mode is drift. Tables change. Business definitions shift. Dashboards get rebuilt. Skills quietly stop matching the source model. Yesterday's correct procedure becomes tomorrow's stale context.
 
-The article gives a stark example. [Anthropic says offline accuracy dropped from roughly 95% to roughly 65% over the course of a month](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude) before they started treating skill maintenance as an engineering problem. That number matters because it turns maintenance from a nice-to-have into a reliability requirement.
+The article gives a stark example. Anthropic says offline accuracy dropped from roughly 95% to roughly 65% over the course of a month before they started treating skill maintenance as an engineering problem. That number matters because it turns maintenance from a nice-to-have into a reliability requirement.
 
-The evaluation stack in the piece is also unusually practical. Anthropic describes offline evals based on known question-answer pairs, dashboard-backed checks for common requests, ablation testing to see which structural changes actually help, provenance footers in online responses, passive monitoring, and a correction-harvesting loop where production failures become new eval cases. Databricks surfaces some of the same instincts in [Genie inspection and benchmarking workflows](https://docs.databricks.com/aws/en/genie).
+The evaluation stack in the piece is also unusually practical. Anthropic describes offline evals based on known question-answer pairs, dashboard-backed checks for common requests, ablation testing to see which structural changes actually help, provenance footers in online responses, passive monitoring, and a correction-harvesting loop where production failures become new eval cases.
 
 That is how mature analytics systems should be tested. Not with vibes. Not with a handful of good-looking screenshots. With stored cases, explicit assertions, and a feedback loop that updates the playbook when the system fails.
 
@@ -250,31 +180,6 @@ Databricks surfaces a similar instinct in its [Genie documentation](https://docs
 This is also where prompts start to look less central than people expect. Prompt quality still matters. But if your semantic layer is weak, your examples are stale, your skills drift, and your evals are absent, no heroic prompt is going to save the system for long.
 
 By this point the architecture lesson should be hard to ignore. Agentic analytics works when the surrounding system behaves like a maintained product, not when the model is allowed to improvise from raw access.
-
-[Add table: "What decays in agentic analytics?"]
-Columns:
-Asset | How it decays | Consequence | Maintenance mechanism
-Rows:
-Metric definition | Business logic changes | Wrong metric used | Metric owner review
-Semantic layer | New data not modeled | Agent falls back to raw SQL | Semantic layer updates
-Query example | Table deprecated | Bad pattern copied | Versioned example library
-Skill | Process changes | Wrong reasoning | Skill maintainer + PR checks
-Dashboard | Logic changes | Eval mismatch | Dashboard eval refresh
-Lineage | Pipeline changes | Bad source selection | Automated lineage checks
-
-[Create diagram: "Analytics agent evaluation loop"]
-Flow:
-Question set -> offline evals -> deployed agent -> provenance + monitoring -> failure capture -> corrected skill/context -> refreshed eval set
-
-[Add table: "Evaluation layers for analytics agents"]
-Columns:
-Layer | What it checks | Typical artifact
-Rows:
-Offline evals | Known question/answer correctness | Fixed eval set
-Dashboard checks | Common business questions | Trusted BI asset
-Long-tail evals | Edge cases and ambiguity | Curated hard prompts
-Online validation | Provenance and runtime trust | Footers, checks, monitoring
-Maintenance loop | Drift and regressions | Updated skills, docs, semantic models
 
 ## What should data teams do if they want agentic analytics now?
 

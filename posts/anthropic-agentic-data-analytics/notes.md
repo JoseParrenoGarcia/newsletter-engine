@@ -59,6 +59,18 @@ Anthropic's agentic data analytics framing is useful because it moves the conver
 
 The post should not argue that text-to-SQL is useless. It should argue that text-to-SQL is only one narrow capability inside a much larger analytics system. Anthropic's own architecture makes that visible: the hard part is not generating a query, but constraining meaning, finding the right source of truth, validating the result, and returning something trustworthy enough for business use.
 
+---
+
+## Brainstorm Summary
+
+Anthropic's June 3, 2026 article on self-service analytics gives Jose a strong way to reframe the category. The useful insight is not that Claude can answer analytics questions. The useful insight is that Anthropic had to build a serious stack around Claude before those answers became trustworthy. That stack includes canonical datasets, metadata, semantic grounding, skills, evals, and maintenance. The post's core argument is that this is what "agentic analytics" should mean in practice.
+
+The audience is technical and close to the problem: data scientists, analytics engineers, analytics leaders, and AI builders who are either evaluating text-to-SQL systems or already trying to deploy conversational analytics. They do not need a product tour. They need a mental model that separates "SQL was generated" from "the business question was answered correctly."
+
+The tone should stay analytical and calm, not anti-vendor and not anti-SQL. Text-to-SQL remains useful. It is simply too narrow to describe the real system. Anthropic's own evidence supports that claim: the three main failure modes are ambiguity, staleness, and retrieval failure; the biggest accuracy jumps come from skills and procedural guidance; and maintenance plus validation are treated as engineering problems, not afterthoughts.
+
+The structural arc should build naturally: start with the seductive but incomplete text-to-SQL framing, show what Anthropic actually built, explain why data ambiguity dominates analytics work, then move through the stack in order of dependency. End with concrete guidance for data teams that want to start without overbuilding.
+
 ## Possible Structure
 
 1. Why people keep reducing analytics agents to text-to-SQL
@@ -66,3 +78,38 @@ The post should not argue that text-to-SQL is useless. It should argue that text
 3. The missing layers: planning, validation, iteration, interpretation
 4. Why this matters for real data work
 5. What "agentic analytics" should mean going forward
+
+## Rough Table of Contents
+
+- **Intro** — Thesis-led opening using Anthropic's article as the entry point: the hard part in analytics agents is not SQL generation but making the answer trustworthy.
+- **Why do so many teams reduce agentic analytics to text-to-SQL?** — The market default, why it is seductive, and why it narrows the problem too early.
+- **What did Anthropic actually build for self-service analytics?** — The architecture in the June 3, 2026 article: data foundations, sources of truth, skills, and validation.
+- **Why is data ambiguity the real problem in analytics agents?** — Concept/entity ambiguity, staleness, retrieval failure, and why analytics differs from coding.
+- **What does an agentic analytics stack need before it writes SQL?** — Canonical datasets, metadata, ownership, and colocated artefacts.
+- **Why is the semantic layer the agent's map?** — Official meaning, joins, grain, allowed paths, and the danger of letting an LLM define the business.
+- **Why do skills change the accuracy story?** — Procedural knowledge, pairwise skills, common analysis patterns, and Anthropic's 21% to 95%+ claim.
+- **Why do evals and maintenance matter as much as prompts?** — Drift, offline evals, ablations, provenance, online validation, and feedback loops.
+- **What should data teams do if they want agentic analytics now?** — A practical starting sequence for teams that want value without unnecessary complexity.
+- **Closing thoughts** — Text-to-SQL is one visible step inside a broader governed system.
+
+## Anthropic quote bank
+
+### Exact short quotes we can use
+
+- "false sense of precision"
+- "Data is not software"
+- "no deterministic way of proving the correctness"
+- "Treat metadata as a first-class product"
+
+### Strong statistics / statements to cite
+
+- Anthropic says 95% of business analytics queries are automated via Claude with roughly 95% aggregate accuracy.
+- Anthropic says Claude did not exceed 21% accuracy on analytics evals without skills, then moved above 95% in aggregate with skills.
+- Anthropic says offline accuracy fell from roughly 95% to roughly 65% over a month before they treated skill maintenance as an engineering problem.
+- Anthropic says the semantic layer is the mandatory default path, with raw SQL as fallback when coverage is missing.
+
+### Paraphrase-only points worth using
+
+- Analytics has one correct answer from one correct source more often than coding does, but the correctness is harder to prove from the output alone.
+- Query history by itself was weak as a retrieval layer; curated reference docs and skills were more useful than dumping thousands of old SQL files into search.
+- Anthropic's stack is ordered to reduce ambiguity first, then retrieval error, then execution error.
