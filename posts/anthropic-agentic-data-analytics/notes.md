@@ -69,7 +69,7 @@ The audience is technical and close to the problem: data scientists, analytics e
 
 The tone should stay analytical and calm, not anti-vendor and not anti-SQL. Text-to-SQL remains useful. It is simply too narrow to describe the real system. Anthropic's own evidence supports that claim: the three main failure modes are ambiguity, staleness, and retrieval failure; the biggest accuracy jumps come from skills and procedural guidance; and maintenance plus validation are treated as engineering problems, not afterthoughts.
 
-The structural arc should build naturally: start with the seductive but incomplete text-to-SQL framing, show what Anthropic actually built, explain why data ambiguity dominates analytics work, then move through the stack in order of dependency. End with concrete guidance for data teams that want to start without overbuilding.
+The structural arc should build naturally: start with the seductive but incomplete text-to-SQL framing, explain why data ambiguity dominates analytics work, then show the Anthropic architecture as the answer to those problems. From there, move through the stack in dependency order. End with concrete guidance for data teams that want to start without overbuilding.
 
 ## Possible Structure
 
@@ -83,8 +83,8 @@ The structural arc should build naturally: start with the seductive but incomple
 
 - **Intro** — Thesis-led opening using Anthropic's article as the entry point: the hard part in analytics agents is not SQL generation but making the answer trustworthy.
 - **Why do so many teams reduce agentic analytics to text-to-SQL?** — The market default, why it is seductive, and why it narrows the problem too early.
-- **What did Anthropic actually build for self-service analytics?** — The architecture in the June 3, 2026 article: data foundations, sources of truth, skills, and validation.
 - **Why is data ambiguity the real problem in analytics agents?** — Concept/entity ambiguity, staleness, retrieval failure, and why analytics differs from coding.
+- **What did Anthropic actually build for self-service analytics?** — The architecture in the June 3, 2026 article: data foundations, sources of truth, skills, and validation.
 - **What does an agentic analytics stack need before it writes SQL?** — Canonical datasets, metadata, ownership, and colocated artefacts.
 - **Why is the semantic layer the agent's map?** — Official meaning, joins, grain, allowed paths, and the danger of letting an LLM define the business.
 - **Why do skills change the accuracy story?** — Procedural knowledge, pairwise skills, common analysis patterns, and Anthropic's 21% to 95%+ claim.

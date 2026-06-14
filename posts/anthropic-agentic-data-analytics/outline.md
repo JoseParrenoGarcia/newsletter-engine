@@ -13,15 +13,15 @@
 - Use Anthropic's "false sense of precision" framing and Snowflake's text-to-SQL language as evidence that the market keeps narrowing the problem too early.
 - Sources: [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude), [Cortex Analyst](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst)
 
-### 2. What did Anthropic actually build for self-service analytics?
-- Summarize the architecture Anthropic describes: data foundations, sources of truth, skills, and validation.
-- Position the 95% query automation / ~95% aggregate accuracy claim as the result of the stack, not of raw SQL generation.
-- Sources: [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude), [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
-
-### 3. Why is data ambiguity the real problem in analytics agents?
+### 2. Why is data ambiguity the real problem in analytics agents?
 - Explain why analytics differs from coding: one correct answer, ambiguous business meaning, no simple deterministic proof.
 - Walk through Anthropic's three failure modes and ground them in one practical business-question example.
 - Sources: [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude)
+
+### 3. What did Anthropic actually build for self-service analytics?
+- Summarize the architecture Anthropic describes: data foundations, sources of truth, skills, and validation.
+- Position the 95% query automation / ~95% aggregate accuracy claim as the result of the stack, not of raw SQL generation.
+- Sources: [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude), [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
 
 ### 4. What does an agentic analytics stack need before it writes SQL?
 - Shift the discussion toward data foundations: canonical datasets, metadata, ownership, colocated artefacts, and context preparation.
