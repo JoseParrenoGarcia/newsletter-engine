@@ -95,6 +95,7 @@ artefacts:
   outline: null
   long_draft: long_draft.md
   long_draft_backup: long_draft_v1.md
+  long_draft_v2: long_draft_v2.md
   seo_brief: seo_brief.md
   review_report: review_report.md
   promotion_posts: null
@@ -120,5 +121,5 @@ stages:
     status: complete
     completed_at: "2026-06-17"
   promote:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-06-17"
