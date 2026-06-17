@@ -1,0 +1,105 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "anthropic-agentic-data-analytics"
+working_title: "Agentic analytics is not text-to-SQL: what Anthropic got right about self-service data"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: >
+  Anthropic's self-service analytics architecture shows that reliable
+  agentic analytics depends far more on governed meaning, procedural
+  workflows, and validation loops than on raw text-to-SQL generation.
+target_audience: >
+  Data scientists, analytics engineers, analytics leaders, and technical
+  practitioners who are building or evaluating AI systems for business
+  analytics and want a clear mental model for what makes them trustworthy.
+target_reading_time_minutes: 15
+topics_to_cover:
+  - "Why the market keeps collapsing analytics agents into text-to-SQL"
+  - "Anthropic's core claim: analytics accuracy is a context and verification problem"
+  - "The three failure modes: concept/entity ambiguity, data staleness, retrieval failure"
+  - "Why old-school data engineering becomes more important, not less"
+  - "The role of canonical datasets, metadata, and colocated artefacts"
+  - "Why the semantic layer is the mandatory first path for trustworthy analytics agents"
+  - "Why Anthropic's skill layer matters so much, including the 21% to 95%+ jump"
+  - "Why evals, ablations, provenance, and maintenance are part of the product"
+  - "Concrete guidance for data teams starting now"
+topics_to_exclude:
+  - "A broad vendor feature-comparison roundup"
+  - "A deep implementation tutorial for any one platform"
+  - "Unstructured document analytics beyond a brief mention"
+  - "Speculative claims about universal AGI replacing analysts"
+open_research_questions:
+  - "How much of Anthropic's stack is necessary for smaller teams with simpler data models?"
+  - "Which parts of the workflow should remain explicitly human-owned even in mature analytics agents?"
+  - "How portable are these design principles across BI-native products and custom internal stacks?"
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: >
+  The post starts from a contrarian but grounded claim: the most useful thing
+  in Anthropic's June 3, 2026 self-service analytics article is not the model
+  performance number, but the architecture lesson behind it. Jose wants to
+  argue that agentic analytics has been misframed by too much of the market as
+  a text-to-SQL problem, when the harder problem is resolving business meaning,
+  narrowing ambiguity, selecting the governed source of truth, and validating
+  that the final answer deserves trust. Anthropic's article makes that visible
+  because its stack puts data foundations, semantic grounding, skills, and
+  evals ahead of query generation. The intended reader is a technical data
+  practitioner who wants a practical mental model rather than hype. The
+  structural arc is: the reductionist framing → what Anthropic actually built
+  → why ambiguity dominates → what the stack must contain → why semantic layers
+  and skills matter → why maintenance and evals are part of the product →
+  practical steps for teams starting now.
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/genai-ai/what-the-docs-dont-tell-you-about-claude-code-skills.md
+  - reference_posts/standalone/genai-ai/claude-code-agents-explained.md
+  - reference_posts/standalone/genai-ai/claude-code-agent-teams-when-and-how-to-go-multi-agent.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  long_draft_v2: long_draft_v2.md
+  long_draft_v3: long_draft_v3.md
+  long_draft_v4: long_draft_v4.md
+  long_draft_v5: long_draft_v5.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-06-13"
+  research:
+    status: complete
+    completed_at: "2026-06-13"
+  draft:
+    status: complete
+    completed_at: "2026-06-13"
+  seo:
+    status: complete
+    completed_at: "2026-06-13"
+  revise:
+    status: complete
+    completed_at: "2026-06-13"
+  review:
+    status: complete
+    completed_at: "2026-06-13"
+  promote:
+    status: pending
+    completed_at: null

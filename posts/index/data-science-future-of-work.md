@@ -4,6 +4,21 @@
 
 ---
 
+<!-- slug: anthropic-agentic-data-analytics -->
+<a name="anthropic-agentic-data-analytics"></a>
+### Agentic analytics is not text-to-SQL
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Data scientists, analytics engineers, analytics leaders, and technical practitioners evaluating AI systems for business analytics |
+| **Topics** | `data-science` `llm-impact` `problem-framing` `automation` |
+| **Path** | `posts/anthropic-agentic-data-analytics/long_draft.md` |
+
+**Summary:** The post argues that Anthropic's self-service analytics system matters less as a product story than as an architectural lesson: reliable analytics agents are not built by attaching an LLM to a warehouse and hoping the SQL is good. It uses Anthropic's June 3, 2026 article to show that ambiguity, staleness, and retrieval failure dominate the risk surface long before query syntax becomes the hard part. From there, it builds a practical stack in order: data foundations, semantic grounding, skills, evals, and maintenance. The takeaway for data teams is clear: text-to-SQL is one useful execution capability, but trustworthy agentic analytics depends on the governed system wrapped around it.
+
+---
+
 <!-- path: reference_posts/series/genai-ai/ds-in-the-age-of-ai/part-1-your-job-isnt-to-build-models.md -->
 <a name="ds-in-age-of-ai-part-1"></a>
 ### DS in the Age of AI — Part 1: Your job isn't to build models; it's to solve problems.
