@@ -16,3 +16,20 @@
 | **Path** | `posts/open-source-models-good-enough/long_draft.md` |
 
 **Summary:** Frontier models (Anthropic, OpenAI) lead open source by roughly 6–12 months, but that headline gap obscures a more useful truth: most production workloads — summarisation, classification, code generation for well-scoped tasks, structured extraction — don't sit at the frontier. The post builds a task taxonomy that separates what genuinely requires frontier reasoning from what doesn't, then makes a concrete cost case for open source using real inference pricing. It profiles the leading Chinese open source models (DeepSeek, Qwen) and their current capability ceiling. The argument closes with a Vegetius-style provocation: you don't need open source today, but you'll need the muscle memory of having experimented with it before the moment you do.
+
+---
+
+<!-- slug: anthropic-agentic-data-analytics -->
+<a name="anthropic-agentic-data-analytics"></a>
+### Agentic analytics is not text-to-SQL: what Anthropic got right about self-service data
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Data scientists, analytics engineers, analytics leaders, and technical practitioners building or evaluating AI systems for business analytics |
+| **Topics** | `agents` `data-science` `llm-impact` `problem-framing` `automation` |
+| **Path** | `posts/anthropic-agentic-data-analytics/long_draft.md` |
+
+**Summary:** Most of the market has collapsed agentic analytics into text-to-SQL, which misframes the actual problem. Anthropic's self-service analytics architecture reveals what's missing: governed semantic layers, procedural skill workflows, disambiguation loops, and validation — all ahead of query generation. The three real failure modes are concept/entity ambiguity, data staleness, and retrieval failure, and all three are fundamentally data engineering problems, not model problems. The post traces why the semantic layer is mandatory first-path infrastructure, why the skill layer (not the model) drives the 21% to 95%+ accuracy jump, and why evals, provenance, and maintenance are part of the product rather than optional extras. It closes with concrete steps for data teams starting to build trustworthy analytics agents now.
+
+---

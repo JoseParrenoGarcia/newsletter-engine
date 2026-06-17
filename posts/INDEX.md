@@ -24,7 +24,7 @@
 | [How Airbnb Used Deep Learning to Rank Listings](#airbnb-deep-learning-ranking) | Paper Explainers | Lessons from Airbnb's AI experiments: what worked, what failed, and why simplicity often wins. |
 | [What Airbnb Discovered After Launching Their Deep Learning Model](#airbnb-deep-learning-post-launch) | Paper Explainers | Post-launch failures turned into lessons — reframing the problem and eliminating position bias. |
 | [Open source models have lagged. So what?](#open-source-models-good-enough) | AI Tools & Adoption | Most tasks don't need frontier models — start experimenting with open source now before you need to. |
-| [Agentic analytics is not text-to-SQL](#anthropic-agentic-data-analytics) | Data Science & Future of Work | Anthropic's analytics stack shows that trustworthy answers come from semantic grounding, skills, and evals — not from SQL generation alone. |
+| [Agentic analytics is not text-to-SQL: what Anthropic got right about self-service data](#anthropic-agentic-data-analytics) | AI Tools & Adoption | Trustworthy analytics agents depend on semantic layers, disambiguation, and evals — not on better text-to-SQL. |
 | [Your Team Doesn't Have a Speed Problem](#agentic-coding-team-management) | Data Science Leadership & Management | Agentic coding made speed abundant — the new scarce resources are trust, control, and attention. |
 | [5 mistakes new managers make in their transition to leadership](#5-mistakes-new-managers) | Data Science Leadership & Management | Five concrete STOPs every new DS manager needs to make in the first 90 days. |
 | [Are meetings taking over your calendar?](#meetings-calendar) | Data Science Leadership & Management | How to reclaim your week using the 3Ps framework — People, Projects, Process. |

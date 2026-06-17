@@ -101,5 +101,5 @@ stages:
     status: complete
     completed_at: "2026-06-13"
   promote:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-06-17"

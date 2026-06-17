@@ -1,0 +1,124 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "ai-labs-becoming-consultancies"
+working_title: "The model provider is coming for your implementation team"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: >
+  OpenAI and Anthropic are not just selling models anymore — they are building
+  forward-deployed engineering teams that look like a new kind of consultancy.
+  Understanding who they are actually targeting (large enterprise, regulated
+  industries, PE-backed portfolios), and who they are not, tells DS and tech
+  leaders where the industry ecosystem is heading and what kind of professional
+  to become.
+target_audience: >
+  Data science and technology leaders in mid-to-large organisations who want
+  a clear-eyed strategic read on what OpenAI and Anthropic are building, who
+  they are targeting, and what it means for their teams and careers. ICs
+  benefit as secondary readers.
+target_reading_time_minutes: 20
+topics_to_cover:
+  - "What OpenAI and Anthropic actually launched — the announcements in plain terms"
+  - "The forward-deployed engineer model — what it is and where it comes from (Palantir)"
+  - "How the two labs diverge: OpenAI vertically ambitious vs Anthropic ecosystem-led"
+  - "Who they are targeting: large enterprise, regulated industries, PE-backed portfolio companies"
+  - "Who they are NOT targeting: mid-market, individual data teams"
+  - "Historical parallels: ERP, RPA, cloud migration — the consulting layer always returns"
+  - "The real question: scalable product-learning loop or just another expensive human layer?"
+  - "What the economics say: services as adoption infrastructure, not the profit engine"
+  - "Takeaway 1: the forward-deployed solutions professional as a career path"
+  - "Takeaway 2: why your data team is not the target — and what that means"
+  - "Takeaway 3: what this ecosystem shift tells you about where the industry is heading"
+topics_to_exclude:
+  - "Detailed vendor feature comparisons"
+  - "Implementation tutorials or technical how-tos"
+  - "Speculation about AGI or long-term existential AI risk"
+  - "Day-to-day DS workflow advice"
+open_research_questions:
+  - "Has either lab confirmed specific revenue or margin targets for their deployment arms?"
+  - "Which regulated industries are seeing the earliest traction — finance, healthcare, or government?"
+  - "What does the PE distribution model (Blackstone/Apollo portfolios) look like in practice?"
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: >
+  The post starts from a concrete news hook: both OpenAI and Anthropic have
+  announced formal deployment capacity — OpenAI via its Deployment Company with
+  $4B+ investment and ~150 Forward Deployed Engineers (via the Tomoro
+  acquisition), Anthropic via a new enterprise AI services company backed by
+  Blackstone, Hellman & Friedman, and Goldman Sachs. The surface read is
+  "labs becoming consultancies." The more interesting read is that the two labs
+  are doing this differently: OpenAI looks vertically ambitious (it wants to own
+  the engagement end-to-end), Anthropic looks ecosystem-led (it is using PE
+  partners as distribution infrastructure into their portfolio companies, and
+  mass-training partner workforces at Accenture and Deloitte at scale).
+  Neither has proven the economics at scale — the research is explicit that
+  these are capital commitments and intent signals, not proven margins.
+
+  The audience is DS and tech leaders in mid-to-large organisations. The framing
+  is strategic commentary, not career advice or implementation guidance. The
+  tone is serious and sourced — charts, articles, and news references throughout,
+  with placeholders where visual assets are needed. The post is written for the
+  leader; the IC benefits as a secondary reader.
+
+  The structural arc moves from announcement → what they are building → who
+  they are targeting (and not) → historical parallels that prove the pattern →
+  the real economic question → three concrete takeaways for the reader. The
+  three takeaways are: (1) the forward-deployed solutions professional is a
+  real emerging career path; (2) your data team is not the target — here is
+  why; (3) this ecosystem shift is a signal about where the industry is heading,
+  and leaders should be studying the model, not fearing it.
+
+  The "open source models" post is the primary tonal and structural reference —
+  same audience, same serious-but-accessible strategic register, same habit of
+  grounding claims in named sources and real numbers before drawing conclusions.
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/genai-ai/open-source-models-good-enough.md
+  - reference_posts/series/genai-ai/ds-in-the-age-of-ai/part-5-the-future-hybrid.md
+  - reference_posts/standalone/data-science-management/engineering-meets-data-the-collaboration-no-one-prepared-you-for.md
+  - reference_posts/standalone/genai-ai/claude-code-agent-teams-when-and-how-to-go-multi-agent.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: null
+  outline: null
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: null
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-06-17"
+  research:
+    status: complete
+    completed_at: "2026-06-17"
+  draft:
+    status: complete
+    completed_at: "2026-06-17"
+  seo:
+    status: complete
+    completed_at: "2026-06-17"
+  revise:
+    status: complete
+    completed_at: "2026-06-17"
+  review:
+    status: complete
+    completed_at: "2026-06-17"
+  promote:
+    status: pending
+    completed_at: null
