@@ -33,3 +33,18 @@
 **Summary:** Most of the market has collapsed agentic analytics into text-to-SQL, which misframes the actual problem. Anthropic's self-service analytics architecture reveals what's missing: governed semantic layers, procedural skill workflows, disambiguation loops, and validation — all ahead of query generation. The three real failure modes are concept/entity ambiguity, data staleness, and retrieval failure, and all three are fundamentally data engineering problems, not model problems. The post traces why the semantic layer is mandatory first-path infrastructure, why the skill layer (not the model) drives the 21% to 95%+ accuracy jump, and why evals, provenance, and maintenance are part of the product rather than optional extras. It closes with concrete steps for data teams starting to build trustworthy analytics agents now.
 
 ---
+
+<!-- slug: ai-labs-becoming-consultancies -->
+<a name="ai-labs-becoming-consultancies"></a>
+### OpenAI and Anthropic are becoming consultancies (and you shouldn't be worried about it)
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Data science and technology leaders in mid-to-large organisations who want a clear-eyed strategic read on what OpenAI and Anthropic are building and what it means for their teams |
+| **Topics** | `llm-impact` `automation` `career` `data-science` `problem-framing` |
+| **Path** | `posts/ai-labs-becoming-consultancies/long_draft.md` |
+
+**Summary:** OpenAI and Anthropic have both built formal enterprise AI deployment arms — OpenAI via a majority-owned Deployment Company with $4B+ and ~150 Forward Deployed Engineers, Anthropic via a PE-backed services company with Blackstone, Goldman Sachs, and Hellman & Friedman. The post argues the "labs becoming consultancies" headline misframes a more precise story: the two labs are running different bets (OpenAI vertically ambitious, Anthropic ecosystem-led), targeting large enterprise and regulated industries — not individual DS teams or mid-market organisations. It traces why the consulting layer always returns across every major enterprise technology wave (ERP, RPA, cloud), grounds the economics in Salesforce, ServiceNow, and Palantir financials, and closes with three concrete actions for DS leaders: a gap analysis against FDE job descriptions, a productisation horizon question for current workflows, and a half-day team session to document AI deployment ownership before someone else defines it for you.
+
+---
