@@ -18,10 +18,10 @@ When you staff them correctly, they do not replace your expertise. They extend w
 
 ## What AI roles are worth hiring first?
 
-- **Why AI executive titles are the wrong starting point** — "AI CFO," "AI CMO," "AI CEO" and why those labels set you up to build the wrong thing. The workflow is the point, not the title.
-- **The AI org chart: five departments, one operating system** — a mental model for mapping AI roles to the work that already needs doing across any team or business.
-- **Before you hire an AI role, write its job description** — the single most important thing that separates a governed assistant from a vague chatbot habit.
-- **The five roles in full** — Intelligence Analyst, Growth Operator, Voice Operator, Builder Partner, and Operating Chief of Staff. What each one does, what inputs it needs, and where human judgment stays irreplaceable.
+- **Why are AI executive titles the wrong starting point?** — "AI CFO," "AI CMO," "AI CEO" and why those labels set you up to build the wrong thing. The workflow is the point, not the title.
+- **What is the AI org chart as an operating system?** — a mental model for mapping AI roles to the work that already needs doing across any team or business.
+- **How do you write an AI role's job description before you build anything?** — the single most important thing that separates a governed assistant from a vague chatbot habit.
+- **What does each role do?** — Intelligence Analyst, Growth Operator, Voice Operator, Builder Partner, and Operating Chief of Staff. What each one does, what inputs it needs, and where human judgment stays irreplaceable.
 - **What is the human-in-the-loop principle, and why does it matter?** — not a bureaucratic safety check, but the actual design principle that makes any of this work sustainably.
 - **Where should you start, by audience type?** — the specific first hires that make most sense for solopreneurs, managers, and executives, and one concrete step for each.
 
