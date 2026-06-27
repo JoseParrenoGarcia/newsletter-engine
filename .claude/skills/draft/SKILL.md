@@ -112,6 +112,8 @@ Write `long_draft.md` to the post folder.
 
 ## Step 5 — Update `post.yaml`
 
+> Re-read `post.yaml` from disk immediately before writing — do not use any cached version from earlier in this run. Update only these fields, leaving all other fields exactly as they are:
+
 ```yaml
 artefacts:
   outline: outline.md

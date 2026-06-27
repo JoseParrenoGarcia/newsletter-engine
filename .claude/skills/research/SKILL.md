@@ -99,7 +99,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > Group sources under the ToC section they were mapped to. If a source is relevant to multiple sections, place it under the most specific one.
 >
 > **Step 7 — Update `post.yaml`**
-> Update:
+> Re-read `post.yaml` from disk immediately before writing — do not use any cached version from earlier in this run. Update only these fields, leaving all other fields exactly as they are:
 > ```yaml
 > artefacts:
 >   research_brief: research_brief.md

@@ -135,6 +135,8 @@ Create the `promotion/` directory if it doesn't exist. Write `promotion_posts.md
 
 Add or update these fields:
 
+> Re-read `post.yaml` from disk immediately before writing — do not use any cached version from earlier in this run. Update only these fields, leaving all other fields exactly as they are:
+
 ```yaml
 artefacts:
   promotion_posts: promotion_posts.md
