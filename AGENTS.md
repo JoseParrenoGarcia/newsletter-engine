@@ -161,24 +161,17 @@ Two hooks run automatically whenever Claude Code is working in this repo. Both a
 
 The marker is deleted **before** returning the block decision to prevent re-trigger on the subsequent Stop call. `stop_hook_active` is checked at entry to prevent infinite loops.
 
-### Signal table
+### Signal detection
 
-| Skill | Detection method | Trigger file |
-|-------|-----------------|--------------|
-| `/draft` | Basename match | `outline.md` |
-| `/research` | Basename match | `research_brief.md` |
-| `/seo` | Basename match | `seo_brief.md` |
-| `/review` | Basename match | `review_report.md` |
-| `/promote` | Basename match | `promotion_posts.md` |
-| `/revise` | Basename match | `long_draft_pre-revise.md` |
-| `/index` | Basename match | `INDEX.md` |
-| `/brainstorm` | Content check | `post.yaml` containing `stages.brainstorm.status: complete` |
-| `/import-pdf` | Path prefix | any `.md` written under `reference_posts/` |
-| `/new-post` | Not detected | Orchestrator only — no unique output file |
+Most skills are detected by the unique basename of their primary output file — see the `SKILL_SIGNALS` map in `.claude/hooks/detect-skill-complete.js` for the full list. Two exceptions:
+
+- **`/brainstorm`** — detected by a content check on `post.yaml` (presence of `stages.brainstorm.status: complete`), because `post.yaml` is written by every skill.
+- **`/import-pdf`** — detected by path prefix (`reference_posts/`), because the output filename is slug-derived at runtime.
+- **`/new-post`** — not detected; it is an orchestrator with no unique output file of its own.
 
 ### Adding a new skill signal
 
-Add an entry to the `SKILL_SIGNALS` map in `.claude/hooks/detect-skill-complete.js`. If the output filename is not unique (e.g. it's a generic name written by multiple skills), add a content or path-prefix fallback after the map lookup — see the existing `brainstorm` and `import-pdf` blocks as examples.
+Add an entry to the `SKILL_SIGNALS` map in `.claude/hooks/detect-skill-complete.js`. If the output filename is not unique, add a content or path-prefix fallback after the map lookup — see the `brainstorm` and `import-pdf` blocks as examples.
 
 ---
 
