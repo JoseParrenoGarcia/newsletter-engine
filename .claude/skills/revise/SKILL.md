@@ -1,6 +1,6 @@
 ---
 name: revise
-description: "Applies SEO-driven revisions to long_draft.md based on seo_brief.md — keyword placement, readability fixes, H1/H2 rewording, and Quick Wins. Creates a backup (long_draft_v1.md) before writing changes. DO trigger: after both long_draft.md and seo_brief.md exist; when the draft needs improvement for search and readability. DO NOT trigger: when only one of the two required inputs exists; for general editorial rewrites not driven by an SEO brief; when revise is already complete and no redo is requested. Keywords: revise, revision, SEO, keyword placement, readability, Quick Wins, long_draft, seo_brief."
+description: "Applies SEO-driven revisions to long_draft.md based on seo_brief.md — keyword placement, readability fixes, H1/H2 rewording, and Quick Wins. Creates a backup (long_draft_pre-revise.md) before writing changes. DO trigger: after both long_draft.md and seo_brief.md exist; when the draft needs improvement for search and readability. DO NOT trigger: when only one of the two required inputs exists; for general editorial rewrites not driven by an SEO brief; when revise is already complete and no redo is requested. Keywords: revise, revision, SEO, keyword placement, readability, Quick Wins, long_draft, seo_brief."
 argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
 license: proprietary
 compatibility: "Claude Code"
@@ -80,7 +80,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > If zero changes are identified, note this and proceed directly to step 5.
 >
 > **Step 4 — Create backup**
-> Write `POST_FOLDER/long_draft_v1.md` as an exact copy of `long_draft.md`. If `long_draft_v1.md` already exists, overwrite it.
+> Write `POST_FOLDER/long_draft_pre-revise.md` as an exact copy of `long_draft.md`. If it already exists, overwrite it. Do not use `long_draft_v1.md` — the `vN` suffix implies a newer version, which is the opposite of what a rollback backup communicates.
 >
 > **Step 5 — Apply revisions to `long_draft.md`**
 > Apply every change from the revision plan. Guardrails:
@@ -90,13 +90,13 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - Preserve Jose's voice — no generic AI filler phrases, no "it's important to note" or "in conclusion"
 > - One change at a time — apply each planned edit exactly as described; do not improvise
 > - **Heading capitalisation** — all H1, H2, and H3 headings must use sentence case (capitalise only the first word and proper nouns). If any existing heading uses title case, correct it as part of the revision pass.
-> - **TOC sync** — after applying any H2 heading change, find the `## What will we cover in this post?` section (this heading must be exact — correct it if it differs). For each changed H2, locate the bullet whose `**bold phrase**` corresponds to that section and update the bold phrase to match the new H2 text exactly. If a bullet has no clear match, leave it unchanged and note it in the revision plan as skipped.
+> - **TOC sync** — after applying any H2 heading change, find the `## What will we cover in this post?` section (this heading must be exact — correct it if it differs). For each changed H2, locate the bullet whose `**bold phrase**` corresponds to that section and update the bold phrase to match the new H2 text exactly. If a bullet has no clear match, leave it unchanged and note it in the revision plan as skipped. **After all H2 changes are applied, do a full ToC sync pass: read every bold phrase in the ToC section and verify it matches its corresponding H2 exactly. Flag any remaining mismatch in the revision plan — do not silently leave stale ToC entries.**
 >
 > **Step 6 — Update `post.yaml`**
 > If `post.yaml` exists, update:
 > ```yaml
 > artefacts:
->   long_draft_backup: long_draft_v1.md
+>   long_draft_backup: long_draft_pre-revise.md
 > stages:
 >   revise:
 >     status: complete

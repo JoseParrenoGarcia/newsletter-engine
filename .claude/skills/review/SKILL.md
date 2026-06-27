@@ -94,6 +94,7 @@ Once all 3 critics have returned their results:
 ### 1. Collect all scores
 Extract from the critic outputs:
 - Structural completeness: ✓/~/✗ for each of the 6 elements
+- **ToC sync check:** For each bold phrase in the `## What will we cover in this post?` section, verify it matches the exact text of its corresponding H2 heading. Any mismatch is a ✗ structural element. Report mismatches as: `ToC: "phrase" → H2: "actual heading"`. This check runs on every review iteration.
 - Voice fidelity score (Pass 2)
 - Argument flow score (Pass 3)
 - Section depth score (Pass 4)
@@ -109,7 +110,7 @@ Read each critic's preliminary verdict:
 ### 3. Apply final verdict logic deterministically:
 - **Ready** — Structural completeness is all ✓ or at most one ~, and all scored dimensions are 4 or 5.
 - **Revise first** — Any scored dimension is 3, or two or more structural elements are ~.
-- **Major rework needed** — Any scored dimension is ≤ 2, or any structural element is ✗.
+- **Major rework needed** — Any scored dimension is ≤ 2, or any structural element is ✗. If the verdict is triggered solely by a content-signal failure (a scored dimension ≤ 2 with no ✗ structural element), prefix the Priority actions section with: *"Note: verdict triggered by content signal failure — structural rework not required. Apply the priority actions below as targeted additions."*
 
 State the verdict and write a single-sentence reason.
 

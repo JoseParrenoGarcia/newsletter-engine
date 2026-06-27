@@ -23,7 +23,7 @@ Wait for explicit confirmation before proceeding.
 
 ### 3. Check pre-conditions
 - If `stages.brainstorm.status` is not `complete`: stop and say "Run `/brainstorm` first."
-- If `stages.research.status` is not `complete`: stop and say "Run `/research` first."
+- If `stages.research.status` is not `complete` AND `research_brief.md` does not exist in the post folder: warn with "Research stage not complete and no `research_brief.md` found. Sources will be drawn from any `.md` files in the post folder — proceed with caution." Do not stop. If `research_brief.md` exists, proceed normally regardless of stage status.
 - If `target_reading_time_minutes` is null in `post.yaml`: ask Jose before proceeding:
   > "What's your target reading time for this post? (e.g. 10 min, 15 min, 20 min)"
   Update `post.yaml` with the answer before continuing.

@@ -1,0 +1,98 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "ai-roles-to-hire"
+working_title: "The AI Org Chart: Roles Worth Hiring Before You Think You're Ready"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "management"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: >
+  The first AI roles worth hiring are not the ones that sound most like executives.
+  They are the ones that handle the repeatable work blocking you from doing the real work.
+  And when you hire them well — with a written job description, bounded tools, and a human
+  owner — they don't replace your expertise. They redefine what's possible with it.
+target_audience: "Solopreneurs, managers, and executives who want to use AI practically — not as a novelty, but as a set of bounded, governed roles that amplify what they already do well."
+target_reading_time_minutes: 20
+topics_to_cover:
+  - The hype trap — why AI executive titles (AI CFO, AI CMO, AI CEO) are the wrong starting point
+  - The AI org chart as an operating system — 5 departments framing
+  - The Intelligence Analyst (market research, competitor tracking, customer insight)
+  - The Growth Operator (sales research + qualification, support triage)
+  - The Voice Operator (content drafting, brand voice, publishing pipeline)
+  - The Builder Partner (product spec writing, coding partner)
+  - The Operating Chief of Staff (meeting prep, inbox digest, project tracking)
+  - Strategy Sparring Mode as a cross-cutting capability, not a standalone role
+  - How to write an AI job description before you build the role (the centrepiece mechanic)
+  - Human-in-the-loop gates — what agents prepare, humans decide and own
+  - Redefining the art of the possible — enhancement without replacing human expertise
+  - Practical first steps per audience type (solopreneur / manager / executive)
+topics_to_exclude:
+  - Deep technical implementation (no code, no API walkthroughs)
+  - AI replacing jobs or workforce reduction framing
+  - Inflated executive AI titles treated as credible roles (AI CEO, AI CFO, AI CMO)
+  - Model comparisons or LLM benchmarking
+  - Enterprise-only tooling or large-team rollout playbooks
+open_research_questions:
+  - Are there strong real-world examples of the Voice Operator or Builder Partner in solopreneur contexts specifically?
+  - What does the Operating Chief of Staff look like in practice for a manager vs. a solopreneur?
+  - Any published frameworks or job description templates for AI roles worth citing?
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: >
+  The post frames AI roles not as executive replacements but as bounded operating functions —
+  five departments that handle the repeatable work blocking people from doing their real work.
+  The structure follows a 5-department org chart (Intelligence Analyst, Growth Operator, Voice
+  Operator, Builder Partner, Operating Chief of Staff) with Strategy Sparring as a cross-cutting
+  mode. The centrepiece mechanic is writing an AI job description before building the role.
+  The dual thesis argues that (1) the right AI roles are defined by workflow, not title, and
+  (2) these tools redefine what's possible without taking away human expertise — they amplify it.
+  Audience is solopreneurs, managers, and executives. Target reading time is 20 minutes.
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/series/genai-ai/ds-in-the-age-of-ai/part-1-your-job-isnt-to-build-models.md
+  - reference_posts/series/genai-ai/ds-in-the-age-of-ai/part-5-the-future-hybrid.md
+  - reference_posts/standalone/genai-ai/claude-code-agent-teams-when-and-how-to-go-multi-agent.md
+  - reference_posts/standalone/data-science-management/building-a-data-science-competency-framework-effectively.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/management.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: null
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_v1.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-06-27"
+  research:
+    status: pending
+    completed_at: null
+  draft:
+    status: complete
+    completed_at: "2026-06-27"
+  seo:
+    status: complete
+    completed_at: "2026-06-27"
+  revise:
+    status: complete
+    completed_at: "2026-06-27"
+  review:
+    status: complete
+    completed_at: "2026-06-27"
+  promote:
+    status: complete
+    completed_at: "2026-06-27"
