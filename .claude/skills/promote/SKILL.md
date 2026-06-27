@@ -137,7 +137,7 @@ Add or update these fields:
 
 ```yaml
 artefacts:
-  promotion_bundle: promotion_posts.md
+  promotion_posts: promotion_posts.md
 stages:
   promote:
     status: complete
