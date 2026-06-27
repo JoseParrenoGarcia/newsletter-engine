@@ -211,3 +211,20 @@
 | **Path** | `reference_posts/standalone/book-reviews/the-book-that-taught-me-data-storytelling.md` |
 
 **Summary:** A review of *Storytelling with Data* by Cole Nussbaumer Knaflic, structured around five key learnings: a simple checklist for effective data storytelling, why you only need five chart types in your toolkit, how to grab and keep an audience's attention, why clutter is the biggest enemy of clear communication, and how to learn from real-world examples. The post is honest about the gap between knowing how to build a chart and knowing how to make it tell a story — and argues this is the one book to read first if you want to close that gap.
+
+---
+
+<!-- slug: ai-roles-to-hire -->
+<a name="ai-roles-to-hire"></a>
+### The AI Org Chart: Roles Worth Hiring Before You Think You're Ready
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / management |
+| **Audience** | Solopreneurs, managers, and executives who want to use AI practically — not as a novelty, but as bounded, governed roles that amplify what they already do well. |
+| **Topics** | `management` `hiring` `automation` `agents` `team-design` `leadership` |
+| **Path** | `posts/ai-roles-to-hire/long_draft.md` |
+
+**Summary:** The post argues that the first AI roles worth building are not executive replacements (no AI CFO or AI CEO) but five bounded operating functions defined by workflow, not title: Intelligence Analyst, Growth Operator, Voice Operator, Builder Partner, and Operating Chief of Staff. The centrepiece mechanic is writing an AI job description before you build the role — a discipline that forces you to define scope, tools, and human-in-the-loop gates before anything runs. Strategy Sparring is treated as a cross-cutting mode rather than a standalone role. The post closes with practical first steps tailored separately to solopreneurs, managers, and executives, and insists throughout that these roles redefine what's possible rather than replace human expertise.
+
+---

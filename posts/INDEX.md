@@ -51,3 +51,4 @@
 | [LLMs Explained — Part 4: Making LLMs actually useful through fine-tuning](#llms-explained-4) | Data Science & Future of Work | Fine-tuning turns a predict-the-next-token machine into something that follows instructions. |
 | [LLMs Explained — Part 5: How AI uses tools to reduce hallucinations](#llms-explained-5) | Data Science & Future of Work | Web search and code execution — the two tools that make LLMs more reliable in practice. |
 | [LLMs Explained — Part 6: Smarter AI through Reinforcement Learning](#llms-explained-6) | Data Science & Future of Work | RLHF and RL for objective tasks — how models learn to prefer better answers over time. |
+| [The AI Org Chart: Roles Worth Hiring Before You Think You're Ready](#ai-roles-to-hire) | Data Science Leadership & Management | Five bounded AI roles — defined by workflow, not title — that amplify what you already do well before you're ready to hire them. |
