@@ -70,7 +70,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > Write to `POST_FOLDER/seo_brief.md` using the template at `.claude/skills/seo/assets/seo_brief_template.md` — load that template now and fill every section. Do not omit any section.
 >
 > **Step 7 — Update `post.yaml`**
-> If `post.yaml` exists, update:
+> If `post.yaml` exists, re-read `post.yaml` from disk immediately before writing — do not use any cached version from earlier in this run. Update only these fields, leaving all other fields exactly as they are:
 > ```yaml
 > artefacts:
 >   seo_brief: seo_brief.md

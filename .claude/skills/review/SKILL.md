@@ -128,6 +128,8 @@ Write to the post folder using the template in `assets/review_report_template.md
 
 If `post.yaml` exists, update:
 
+Re-read `post.yaml` from disk immediately before writing — do not use any cached version from earlier in this run. Update only these fields, leaving all other fields exactly as they are:
+
 ```yaml
 artefacts:
   review_report: review_report.md

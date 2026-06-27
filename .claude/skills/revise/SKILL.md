@@ -94,6 +94,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 >
 > **Step 6 — Update `post.yaml`**
 > If `post.yaml` exists, update:
+> Re-read `post.yaml` from disk immediately before writing — do not use any cached version from earlier in this run. Update only these fields, leaving all other fields exactly as they are:
 > ```yaml
 > artefacts:
 >   long_draft_backup: long_draft_pre-revise.md
