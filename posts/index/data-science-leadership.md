@@ -223,7 +223,7 @@
 | **Type** | standalone / management |
 | **Audience** | Solopreneurs, managers, and executives who want to use AI practically — not as a novelty, but as bounded, governed roles that amplify what they already do well. |
 | **Topics** | `management` `hiring` `automation` `agents` `team-design` `leadership` |
-| **Path** | `posts/ai-roles-to-hire/long_draft.md` |
+| **Path** | `posts/ai-roles-to-hire/hire-ai-agent-roles.md` |
 
 **Summary:** The post argues that the first AI roles worth building are not executive replacements (no AI CFO or AI CEO) but five bounded operating functions defined by workflow, not title: Intelligence Analyst, Growth Operator, Voice Operator, Builder Partner, and Operating Chief of Staff. The centrepiece mechanic is writing an AI job description before you build the role — a discipline that forces you to define scope, tools, and human-in-the-loop gates before anything runs. Strategy Sparring is treated as a cross-cutting mode rather than a standalone role. The post closes with practical first steps tailored separately to solopreneurs, managers, and executives, and insists throughout that these roles redefine what's possible rather than replace human expertise.
 
