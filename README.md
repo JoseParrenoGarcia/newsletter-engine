@@ -50,7 +50,7 @@ Each skill is independently invocable. `/new-post` chains all stages unattended 
 | `/research` | `research_brief.md` |
 | `/draft` | `outline.md`, `long_draft.md` |
 | `/seo` | `seo_brief.md` |
-| `/revise` | `long_draft.md` (revised), `long_draft_v1.md` (backup), `seo_brief.md` (section 12 appended) |
+| `/revise` | `long_draft.md` (revised), `long_draft_pre-revise.md` (backup), `seo_brief.md` (section 12 appended) |
 | `/review` | `review_report.md` |
 | `/promote` | `promotion_posts.md` |
 | `/new-post` | `decision_log.md`, `skill_reflection_log.md` (via hooks) |
@@ -101,7 +101,7 @@ newsletter-engine/
         ├── research_brief.md
         ├── outline.md
         ├── long_draft.md
-        ├── long_draft_v1.md       # Pre-revision backup (created by /revise)
+        ├── long_draft_pre-revise.md  # Pre-revision backup (created by /revise)
         ├── seo_brief.md
         ├── review_report.md       # Panel consensus + 6-dimension scores (created by /review)
         ├── promotion_posts.md
