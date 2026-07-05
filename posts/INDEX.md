@@ -52,3 +52,4 @@
 | [LLMs Explained — Part 5: How AI uses tools to reduce hallucinations](#llms-explained-5) | Data Science & Future of Work | Web search and code execution — the two tools that make LLMs more reliable in practice. |
 | [LLMs Explained — Part 6: Smarter AI through Reinforcement Learning](#llms-explained-6) | Data Science & Future of Work | RLHF and RL for objective tasks — how models learn to prefer better answers over time. |
 | [The AI Org Chart: Roles Worth Hiring Before You Think You're Ready](#ai-roles-to-hire) | Data Science Leadership & Management | Five bounded AI roles — defined by workflow, not title — that amplify what you already do well before you're ready to hire them. |
+| [Google TabFM: A Genuine Step Forward for Tabular ML (But Don't Call It a Revolution)](#google-tabfm) | Paper Explainers | Tabular foundation models have moved from research curiosity to serious benchmark contender — calibrated optimism required, XGBoost isn't dead yet. |
