@@ -1,0 +1,84 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "google-tabfm"
+working_title: "Google TabFM: A Genuine Step Forward for Tabular ML (But Don't Call It a Revolution)"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: standalone
+content_type: paper-explainer
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Tabular foundation models have moved from research curiosity to serious benchmark contender — Google TabFM packages the field's best ideas into something practitioners can finally try. But the correct response is calibrated optimism and benchmarking, not hype: this is not production-ready by default, and XGBoost isn't dead yet."
+target_audience: "Practising data scientists and ML engineers who know GBDTs, have watched tabular deep learning mostly disappoint, and want to know whether foundation models are finally worth their time."
+target_reading_time_minutes: 20
+topics_to_cover:
+  - Why tabular data was historically hard for deep learning (the old kingdom: trees dominated)
+  - The false dawn of early deep tabular models (TabNet, TabTransformer, SAINT etc.)
+  - What a tabular foundation model actually is (in-context learning framing, not just "neural net on a CSV")
+  - The family tree: TabPFN → TabPFN-2.5 → TabICL → TabDPT → Google TabFM
+  - How TabFM works architecturally (row/column attention, row compression, ICL transformer)
+  - How TabFM is trained (synthetic SCM-generated datasets, no real proprietary data)
+  - What "single forward pass" actually means and why it matters (and its caveats)
+  - Benchmark evidence: TabArena context, what Google claims, what is independently verified
+  - When TabFM is likely to win vs when GBDTs still win
+  - Honest gotchas and production caveats
+  - The right stance: benchmark it yourself, don't believe leaderboards blindly
+topics_to_exclude:
+  - How to install and run TabFM with code examples (that is Post 2)
+  - Full hands-on evaluation repo walkthrough (Post 2)
+  - Other modalities (NLP, vision — tabular only)
+  - Deep dive into AutoML frameworks beyond what's needed for context
+open_research_questions:
+  - No standalone peer-reviewed TabFM paper found at time of writing — frame this honestly
+  - TabArena benchmark: IID vs temporal/grouped performance gap needs flagging
+  - Whether TabFM-Ensemble results are comparable to "pure zero-shot" results
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "This post tells the history and current state of tabular foundation models, culminating in Google TabFM. The core argument is that tabular ML has been stuck under GBDT dominance for years — not because no one tried deep learning, but because early neural approaches (TabNet, FT-Transformer, etc.) failed to beat well-tuned trees reliably on real datasets. The shift happened when researchers reframed the problem: instead of training a neural net on one table, pretrain a model across many tasks so it learns a reusable prediction procedure. TabPFN was the conceptual breakthrough (Nature paper, synthetic pretraining + in-context learning). TabICL made it scale. TabDPT showed real data pretraining helps. Google TabFM combines these ideas into an official, scikit-learn-compatible release. The post walks through this family tree, explains how TabFM works (row/column attention + row compression + ICL transformer over compressed rows), and contextualises Google's benchmark claims honestly (TabArena is a living benchmark, but TabFM-Ensemble is not the same as pure zero-shot). The honest conclusion: foundation tabular models are now a credible first attempt on small-to-medium datasets — but GBDTs remain strong where cost, latency, interpretability, large data, and production simplicity matter. The reader should leave knowing when to try TabFM, when not to, and why the right move is to benchmark rather than trust leaderboards."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/genai-ai/open-source-models-good-enough.md
+  - reference_posts/series/genai-ai/ds-in-the-age-of-ai/part-4-the-science-we-cant-afford-to-lose.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/paper-explainer.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  tabfm_repo_investigation: tabfm_repo_investigation.md
+  tabpfn_paper_investigation: tabpfn_paper_investigation.md
+  outline: null
+  long_draft: null
+  long_draft_backup: null
+  seo_brief: null
+  review_report: null
+  promotion_posts: null
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-07-05"
+  research:
+    status: complete
+    completed_at: "2026-07-05"
+  draft:
+    status: pending
+    completed_at: null
+  seo:
+    status: pending
+    completed_at: null
+  revise:
+    status: pending
+    completed_at: null
+  review:
+    status: pending
+    completed_at: null
+  promote:
+    status: pending
+    completed_at: null
