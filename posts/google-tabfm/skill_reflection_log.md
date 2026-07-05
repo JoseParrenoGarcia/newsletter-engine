@@ -1,3 +1,23 @@
+## 2026-07-05 — /review
+
+**Verdict logic edge case: ✗ structural element inflating severity**
+The deterministic verdict rule triggered "Major rework needed" because of one ✗ structural element (missing subtitle). The subtitle is a one-line addition, not a structural rework. The rule does not distinguish between a missing subtitle and a missing closing section or missing intro — both trigger the same verdict. The review_report.md includes a clarifying note ("Note: 'Major rework needed' triggered by missing subtitle — substantive work is two targeted additions"), but the skill instruction could add a carve-out: if the only ✗ is a subtitle/deck line, downgrade verdict to "Revise first" unless the subtitle is explicitly required by the type-specific guide.
+
+**Workaround: synthesiser ran in main session**
+The skill instruction says to spawn all 3 critics in parallel and then synthesise. The synthesiser step runs in the main session after critics return. This worked cleanly but required manually collecting scores from three background task notifications. No adaptation needed — just noting that the synthesiser is implicitly the main session, not documented explicitly in the skill.
+
+**No other issues.** All three critics returned clean, structured output. The ToC sync check passed without issues. post.yaml was updated correctly after the report was written.
+
+---
+
+## 2026-07-05 — /seo
+
+**No issues encountered.** The SEO subagent ran cleanly. All assessment areas resolved without adaptation. The draft's question-format H2s meant the AI discoverability score was partially pre-satisfied, reducing the revision burden. The contrarian title recommendation was well-matched to the post's thesis — no ambiguity in the title-styles.md guidance.
+
+One observation worth noting for future runs: the draft was 31% over the target word count (6,564 vs 5,000). The SEO brief flagged this under readability but did not prescribe a specific trimming target or which sections to cut. The revise skill would benefit from a concrete word-count delta in the Quick Wins when over-length is flagged — "trim ~1,500 words, primarily from section X" is more actionable than "draft runs over target."
+
+---
+
 ## 2026-07-05 — /research
 
 **Adaptation: sources split across two files**
