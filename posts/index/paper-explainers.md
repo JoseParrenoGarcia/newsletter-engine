@@ -19,6 +19,23 @@
 
 ---
 
+<!-- slug: google-tabfm -->
+<a name="google-tabfm"></a>
+### Google TabFM: A Genuine Step Forward for Tabular ML (But Don't Call It a Revolution)
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / genai-ai |
+| **Audience** | Practising data scientists and ML engineers who know GBDTs, have watched tabular deep learning mostly disappoint, and want to know whether foundation models are finally worth their time |
+| **Topics** | `paper-explainer` `google` `deep-learning` `data-science` `feature-engineering` `tabular-ml` |
+| **Path** | `posts/google-tabfm/long_draft.md` |
+
+**Summary:** Tabular ML has been dominated by gradient-boosted trees for years — not for lack of trying with deep learning, but because early architectures (TabNet, FT-Transformer) reliably failed to beat well-tuned GBDTs in practice. The shift happening now is a reframing: tabular foundation models like TabPFN, TabICL, and Google's TabFM pretrain across millions of synthetic tasks so the model learns a reusable prediction procedure, treating training rows as context rather than gradient signal at inference time. The post walks through the full family tree (TabPFN → TabPFN-3 → TabICL/v2 → TabDPT → TabFM), explains TabFM's exact 4-stage architecture from the source code (cell embedding, column Set Transformer, row attention, row compression + 24-block ICL transformer), and contextualises Google's benchmark claims honestly — TabFM-Ensemble is not the same as zero-shot TabFM, and no peer-reviewed paper existed at time of writing. The honest verdict: foundation tabular models are now a credible first attempt on small-to-medium datasets, but GBDTs still win on CPU, strict latency, large data, and production governance — the right response is benchmarking, not hype.
+
+---
+
+---
+
 <!-- path: reference_posts/standalone/paper-explainers/airbnbs-2013-location-model-lessons-in-feature-engineering.md -->
 <a name="airbnb-location-model"></a>
 ### Airbnb's 2013 Location Model: Lessons in Feature Engineering
