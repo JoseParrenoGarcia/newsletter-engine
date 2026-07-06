@@ -41,7 +41,8 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 >
 > **Step 2 — Detect existing URLs**
 > Scan `notes.md` for any URLs (lines containing `http://` or `https://`). Collect them as the incoming list.
-> If no URLs found, skip to Step 4.
+> If `notes.md` contains no URLs, scan all other `.md` files in `POST_FOLDER` for lines containing `http://` or `https://` and add any found URLs to the incoming list. Note which file each URL came from.
+> If still no URLs found after scanning all `.md` files, skip to Step 4.
 >
 > **Step 3 — Validate and enrich existing URLs**
 > For each URL in the incoming list:
@@ -69,7 +70,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > 5. Fetch the selected URL using `ctx_fetch_and_index`. If unreachable: try the next result. If reachable: search the indexed content to extract title + write 1-3 sentence summary, map to the gap section
 > 6. Add to the running list
 >
-> Hard cap: stop adding sources once the total reaches 10, even if gaps remain.
+> Hard cap: stop adding new sources via search once 10 have been added via search. Pre-existing validated sources from the post folder do not count toward this cap.
 > Variety rule: never exceed 2 sources from the same domain across the entire brief.
 >
 > **Step 6 — Write `research_brief.md`**
@@ -94,6 +95,9 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 >
 > ## Research Gaps
 > <Bullet list of sections with no source. Omit if no gaps.>
+>
+> ## Dropped Sources
+> <Bullet list of URLs that were unreachable during validation, with a one-line reason (e.g. "signup wall", "404", "paywalled"). Omit section if no URLs were dropped.>
 > ```
 >
 > Group sources under the ToC section they were mapped to. If a source is relevant to multiple sections, place it under the most specific one.
@@ -111,9 +115,9 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 >
 > **Step 8 — Return summary**
 > Return:
-> - Total sources (X from notes.md, Y found via search)
+> - Total sources (X from post folder files, Y found via search)
 > - Any sections in Research Gaps
-> - Count of notes.md URLs that were dropped
+> - Count of URLs dropped and reason (e.g. "2 dropped: signup wall")
 
 Once the subagent completes, tell Jose:
 - Total sources and breakdown
