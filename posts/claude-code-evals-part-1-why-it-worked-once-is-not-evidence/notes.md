@@ -785,3 +785,26 @@ The reader should think:
 > I have trusted one good Claude Code run too much.
 
 Part 1 should create the mental shift from final-answer evaluation to workflow evaluation.
+
+---
+
+## Brainstorm Summary
+
+Part 1 is a mental-model essay. Its job is to install the *why* before Parts 2 and 3 deliver the map and the method. The sharpest hook is the unit-test analogy: software engineers write tests by discipline, not because they believe their code is broken, yet that discipline evaporates the moment the same engineer starts building agents. This is the missing mental model the post must correct.
+
+The argument builds from false comfort (it worked once) through the probabilistic nature of LLMs (how do you measure quality when output varies across runs?) to the iteration problem (how do you know a revised skill is better, not just different?) and the cost management use case (can Haiku replace Sonnet for this workflow? — a question that cannot be answered without evals). Each of these is a concrete, practical reason to care, not an abstract principle.
+
+The tone is "here's a mental model you're missing" — analytical and direct, not a personal narrative. Real-life scenarios and external anchors should give the argument weight. The post should end by pointing forward: building evals is not that hard, it mostly requires thinking, and that is exactly what we are starting to outsource to agents.
+
+The reader should finish Part 1 clear on *why* evals are necessary, curious about *what* to evaluate, and not yet burdened with the *how*.
+
+## Rough Table of Contents
+
+- **The run that felt like magic** — set up the false comfort scenario; a Claude Code workflow that looked impressive, maybe even surprising
+- **LLMs are probabilistic, not deterministic** — same prompt, different run, different output; why a single success proves nothing
+- **The unit test we forgot to write** — the discipline analogy; software engineers test by default, not because they expect failure; why agents should be no different
+- **Three questions you cannot answer without evals** — (1) did the revision make it better or just different? (2) can a cheaper model handle this task? (3) is this failure new or have we seen it before?
+- **What Claude Code is actually doing** — not answering, but acting: editing files, running commands, calling tools, firing hooks; the whole workflow is the unit of trust
+- **The failures that should have been caught** — concrete scenarios showing real-world failure modes (wrong files edited, tests skipped, hallucinated details, claimed done when not done)
+- **Evals are a thinking problem, not an infrastructure problem** — the reframe; most of the work is deciding what good looks like, which requires human judgment — the thing we are starting to outsource
+- **What comes next** — light forward pointer to Part 2 (what to evaluate) and Part 3 (how to start)
