@@ -1,0 +1,61 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: ""                    # matches the posts/<slug>/ folder name
+working_title: ""
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: ""         # standalone | short_technical | series
+content_type: ""            # management | paper-explainer | book-review | series-genai
+series_name: ""             # only if structural_type: series (leave blank otherwise)
+series_position: null       # integer (1, 2, 3 …), only if structural_type: series
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: ""
+target_audience: ""
+target_reading_time_minutes: null  # e.g. 10, 15, 20 — set during brainstorm; drives word count (×250)
+topics_to_cover: []
+topics_to_exclude: []
+open_research_questions: []
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: ""
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts: []
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: null
+  outline: null
+  long_draft: null
+  long_draft_backup: null  # populated by /revise
+  seo_brief: null
+  review_report: null
+  promotion_posts: null
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: pending         # pending | complete
+    completed_at: null
+  research:
+    status: pending
+    completed_at: null
+  draft:
+    status: pending
+    completed_at: null
+  seo:
+    status: pending
+    completed_at: null
+  revise:
+    status: pending
+    completed_at: null
+  review:
+    status: pending
+    completed_at: null
+  promote:
+    status: pending
+    completed_at: null
