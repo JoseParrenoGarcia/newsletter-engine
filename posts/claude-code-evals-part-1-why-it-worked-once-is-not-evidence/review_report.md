@@ -1,7 +1,7 @@
 # Review Report: Why "It Worked Once" Is Not Evidence
 
 **Post:** `claude-code-evals-part-1-why-it-worked-once-is-not-evidence`
-**Draft reviewed:** `long_draft.md` (iteration 3 + structural fixes)
+**Draft reviewed:** `long_draft.md` (iteration 3 — new structure)
 **Reviewed:** 2026-07-07
 
 ---
@@ -11,10 +11,10 @@
 | Critic | Covers | Preliminary verdict |
 |--------|--------|---------------------|
 | Voice & Audience | Voice fidelity, Audience specificity | Ready |
-| Structure & Depth | Structural completeness, Section depth | Ready (post structural fixes) |
-| Impact & Argument | Argument build-up, Actionability | Ready |
+| Structure & Depth | Structural completeness, Section depth | Ready |
+| Impact & Argument | Argument build-up, Actionability | Revise first |
 
-**Consensus:** Unanimous: Ready
+**Consensus:** Split 2-1 → Revise first. Deterministic rule triggered: actionability 3/5 requires at least one revision before publish.
 
 ---
 
@@ -22,14 +22,14 @@
 
 | Element | Status | Note |
 |---------|--------|------|
-| Intro: anecdote → framing → thesis | ✓ | Personal newsletter pipeline failure opens section 1; thesis before first H2 |
-| Subtitle/deck line | ✓ | Deck line added: "why one good run is not evidence, and why the same testing discipline…" |
-| Preview section (named ##) | ✓ | `## What will we cover in this post?` with 7 labelled bullets, ToC in sync with H2s |
-| Main body H2 sections (5–8) | ✓ | 7 question-format H2s, all matching ToC order |
-| Closing thoughts (named ##) | ✓ | `## What comes next` now synthesises post argument with personal callback before bridging to series |
-| Now, I want to hear from you (##) | ✓ | 3 distinct questions tied to different facets of the argument |
+| Intro: anecdote → framing → thesis | ✓ | Personal scene opens; explicit thesis before first H2 |
+| Subtitle/deck line | ✓ | Deck line present under H1 |
+| Preview section (named ##) | ✓ | `## What will we cover in this post?` with 5 lean one-liner bullets |
+| Main body H2 sections (5–8) | ✓ | 6 content H2s, all argument-tied |
+| Closing thoughts (named ##) | ✓ | `## Closing thoughts` — synthesis of post argument before series pointer |
+| Now, I want to hear from you (##) | ~ | Present and distinct, but question 3 is structured as a scaffolded prompt (show an example + ask theirs) — slightly overlong for a CTA section |
 
-**ToC sync check:** All 7 bold phrases in `## What will we cover in this post?` match their corresponding H2 headings exactly. No mismatches.
+**ToC sync check:** All 5 bold phrases match their corresponding H2 headings exactly.
 
 ---
 
@@ -38,12 +38,12 @@
 **Score:** 4/5
 
 **Positive example:**
-> "I had that feeling with one of the first skills I built for this newsletter pipeline. Claude read a research brief, produced a structured draft that matched the outline almost exactly, and cited every source correctly. I ran it again the next day on a different brief and it worked again. I told myself the skill was solid. I moved on."
+> "I have watched a recommendation model degrade for six weeks before anyone noticed. The code was unchanged. The pipeline was running."
 
 **Issue (minor):**
-> "The argument in this post reduces to a single point: you cannot trust a workflow you have not measured." — generic enough to appear in any engineering observability post; no self-grounding.
+> "What will we cover in this post?" — five-bullet preview block exceeds the one-sentence-of-framing maximum (anti-pattern: Excessive preview text). The ToC is a required structural element; the violation is a calibration issue, not a register failure.
 
-**Action:** None — score ≥ 4
+**Action:** None — score ≥ 4.
 
 ---
 
@@ -52,12 +52,12 @@
 **Score:** 4/5
 
 **Thesis:**
-Claude Code is an acting system with multiple failure-prone layers, and a single impressive run tells you nothing about reliability — applying the same discipline as unit testing is the only way to measure quality, iterate safely, and prevent repeated failures.
+One successful Claude Code run proves nothing about reliability — the same verification discipline that mature engineering disciplines take for granted (unit tests, MLOps, experimentation) must be installed as a reflex for agentic workflows.
 
 **Weakest point:**
-"What is the unit test we forgot to write?" — partially restates the unit-test analogy already established in the intro; the new beat (Anthropic's input/grading-criterion/check structure) advances the argument but the section setup is slightly redundant.
+"What will we cover in this post?" stalls momentum between the hook and the first content section — the reader just had the problem framed compellingly; the ToC interrupts rather than propels. Minor; ToC is a required element.
 
-**Action:** None — score ≥ 4
+**Action:** None — score ≥ 4.
 
 ---
 
@@ -66,26 +66,30 @@ Claude Code is an acting system with multiple failure-prone layers, and a single
 **Score:** 4/5
 
 **Shallowest section:**
-"What is the run that felt like magic?" — names availability bias but does not operationalise it; reader knows the problem has a name but not what to do differently after a good first run.
+"What do unit tests, MLOps, and experimentation have in common?" — unit test and experimentation sub-sections describe familiar practices without a reframe specific to agents; the synthesis closes where the reader was already.
 
-**Action:** None — score ≥ 4
+**Action:** None — score ≥ 4.
 
 ---
 
 ## Pass 5 — Actionability
 
-**Score:** N/A — post explicitly scoped to "the why"; all practical method deferred to Parts 2 and 3. One concrete worked example present (hook failure decomposed into input/grading-criterion/check). Intentional scope choice.
+**Score:** 3/5
+
+**Weakest recommendation:**
+> "Pick one workflow you already rely on. Write three bullet points describing what a correct run looks like — not what it outputs, but what makes the output correct. That is your eval seed." — directionally useful but stops short of showing how to derive the criteria. A tech lead who has never written an eval does not know whether to start from failure modes seen, the workflow's stated purpose, or a checklist of output properties. The PR-review example is the most concrete thing in the section but is buried as an illustration rather than the lead recommendation.
+
+**Action:** Reframe the closing guidance as a concrete three-step seed exercise: (1) name one failure you have already seen, (2) invert it into a pass criterion, (3) write the check mechanism. Lead with the PR-review example as the worked model, not a buried illustration.
 
 ---
 
 ## Pass 6 — Audience Specificity
 
-**Score:** 4/5
+**Score:** 5/5
 
-**Most generic section:**
-"What is the unit test we forgot to write?" — mentions DS test-set discipline but immediately returns to generic software engineering framing; the parallel to held-out evaluation sets is raised but not followed through.
+**Most generic section:** None. Every worked example (recommendation model drift, experiment design document, PR-review eval seed, Haiku vs Sonnet cost routing) is drawn from DS/ML practitioner contexts.
 
-**Action:** None — score ≥ 4
+**Action:** None — score ≥ 4.
 
 ---
 
@@ -96,14 +100,18 @@ Claude Code is an acting system with multiple failure-prone layers, and a single
 | Voice fidelity | 4/5 |
 | Argument flow | 4/5 |
 | Section depth | 4/5 |
-| Actionability | N/A |
-| Audience specificity | 4/5 |
-| **Average** | **4.0/5** |
+| Actionability | 3/5 |
+| Audience specificity | 5/5 |
+| **Average** | **4.2/5** |
 
 ---
 
 ## Publish Readiness Verdict
 
-### Ready
+### Revise first
 
-All scored dimensions at 4/5; structural elements all ✓ after three iterations of targeted fixes; argument is coherent, well-evidenced, and grounded in personal experience throughout.
+Three review iterations complete. Four of five scored dimensions at 4/5 or better (average 4.2/5). Actionability remains at 3/5 after 3 passes — the engagement section's eval-seed guidance tells the reader *what* to produce but not *how* to derive it, and the PR-review worked example is buried rather than leading. One targeted rewrite of the closing section resolves this.
+
+### Priority actions
+
+1. **Reframe the eval-seed guidance in the closing section as a three-step exercise.** Lead with the PR-review example as a worked model, then give the three steps: (1) name one failure you have already seen, (2) invert it into a pass criterion, (3) write the check mechanism. This gives a tech lead who has never written an eval a concrete starting point, not just a reflection prompt.

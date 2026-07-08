@@ -154,50 +154,48 @@ It should make them feel like what they are at their best:
 # Part 3: Claude Code Evals, Part 3: Building A Tiny Eval Suite That Actually Helps
 ### 3.3 Why Part 3 Comes Third
 
-Only after the reader has the mental model and the map should the series move into implementation.
+Part 1 gave the reader a YAML sketch of an eval for the A/B test document skill — deliberately labelled "not production-ready." Part 2 showed that same skill has at least nine evaluation surfaces.
+
+Part 3 makes it real. The reader has the concept and the map. Part 3 hands them the shovel.
 
 Part 3 should answer:
 
 > How do I build my first useful Claude Code eval suite without turning it into enterprise theatre?
 
-The post should be highly practical.
-
 The recommendation should be:
 
 ```text
 Do not start by evaluating everything.
-Start with one workflow that matters.
-Collect 5-10 real examples.
-Define success and failure.
-Automate deterministic checks where possible.
-Use judgement checks where necessary.
-Compare against a baseline.
-Turn repeated failures into regression cases.
+Take the A/B test document skill you already know from Part 1.
+Collect 5 real experiment briefs.
+Define success and failure exactly as you did in Part 1.
+Automate the deterministic checks.
+Write a judge prompt for the reasoning quality checks.
+Run it. Find a failure. Turn that failure into a regression case.
 ```
 
-This is where the series should introduce two worked examples:
+This is where the series completes the A/B test document skill thread — and then shows the method generalises with two additional worked examples:
 
-1. **An analytics agent eval suite**
-2. **A writing-format agent eval suite**
+1. **The A/B test document skill** (primary thread — completes the Part 1 sketch into a working, runnable suite)
+2. **An analytics agent eval suite** (section 30 — shows the method applied to a more complex DS workflow: SQL, dbt, canonical metrics, repository hygiene)
+3. **A writing-format agent eval suite** (section 31 — shows evals for non-code artefacts: weekly updates, experiment summaries, structured communication)
 
-The analytics example speaks directly to data science, analytics, SQL, dbt, and metric-definition workflows.
+The A/B test skill is the primary thread. It should be the first complete example, carrying the reader from the Part 1 sketch to a working suite with a real failure caught and turned into a regression case.
 
-The writing-format example shows that evals are not only for code. Claude Code workflows often produce documentation, release notes, summaries, experiment write-ups, PR descriptions, stakeholder updates, and structured communication artefacts.
+The analytics agent (section 30) and writing-format agent (section 31) follow as "the method generalises" beats. They are secondary — they broaden the coverage without replacing the primary thread.
 
 ---
 ## 23. Role Of Part 3 In The Series
 
-Part 3 is the practical implementation post.
+Part 3 is the practical implementation post — and the payoff for the reader who has followed the A/B test document skill since Part 1.
 
-This is where the reader moves from "I understand evals" to "I can build my first useful eval suite".
+This is where the reader moves from "I understand evals and I know the surfaces" to "I have a working suite running against a real workflow."
 
-The tone should be pragmatic.
-
-The goal is not to build a perfect eval platform. The goal is to build the smallest useful system that catches real repeated failures.
+The tone should be pragmatic and honest. Building evals requires thinking before it requires tooling. The A/B test skill already has its success criteria defined (from Part 1) and its surfaces mapped (from Part 2). Part 3 shows what building the actual suite looks like: the folder, the task bank, the graders, the judge prompt, and the first run.
 
 The central message is:
 
-> A useful eval suite does not need to be huge. It needs to catch the failures that matter.
+> A useful eval suite does not need to be huge. It needs to catch the failures that matter. The A/B test document skill already told us what those failures are.
 
 ---
 
@@ -209,17 +207,21 @@ The central message is:
 
 ## 26. Suggested Opening Hook
 
-The fastest way to ruin evals is to start by building an eval platform.
+In Part 1, we sketched the eval for the A/B test document skill. In Part 2, we mapped nine surfaces it could cover. In both cases, we ended with the same instruction: "start small, define success, automate the checks."
+
+Part 3 is where we actually do that.
+
+The fastest way to ruin evals is to start by building an eval platform. A harness, a test runner, a judge prompt, a results dashboard, a CI integration — before you have even run one eval against one real task.
 
 The better starting point is much smaller:
 
-> Pick one workflow that matters. Collect five real examples. Decide what failure means. Automate the obvious checks. Review the rest.
+> Take the A/B test document skill. Collect five real experiment briefs. Write the deterministic checks. Write one judge prompt. Run it. See what fails.
 
 That is enough to move from vibes to evidence.
 
 Possible opening line:
 
-> The first Claude Code eval suite should not be a platform. It should be a small folder of tasks that remember the ways your workflow keeps disappointing you.
+> The first Claude Code eval suite should not be a platform. It should be a small folder of tasks that remember the ways your workflow keeps disappointing you — starting with the skill you have already been reading about for two posts.
 
 ---
 
@@ -251,33 +253,37 @@ Turn failures into regression cases
 
 ## 28. Minimal Folder Structure
 
+The folder structure below is built around the A/B test document skill. This is the concrete form of the Part 1 YAML sketch — a real directory a reader could create in an afternoon.
+
 ```text
 evals/
   tasks/
-    analytics_001.md
-    analytics_002.md
-    writing_001.md
+    ab_test_001.md     # homepage ranking test brief
+    ab_test_002.md     # search relevance test brief
+    ab_test_003.md     # notifications opt-in test brief
+    ab_test_004.md     # pricing page test brief
+    ab_test_005.md     # onboarding flow test (missing guardrail metrics — ambiguous brief)
   expected/
-    analytics_001.yaml
-    analytics_002.yaml
-    writing_001.yaml
+    ab_test_001.yaml   # expected headings, required metrics, forbidden invented metrics
+    ab_test_002.yaml
+    ab_test_003.yaml
+    ab_test_004.yaml
+    ab_test_005.yaml   # should ask for missing context, not invent guardrail metrics
   graders/
-    check_diff_scope.py
-    check_sql_sources.py
     check_required_headings.py
-    judge_response.md
+    check_metric_mentions.py
+    check_no_invented_metrics.py
+    judge_statistical_reasoning.md   # LLM-as-judge prompt for reasoning quality
   runs/
-    baseline/
-    with_skill/
-    with_subagent/
+    baseline/          # current skill, all 5 tasks
+    with_revision/     # after prompt change, all 5 tasks
+    haiku/             # cheaper model, same 5 tasks
   results/
     summary.csv
     failures.md
 ```
 
-This folder structure is deliberately simple.
-
-A first eval suite can start as files, scripts, and a small report. It does not need a dashboard, database, or orchestration framework on day one.
+This folder structure is deliberately simple. It does not need a dashboard, database, or orchestration framework on day one. It needs five real experiment briefs, the deterministic checks from Part 1, and one judge prompt.
 
 ---
 
@@ -287,21 +293,18 @@ A first eval suite can start as files, scripts, and a small report. It does not 
 
 Do not evaluate "Claude Code".
 
-Evaluate one concrete workflow.
+Evaluate one concrete workflow. For Part 3, that workflow is the A/B test document skill — the same skill the reader has been following since Part 1. They already know what it does, what success looks like, and what the YAML sketch contains. They do not need to choose from scratch.
+
+For readers who want to apply this to their own work, the choice criteria below still apply.
 
 #### Good Starting Workflows
 
-- analytics agent,
-- PR review agent,
-- dbt model generation workflow,
+- the A/B test document skill (primary example for this post),
+- analytics or metrics query agent,
 - weekly update writer,
+- experiment summary agent,
 - release note formatter,
-- migration assistant,
-- bug-fix command,
-- safety hook,
-- documentation skill,
-- experiment-summary agent,
-- incident-summary workflow.
+- dbt model generation workflow.
 
 #### Good Workflow Choice Criteria
 
@@ -309,99 +312,81 @@ A good first workflow is:
 
 - repeated often,
 - costly when wrong,
-- visible when it fails,
-- small enough to test,
-- connected to real work,
-- partly automatable,
-- likely to benefit from Claude Code.
+- has clearly definable success criteria,
+- small enough to collect 5 real examples,
+- connected to real work the team does.
 
 #### Bad Starting Points
 
 Avoid starting with:
 
 - "evaluate all coding tasks",
-- "evaluate all agents",
 - "evaluate our whole AI workflow",
-- "build a general benchmark for everything",
-- "test every possible prompt",
-- "score Claude Code globally".
+- "build a general benchmark for everything".
 
 That way lies meetings. Many meetings.
 
 #### Key Message
 
-> Start with one workflow, not one grand theory of agent evaluation.
+> For this post: start with the A/B test document skill. You already have the success criteria. You already have the YAML sketch. Now collect the tasks and make it run.
 
 ---
 
 ### 29.2 Step 2: Collect Real Examples
 
-Start with real or realistic tasks.
+For the A/B test document skill, collect 5 real or realistic experiment briefs. Vary them deliberately:
 
-#### Useful Sources
-
-- previous Claude Code sessions,
-- failed outputs,
-- PR comments,
-- bug reports,
-- manual corrections,
-- repeated Slack requests,
-- existing project templates,
-- common repository tasks,
-- team checklists,
-- known failure cases,
-- support tickets,
-- examples from code review.
-
-#### Task Collection Table
-
-| Source | Example task | Why it is useful |
+| Task ID | Brief type | Why it is useful |
 |---|---|---|
-| Failed Claude session | "Fix failing dbt test" | Captures real failure mode |
-| PR comment | "Use canonical mart, not raw table" | Encodes team convention |
-| Slack request | "Summarise weekly status" | Repeated communication workflow |
-| Bug report | "Investigate login timeout" | Real debugging task |
-| Manual correction | "Do not invent metrics" | Faithfulness failure |
+| ab_test_001 | Homepage ranking test — complete brief, all metrics provided | Baseline pass case |
+| ab_test_002 | Search relevance test — complete brief, different product area | Tests generalisation |
+| ab_test_003 | Notifications opt-in test — complete brief | Another pass case |
+| ab_test_004 | Pricing page test — brief with slightly ambiguous primary metric | Tests edge handling |
+| ab_test_005 | Onboarding flow test — missing guardrail metrics | Key failure case: does the skill ask for missing context or invent metrics? |
+
+Task 5 is the most valuable. It is the case most likely to expose invented metrics — the highest-risk failure mode identified in Part 1. If the eval suite catches only one failure, it should catch this one.
 
 #### Key Message
 
-> Your eval set should look like the work you actually do, not the work you wish you did.
+> Your eval set should include at least one case designed to provoke the failure mode you care most about catching. For the A/B test skill, that is the ambiguous brief where guardrail metrics are missing.
 
 ---
 
 ### 29.3 Step 3: Define Success And Failure
 
-For each task, write down what success means.
+For the A/B test document skill, success and failure were already defined in Part 1. This step is about translating those definitions into a machine-readable form for each task.
 
 #### Example
 
 ```yaml
-id: analytics_003
-task: "Create a SQL query for weekly net revenue by market."
+id: ab_test_005
+task: "Draft an A/B experiment design document for an onboarding flow test."
+context:
+  product_area: "Onboarding"
+  change: "New onboarding email sequence"
+  primary_metric: "activation_rate"
+  guardrail_metrics: []   # deliberately missing — key failure case
 
 success:
-  - references the canonical net revenue model
-  - saves SQL under analysis/generated/
-  - does not query raw payments directly
-  - explains any assumptions
-  - output is valid SQL
+  - document contains a clearly stated hypothesis
+  - primary metric (activation_rate) is named
+  - document either asks for guardrail metrics or explicitly notes they were not provided
+  - no invented guardrail metrics appear in the output
+  - expected headings are present
 
 hard_fail:
-  - uses raw.payments
-  - invents a metric definition
-  - writes outside the allowed folder
-  - claims the query is validated without running checks
+  - invents guardrail metrics not in the input context
+  - claims statistical significance without sample size assumptions
+  - produces a document without flagging the missing context
 ```
 
 #### Why This Matters
 
-This step forces clarity.
-
-If the team cannot define failure, it probably cannot automate the eval yet.
+Task 005 is the eval that earns its place. If the skill invents guardrail metrics to fill the gap rather than flagging the missing context, that is the exact failure the team most needs to catch and turn into a regression case.
 
 #### Key Message
 
-> Before writing a grader, write down what would disappoint you.
+> Before writing a grader, write down what would disappoint you. For the A/B test skill, the answer is already in Part 1: invented metrics, missing sections, and overconfident statistical claims.
 
 ---
 
@@ -1603,12 +1588,68 @@ When discussing analytics-agent examples, link to research on agentic systems an
 # 35. Final Recommended Narrative Arc
 
 The series should feel like a progression from intuition to practice.
+
 ## Part 3: Give The Reader The Shovel
 
 The reader should think:
 
-> I do not need a giant eval platform. I can start with five real examples and a few useful checks.
+> I have seen the concept (Part 1) and the map (Part 2). Now I am watching the A/B test document eval get built from scratch. I can do this for my own workflow.
 
-Part 3 should make the implementation feel practical and achievable.
+**Narrative beat sequence for Part 3:**
+
+1. Open by recalling the arc: Part 1 sketched the eval, Part 2 mapped the surfaces. Part 3 builds the actual suite.
+2. Show the folder structure (section 28) — grounded in the A/B test skill, not a generic template.
+3. Walk through the 12-step recipe (section 29) using the A/B test skill: collect 5 briefs, define success/failure per task, separate deterministic from judgement checks.
+4. Show the working graders: `check_required_headings.py`, `check_no_invented_metrics.py`, and the judge prompt for statistical reasoning quality.
+5. Run the baseline. Show the failure on task 005 (the ambiguous brief with no guardrail metrics — the skill invents them). Name the failure clearly.
+6. Turn that failure into a regression case. Show the updated task definition and the check that would have caught it.
+7. Transition to the analytics agent (section 30) as the "method generalises" beat — same 12 steps, more complex workflow (SQL, dbt, canonical metrics).
+8. Close with the series thesis: "The goal is not to evaluate everything. The goal is to stop being surprised by the same failure twice." Show the reader that the A/B test suite now catches that failure every time.
+
+**Tone:** practical, honest about the effort required, but optimistic about the achievability. The A/B test skill already has its success criteria written. The hard part is behind the reader by the time they reach Part 3 — now it is just building.
 
 ---
+
+---
+
+# 36. Primary Teaching Example — Series Thread
+
+## The A/B test document skill as the primary thread
+
+Part 1 introduced the A/B test document skill and sketched its eval in YAML ("below is not meant to be production-ready code — it is a simplified sketch"). Part 2 extended that same skill across five evaluation surfaces (output, repository state, tool-use, hook, cost/latency).
+
+Part 3 completes the job: take the sketch from Part 1 and the surface mapping from Part 2, and build the actual working eval suite for this skill. The reader has seen the concept (Part 1) and the map (Part 2). Part 3 gives them the shovel.
+
+## How to apply the 12-step recipe (section 29) to the A/B test skill
+
+**Step 1 — Choose one workflow:** the A/B test document skill. Already chosen. The reader has been using it since Part 1.
+
+**Step 2 — Collect real examples:** 5 real experiment briefs. Different product areas (homepage ranking, search, notifications, pricing, onboarding). Different levels of completeness in the input context. Include one brief with missing context (no guardrail metrics provided) to test how the skill handles ambiguity.
+
+**Step 3 — Define success and failure:** already defined in Part 1. Success = correct headings, no invented metrics, falsifiable hypothesis, sound statistical caveats. Failure = invented metric names, missing sections, overconfident statistical claims, metric confusion (guardrail presented as primary).
+
+**Step 4 — Deterministic vs judgement checks:** deterministic = heading presence, metric mention, forbidden metric absence. Judgement = hypothesis quality, statistical reasoning, groundedness. Both were sketched in the Part 1 YAML. Part 3 makes them executable.
+
+**Step 5 — Build the golden dataset:** 5 experiment briefs + 5 expected outputs (one human-authored "gold" document per brief). The gold documents define what correct looks like at the judgement level.
+
+**Step 6–7 — Run baseline and improved workflow:** run the current skill against all 5 briefs, record pass/fail per check. Then make one change (e.g. update the skill instructions to handle missing context more explicitly), run again, compare. This is the answer to Part 1's question: "did this change make the workflow better, or just different?"
+
+**Step 8 — Grade output, state, and trajectory:** the output document passes the deterministic checks + model-graded rubric. The repository state shows exactly one new file in `docs/experiments/`. The tool-use trajectory shows a Read call to `docs/metrics.md` before the Write call.
+
+**Step 9–10 — First failures and regression cases:** the first run will likely surface at least one invented metric on the ambiguous brief (missing guardrail metrics). That failure becomes a regression case. Every future run checks that the skill asks for missing context rather than inventing it.
+
+## Relationship to existing worked examples (sections 30, 31)
+
+The analytics agent (section 30) and writing-format agent (section 31) remain. They serve a different purpose: showing the method generalises. Place them after the A/B test suite is complete, framed as: "The same 12 steps apply to more complex workflows. Here is what they look like for an analytics agent operating against a dbt repository."
+
+The writing-format agent (section 31) is close to the newsletter pipeline skill — weekly updates, experiment summaries, structured artefacts from messy notes. It is the most immediately recognisable example for Jose's audience.
+
+## Narrative arc for Part 3
+
+1. Open with the hook (section 26): "The fastest way to ruin evals is to start by building an eval platform."
+2. Restate the A/B test skill: "In Part 1 we sketched the eval. In Part 2 we mapped the surfaces. Now let's build it."
+3. Walk through the 12-step recipe using the A/B test skill as the concrete thread.
+4. Show the working suite: the folder structure, the task bank, the deterministic checks, the judge prompt.
+5. Run it. Show a failure. Show the regression case.
+6. Close with the analytics agent as proof the method generalises.
+7. End with: "The goal is not to evaluate everything. The goal is to stop being surprised by the same failure twice."

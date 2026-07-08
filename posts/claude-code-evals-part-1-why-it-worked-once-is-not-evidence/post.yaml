@@ -57,6 +57,7 @@ artefacts:
   review_report: review_report.md
   promotion_posts: promotion/promotion_posts.md
 
+
 # ── Pipeline stages ───────────────────────────────────────────────────
 stages:
   brainstorm:
@@ -77,6 +78,7 @@ stages:
   review:
     status: complete
     completed_at: "2026-07-07"
+
   promote:
-    status: complete
-    completed_at: "2026-07-07"
+    status: pending
+    completed_at: null

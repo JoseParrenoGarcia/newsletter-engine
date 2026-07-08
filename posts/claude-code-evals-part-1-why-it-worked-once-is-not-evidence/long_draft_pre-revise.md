@@ -1,193 +1,219 @@
-# Why "It Worked Once" Is Not Evidence
+# Why "It Worked Once" Is Not Evidence — Claude Code Evals, Part 1
 
-*Claude Code Evals — Part 1 of 3*
+*Part 1 of 3 — Why one good run is not evidence, and why the same testing discipline that makes software reliable must be applied to Claude Code workflows.*
 
-One good run is not evidence. It is a story you told yourself.
+You built a Claude Code workflow. Maybe a skill that generates reports, a pipeline that processes tickets, or an agent that reviews pull requests. It worked. Maybe it worked beautifully — the output was structured, the reasoning was sharp, and you felt something close to relief. This thing actually works.
 
-Claude Code is not a chat interface. It is an agent that reads your codebase, edits files, runs commands, calls tools, fires hooks, loads memory, and routes work to subagents. When it works, the whole system worked — the model, the instructions, the configuration, the tools, the environment. When it fails, any one of those layers may be the cause. And if you have never built an eval for it, you have no way to distinguish a reliable workflow from a lucky one.
+But here is the question that rarely gets asked: how do you know it will work again tomorrow?
 
-This is the missing discipline. Software engineers do not write tests because they expect their code to fail. They write tests because verification by assumption is not verification at all. That same discipline has not made it into how most people build with agents — and the cost shows up slowly, in workflows that degrade when the prompt is revised, in models that cannot be swapped without a manual inspection, in failures that repeat because no one captured them the first time.
+Not "will Claude Code still exist tomorrow." How do you know *this specific workflow*, with *these specific instructions*, against *this range of inputs*, will produce a correct result on the next run, and the run after that?
 
-This post is about the why. Not the infrastructure, not the harnesses, not the YAML configs — those come in Parts 2 and 3 of this series. This is about the mental model that makes evals feel necessary rather than optional.
+Software engineering has an answer to this problem: unit tests. You define expected behaviour, encode it in a test, and run it every time something changes. Not because you expect the function to be broken — because verification by discipline is more reliable than verification by assumption.
+
+Machine learning engineering has the same instinct in a different form. You do not trust a model at launch and walk away. You monitor for data drift, track performance degradation, and alert when the world moves underneath the model. The discipline exists because a model that worked last quarter can fail this quarter without anything in the code changing.
+
+Data science has a version too. You run controlled experiments before trusting that a change actually caused an improvement. "More clicks after the change" is not causation. It might be seasonality, sample bias, or noise in a very expensive jacket.
+
+Notice the pattern. Every mature engineering discipline has a practice for answering: *does this actually work, and how would I know if it stopped?*
+
+Now look at how most people build with Claude Code. A workflow is built. It works on a few runs. The builder moves on. No baseline. No grading criteria. No test cases. If it fails next week, they will debug it manually and wonder whether it was always flaky.
+
+This is not a post about how to implement evals. That is Part 3. This is a post about why evals are the missing quality discipline for agentic workflows — the practice that every other engineering domain takes for granted, and that agent builders have not yet installed as a reflex.
 
 ---
 
 ## What will we cover in this post?
 
-- **The run that felt like magic.** Why the first impressive Claude Code run is the most dangerous data point you have.
-- **Why LLMs are probabilistic, not deterministic.** What the empirical variance data says about "it worked once."
-- **The unit test we forgot to write.** The discipline analogy — and why it applies directly to agent workflows.
-- **Three questions you cannot answer without evals.** The revision problem, the cost problem, and the regression problem.
-- **What Claude Code is actually doing.** Why the unit of trust is the whole workflow, not the final text output.
-- **The failures that should have been caught.** Concrete failure modes that are invisible on a single run but obvious in a regression suite.
-- **Evals are a thinking problem, not an infrastructure problem.** The reframe — and the forward pointer to Parts 2 and 3.
+- **Why are LLMs probabilistic even when they look consistent?** Why a token-sampling architecture means "it worked once" is a sample of one from a distribution you have not characterised.
+- **What do unit tests, MLOps, and experimentation have in common?** The three engineering disciplines that all answer the same question, and what agents need from each of them.
+- **What is the equivalent discipline for agents?** A concrete definition of an eval, grounded in a real example, with a working breakdown of inputs, success criteria, and checks.
+- **What are the three questions you cannot answer without evals?** The revision problem, the cost problem, and the regression problem — all practical, all common.
+- **Why are evals a thinking problem before they are an infrastructure problem?** The reframe that makes evals feel achievable rather than academic.
 
 ---
 
-## What is the run that felt like magic?
+## Why are LLMs probabilistic even when they look consistent?
 
-You ran Claude Code on a real task. Maybe it navigated a codebase you had not explained, found the relevant function, and fixed the bug. Maybe it wrote a script that automated something you had been doing by hand. Maybe it summarised a set of files in a way that would have taken you an hour.
+Start with how the model works, but only the part that matters for this argument.
 
-It was impressive. Not "good for an AI" impressive — genuinely impressive. [Bryan Walsh's piece in Vox](https://www.vox.com/future-perfect/475370/anthropic-claude-code-artificial-intelligence-coder-jobs) captures this reaction well: Claude Code has a way of prompting extreme responses, partly because it is doing something that looks like competence, not just pattern matching.
+Language models generate output token by token. At each step, the model computes a probability distribution over possible next tokens and samples from it. This is not a bug or an implementation quirk — it is the architecture. The model is not retrieving a stored answer. It is generating a likely continuation of the sequence it has seen.
 
-That reaction is not wrong. The first run often is good. The problem is what you do with it.
+Temperature controls how peaked that distribution is. Set it to zero and the model reliably picks the highest-probability token at each step. That sounds deterministic. In practice, even zero-temperature runs vary — floating-point arithmetic across distributed hardware introduces small differences that can compound over a long sequence of token choices. The setting reduces variance. It does not eliminate it.
 
-Most people walk away with a feeling of confidence. The workflow is figured out. The agent handles it. They use it again, and it works again — or it mostly works, with a few things to clean up manually. A mental model forms: Claude Code is reliable for this kind of task.
+Here is what the empirical picture looks like. In a [2024 study from Penn State and Amazon](https://arxiv.org/abs/2408.04667), researchers ran five LLMs on eight common tasks, ten runs each, under supposedly deterministic settings. Accuracy varied by up to 15% across runs for the same model on the same task. The gap between the best and worst possible run for a single model reached 70%. None of the five models delivered consistently repeatable accuracy.
 
-That mental model is built on the wrong foundation. "It worked twice" is still not evidence of reliability. It is evidence of two successful runs. Reliability requires being able to characterise failure as well as success — to know the rate, the conditions, and the specific ways a workflow breaks. Without that, you are trusting the story of the good runs.
+Seventy percent. Not across different models. For the same model, on the same task.
 
----
+To make this concrete: ask a model to summarise a set of meeting notes and produce a structured list of action items. Run it ten times. On most runs the output will be broadly similar. On some it will be notably better. On others it will miss an item, collapse two into one, or introduce an action item that was not discussed. The underlying task did not change. The prompt did not change. The distribution moved.
 
-## Why are LLMs probabilistic, not deterministic?
+The point is not that Claude Code is unreliable. The point is this: if your workflow depends on the model correctly following a set of instructions — generating a document, extracting structured data, making a decision — then one successful run tells you very little. Unless the LLM is writing deterministic code that you then execute and test, you are mostly trusting instruction-following behaviour. That behaviour needs evaluation.
 
-The architecture is the reason.
-
-Language models generate output token by token, sampling from a probability distribution at each step. Even with temperature set to zero — the so-called "deterministic" setting — the underlying computation involves floating-point arithmetic distributed across hardware, which introduces variation. The setting reduces variance; it does not eliminate it.
-
-A [2024 empirical study from Penn State and Amazon](https://arxiv.org/abs/2408.04667) investigated this directly. Researchers ran five LLMs on eight common tasks, ten runs each, under supposedly deterministic settings. The results:
-
-- Accuracy varied by up to 15% across runs for the same model on the same task
-- The gap between the best and worst possible run for a single model reached up to 70%
-- None of the five models consistently delivered repeatable accuracy
-
-That 70% figure is not a theoretical maximum. It is a measured outcome on real tasks with real models. The point is not that Claude Code is unreliable — it is that without measurement, you have no idea where on that spectrum your particular workflow sits.
-
-This is what "it worked once" actually means: you have one sample from a distribution you have not characterised. The sample was good. The distribution may be excellent, or it may be volatile. You do not know which.
-
-Evals are how you find out.
+One good run is a sample of one from a distribution you have not characterised. The sample was good. The distribution may be excellent or it may be volatile. You do not know which until you measure.
 
 ---
 
-## What is the unit test we forgot to write?
+## What do unit tests, MLOps, and experimentation have in common?
 
-Software engineers do not write unit tests because they think their code is broken. They write them because the practice of verification is a discipline, and disciplines produce reliability that informal review cannot.
+They are all answers to the same question: *does this actually work, and how would I know if it stopped?*
 
-Think about what a unit test actually does. It captures a known input, a known expected output, and a check that the actual output matches. The test does not run once and get deleted. It runs on every change, catching regressions before they reach production. The engineer who wrote the original function may be long gone, but the test remains — a frozen specification of what "correct" looks like.
+The reason this question matters is that intuition and visual inspection are weak signals. They tell you about the runs you observed. They tell you nothing about the runs you did not. Every mature engineering discipline has developed a practice for moving beyond "it looked fine" — and each practice has something to teach about agents.
 
-That is precisely what is missing from most agent workflows.
+**Unit tests**
 
-[Anthropic's own engineering blog post on evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) defines the eval structure: an input, a grading criterion, and a check. The structure is almost identical to a unit test. The conceptual leap is not large — but it requires making the decision that your workflow is the kind of thing that deserves to be tested.
+A function takes an input and returns an output. You define what the correct output should be for a given input, write a test that encodes that definition, and run it on every change.
 
-Most teams have not made that decision. The workflow runs. It looks good. No one sits down to write the eval.
+A pricing function that applies a 10% discount should return £90 when given £100. The test does not care whether you believe the function is broken. It runs because the cost of a regression — a future change that silently breaks the discount logic — is higher than the cost of writing the test. The test is the memory of what correct looks like.
 
-[Anthropic's best practices guide](https://code.claude.com/docs/en/best-practices) makes the implication explicit: Claude should always have a verifiable check it can run — tests, a build, a screenshot comparison — rather than relying on "looks done" as the signal that a task is complete. The guide is written about how to design prompts and workflows. But the same logic applies to the team building those workflows. If "looks done" is not acceptable for Claude to use as a completion criterion, why is it acceptable for the team building and evaluating the workflow to use?
+The lesson is not about functions. It is about the practice. We do not trust code because it worked once. We trust it because we can repeatedly verify it.
 
-The unit test is not difficult to write. The difficult part is deciding it is worth writing.
+**MLOps and data drift**
+
+A machine learning model can perform well at launch and degrade steadily for reasons that have nothing to do with the code. The input distribution shifts. Customer behaviour changes. Fraud patterns evolve. The model was trained on last year's data. This year's data looks different enough that the model's predictions are increasingly wrong — but the code is unchanged, the pipeline is running, and no alarm has fired.
+
+The discipline MLOps built in response is monitoring: define expected input distributions and performance thresholds, measure them continuously, and alert when the world has moved underneath the model.
+
+The lesson: we do not trust ML models forever. We monitor whether the world has moved underneath them.
+
+**Experimentation**
+
+A product team ships a new ranking model. Traffic is up. Clicks are up. The instinct is to declare success. But without a controlled experiment — a random split between the old model and the new one, with a pre-agreed success metric — the improvement could be seasonal traffic, a coincident change elsewhere in the product, or selection bias in how the analysis was sliced. The world is full of confident decisions made on data that turned out to be noise.
+
+The lesson: we do not trust intuition when the cost of being wrong matters. We test causally.
+
+---
+
+Three different domains. Three different practices. All solving the same problem: replacing the unreliable signal of "looked good" with a repeatable, measurable, historically comparable check.
+
+Agents need the same discipline. Not because they are useless. Because they are useful enough to become infrastructure — and infrastructure that cannot be verified is infrastructure that will eventually fail in ways nobody expected.
+
+---
+
+## What is the equivalent discipline for agents?
+
+Not benchmarks, not leaderboards, not the kind of evaluation that compares GPT-4 against Claude on MMLU. What agents need is something closer to the unit test: a repeatable way to check whether a specific workflow, in your specific context, did what it was supposed to do.
+
+The structure is simple. [Anthropic's own engineering post on evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) defines it as three components:
+
+- **Input:** the task, prompt, file, codebase, ticket, document, or workflow trigger
+- **A success criterion:** what must be true for the run to count as correct
+- **A check:** the mechanism that decides whether the criterion was met
+
+That is it. An eval is not a framework or a benchmark or a research protocol. It is a stored definition of what a correct run looks like, plus a mechanism to check whether a given run met that definition.
+
+To make this concrete, take a real example that is relevant to almost anyone working with data teams.
+
+*The task:* draft an experiment design document for a homepage ranking test.
+
+*Success criteria:*
+- Contains a clearly stated hypothesis
+- Names a primary metric and at least two guardrail metrics
+- Includes sample size assumptions
+- States launch criteria and rollback criteria
+- Does not invent metrics that were not provided as context
+- Includes at least one statistical caveat (minimum detectable effect, power, or confidence threshold)
+- Produces a markdown document with the expected section headings
+
+*Checks:*
+- Some are deterministic: the expected headings exist, the required sections are present, no invented metrics appear in the output
+- Some are model-graded: is the statistical reasoning sound, are the assumptions justified, is the hypothesis falsifiable?
+- Some are human-reviewed: is this document useful to the team running the experiment? Would a statistician sign off on it?
+
+Now consider what "the skill produced a document" tells you without these criteria. It tells you the workflow completed. It tells you something appeared on screen. It tells you nothing about whether the reasoning was sound, whether the statistical caveats were correct, or whether the output would embarrass someone in a review meeting.
+
+An eval is not the workflow. It is the memory of what good looks like.
 
 ---
 
 ## What are the three questions you cannot answer without evals?
 
-These are not hypothetical concerns. They are questions that come up for any team that builds more than one Claude Code workflow and plans to iterate on it.
+These are not hypothetical. They come up for any team that builds more than one Claude Code workflow and plans to iterate on it.
 
-**Did this revision make it better, or just different?**
+**Did this change make the workflow better, or just different?**
 
-You have a skill — a reusable procedure stored in a SKILL.md file that Claude can invoke. You revised the instructions based on a run that did not go well. The next run looks better. But does it? You changed the prompt, not the task. Without evals — without a set of known inputs and a grading criterion — you have no way to know whether the revision improved performance across the range of cases the skill is meant to handle, or whether it just happened to perform better on the one run you used for the revision.
+You revised a skill. Maybe you adjusted the instructions after noticing it was missing edge cases. Maybe you rewrote the opening section for clarity. Maybe you changed the output format based on feedback. The next run looks better.
 
-[The skills documentation](https://code.claude.com/docs/en/skills) describes how skill bodies are loaded only when used, and how they encode reusable procedures. What the documentation does not provide — because it is not a documentation problem — is a way to measure whether a revised skill is better. That is an eval problem.
+But does it? You changed the prompt. You did not change the task, the range of inputs, or the definition of correct. Without a set of known inputs and grading criteria, you have no way to know whether the revision improved quality across the range of cases the skill handles, or whether it just happened to produce a better result on the one example you were looking at when you made the change. "Vibes before and after" is not a measurement. Somewhere, a p-value quietly weeps.
 
-**Can Haiku replace Sonnet for this task?**
+This applies every time you edit a prompt, a skill, a CLAUDE.md file, a system instruction, or a tool description. Without evals, you are comparing impressions.
 
-Cost management is a real concern for any team running agents at volume. [The subagents documentation](https://code.claude.com/docs/en/sub-agents) explicitly mentions routing tasks to "faster, cheaper models like Haiku" as a cost control mechanism. Claude Haiku is significantly less expensive than Sonnet or Opus. For workflows that run frequently or at scale, the cost difference is material.
+**Can I use a cheaper or faster model?**
 
-But whether Haiku is good enough for a specific workflow is an empirical question, not a theoretical one. The answer depends on the task, the instructions, the error tolerance, and the specific ways each model tends to fail. A visual inspection of a few runs will not tell you. You need evals — a fixed set of test cases with defined grading criteria — to characterise the quality difference and decide whether the cost saving is worth it.
+[The subagents documentation](https://code.claude.com/docs/en/sub-agents) explicitly mentions routing tasks to faster, cheaper models like Haiku as a cost control mechanism. For workflows that run at volume — processing hundreds of documents per day, reviewing every pull request, summarising meeting notes across a team — the cost difference between Haiku and Sonnet is material. Could Haiku handle the summarisation step? Could it classify tickets well enough? Does Sonnet need to touch every part of the workflow, or only the steps that require complex reasoning?
+
+These are empirical questions, not theoretical ones. The answer depends on the task, the instructions, the error tolerance, and the specific ways each model tends to fail. A visual inspection of a few runs will not tell you. Evals — fixed test cases with defined grading criteria — let you characterise the quality difference and make the decision with evidence.
+
+Without evals, model routing is guesswork.
 
 **Is this failure new, or have we seen it before?**
 
-This is the regression question, and it is the one that bites teams hardest. A workflow that worked last month starts producing errors. Was this a change in the model? A change in the codebase? A change in the tools or configuration? Without a regression suite — evals that run on a defined set of cases and report pass/fail — there is no way to know when a failure was introduced, and no way to verify that a fix actually fixed it.
+A workflow fails today. Something in the output is wrong. The immediate question is: was it always doing this, or did something change?
 
-[Common workflow recipes](https://code.claude.com/docs/en/common-workflows) cover the everyday tasks where Claude Code adds value: exploring codebases, fixing bugs, creating PRs. Each of those is a workflow that will be run repeatedly. Each is a workflow where regressions will happen. The question is whether the team finds out before or after it causes a problem.
+Was it the model? Did a recent CLAUDE.md edit introduce a conflict? Did the tool permissions change? Did the upstream data format shift? Without a regression suite — evals that run on a defined set of cases and report pass or fail — there is no history to consult. You cannot know when the failure was introduced. You cannot verify that your fix actually fixed it rather than just masking it on the one case you tested.
 
----
-
-## What is Claude Code actually doing?
-
-This is the framing that makes the eval case land.
-
-Claude Code is described in [its own overview](https://code.claude.com/docs/en/overview) as an AI-powered coding assistant that reads codebases, edits files, runs commands, and integrates with development tools. That is not a chat interface. It is an agent that acts inside an environment.
-
-When Claude Code runs a workflow, it is doing some combination of the following:
-
-- Loading instructions from CLAUDE.md files at the user, project, and organisation scope
-- Reading files in the repository to understand context
-- Editing files — sometimes many of them, in non-obvious places
-- Running shell commands — builds, tests, linting, git operations
-- Calling MCP tools that connect to external services
-- Firing hooks at lifecycle points (PreToolUse, PostToolUse, Stop, SessionStart)
-- Routing subtasks to subagents with their own context and tool permissions
-
-Each layer is a variable. [Memory configuration](https://code.claude.com/docs/en/memory) determines what Claude knows about your project before it starts. [Settings and permissions](https://code.claude.com/docs/en/settings) determine what it is allowed to do. [Hooks](https://code.claude.com/docs/en/hooks) fire automatically at lifecycle points and can run shell commands, call HTTP endpoints, or prompt Claude — all without the user explicitly triggering them.
-
-An [architectural analysis of Claude Code's public source code](https://arxiv.org/abs/2604.14228) identified the core while-loop, a five-layer compaction pipeline, four extensibility mechanisms, and the subagent orchestration layer. The complexity is real. It is not academic — it is the thing that runs when you invoke a workflow.
-
-A [systematic study of configuration in five agentic AI coding tools](https://arxiv.org/abs/2602.14690) analysed 2,853 GitHub repositories and found that Claude Code users employ the broadest range of configuration mechanisms of any tool examined. Real teams are using hooks, skills, MCP integrations, and custom memory — not just writing prompts.
-
-Evaluating only the final text output of a Claude Code workflow is like testing a function by reading its name. The name might be correct. The function might still be broken. The system under test is the whole workflow — the model, the instructions, the configuration, the tools, the environment — and the only way to know whether it is working correctly is to define what correct looks like and check against it.
+Without evals, you do not have history. You only have vibes with timestamps.
 
 ---
 
-## What are the failures that should have been caught?
+## Why are evals a thinking problem before they are an infrastructure problem?
 
-These are not edge cases. They are the kinds of failure that happen in normal use and are invisible until something downstream breaks.
+The most common reason teams do not build evals is that they imagine the infrastructure first. A harness. A test runner. A grading function. YAML configs. An LLM-as-judge prompt. A dashboard. The picture is not wrong — Part 3 of this series will walk through exactly that. But starting with the infrastructure is the wrong starting point, and it is why evals feel heavier than they are.
 
-**The hook that fired but did nothing.** A hook is configured to run a validation script after each file write. The hook fires — the PostToolUse event triggers, the hook executes, no error is returned. But the script path was wrong. The validation never ran. The workflow completed successfully. No one noticed until a downstream step failed three hours later. A single run would not catch this. An eval that checks whether the expected side effect occurred would catch it immediately.
+The first question is not "which framework should I use?" It is: *what does a correct run look like?*
 
-**The files edited in the wrong directory.** Claude Code was asked to update a configuration file. It found a file with the right name, updated it, and reported success. The file was in the wrong directory — a duplicate from an older version of the project. The real configuration file was untouched. Visual inspection of the output confirmed a change was made. Only checking the state of the right file would have caught the error.
+Go back to the experiment design document example. A correct run is not "a document was created." A correct run is one where the document contains the right reasoning, the right structure, the right statistical caveats, and avoids dangerous nonsense that a statistician would flag in a review meeting. Defining that takes thinking. It takes familiarity with the task and an honest answer to the question: what would make me trust this output enough to use it?
 
-**The subagent that returned a plausible but incorrect result.** A subagent was delegated a research task. It returned a structured summary that looked authoritative. The sources it cited were real. The claims it made were wrong — plausible extrapolations from the sources, not statements the sources actually made. The result was used downstream. The error propagated. [Anthropic's eval guide](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) names this directly: in agentic workflows, mistakes compound. A grading criterion that checks specific claims against the source material would have caught this at the subagent layer.
+The eval is just the artefact that captures your success criteria. If you have not defined success, no framework will save you.
 
-**The tests that were skipped because the agent decided they were optional.** A workflow includes a step that runs the test suite before committing. On one run, Claude Code assessed that the tests were not relevant to the changes made and skipped them. The assessment was wrong. The commit introduced a regression. The [best practices guide](https://code.claude.com/docs/en/best-practices) is explicit: "looks done" is not a valid completion criterion. An eval that checks whether the test suite ran and passed would have caught this.
+Buying a test harness before defining correctness is like buying a very expensive measuring tape and refusing to decide what length means.
 
-None of these failures requires a complex scenario. They are the normal failure modes of a system with many layers. The reason they are caught late — or not at all — is that the discipline of defining what correct looks like was never applied.
+The parallel to the other three disciplines is exact. Unit tests require you to know what the function should return before you can write the assertion. ML monitoring requires you to define expected distributions before you can alert on drift. Experimentation requires you to agree on the success metric before you randomise. Evals for agents are no different: the thinking comes first, and the infrastructure serves the thinking.
 
----
+For the experiment design document skill, writing the eval does not require any framework. It requires three things:
 
-## Are evals a thinking problem or an infrastructure problem?
+- **Input:** a realistic experiment brief — a product team, a proposed change, a metric they care about
+- **Success criteria:** the section headings exist, no invented metrics appear, the statistical caveats are present, the hypothesis is falsifiable
+- **Check:** a script that reads the output, confirms the expected structure, and flags violations — plus a model-graded pass for reasoning quality
 
-Both, but in the wrong order.
-
-Most people who decide not to build evals imagine the infrastructure first: a harness, a test runner, a grading function, a set of metrics to track. That picture is not wrong — Part 3 of this series will walk through exactly that. But starting with the infrastructure is the wrong starting point, and it is why evals feel harder than they are.
-
-The real work is earlier and simpler. It is sitting down with your workflow and answering: what does a correct run look like? What would I check if I watched it run? What is the difference between "it completed" and "it completed correctly"?
-
-[Anthropic's demystifying evals post](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) defines the eval structure as: an input, a grading criterion, and a check. That is it. The input is the task. The grading criterion is the specification of correct. The check is whatever mechanism you use to verify it. The infrastructure serves the grading criterion — it does not replace it.
-
-The grading criterion requires thinking. Thinking requires attention. And this is where the situation gets pointed: the capability that makes evals feel unnecessary — powerful AI tools that handle complex tasks — is also the thing that encourages outsourcing the thinking that evals require. The more you trust Claude Code to handle things, the less likely you are to sit down and specify what "handled correctly" means.
-
-That is the trap. Evals are not infrastructure. They are a discipline of specification. The cost of skipping them is not paid immediately — it accumulates in the drift between what your workflow does and what you think it does.
+No YAML. No external service. The difficult part is not the infrastructure. It is sitting down and answering: what does "the skill worked correctly" actually mean?
 
 ---
 
-## What comes next
+## What Claude Code workflow would you test first?
 
-This post is about the mental model: Claude Code is an acting system, and one good run is not evidence.
+Think of one Claude Code workflow, skill, or agent that you already trust. Something you have used more than a handful of times and would describe as reliable. Now ask yourself: if a colleague asked you to prove it works — not "it looks good" but measurably, repeatably works — what would you show them?
 
-Part 2 will give you the map. There are eight distinct surfaces of a Claude Code workflow that can be evaluated — final output, repository state, tool-use trajectory, skill invocation, subagent delegation, hook execution, cost and latency, and human usefulness. Each surface has its own failure modes and its own grading criteria. The right eval depends on which part of the workflow you are trying to trust.
+If the answer is "I would run it and show them the output," that is not proof. That is a demonstration of one run from a distribution you have not characterised.
 
-Part 3 will give you the method. A twelve-step recipe for building a first eval suite that actually helps — starting from one workflow, collecting real examples, defining failure, and building small regression cases. The goal is not comprehensiveness. The goal, as the series thesis has it, is to stop being surprised by the same failure twice.
+Three questions to sit with:
+
+1. Which Claude Code workflow do you trust most right now — and have you ever measured it, or are you trusting the story of the good runs?
+
+2. Of the three analogies in this post — unit tests protecting against regression, MLOps monitoring for drift, experimentation requiring causal evidence — which one felt most like a gap in how you currently think about your agent workflows?
+
+3. For a skill you rely on regularly: have you ever written down what a correct run looks like? Not what it produces — what makes that production correct?
 
 ---
 
-## Now, I want to hear from you
+Part 2 maps the territory. There are distinct surfaces of a Claude Code workflow that can be evaluated — final output, repository state, tool-use trajectory, skill invocation, subagent delegation, hook execution, cost and latency, and human usefulness. Each surface has its own failure modes and its own grading criteria.
 
-What workflow have you built with Claude Code that you trust — but have never tested? What would you need to define as "correct" to write the first eval for it?
+Part 3 builds the first suite. A practical recipe starting from one workflow, real test cases, and the failures you have already seen. The goal is not comprehensiveness. The goal is to stop being surprised by the same failure twice.
 
 ---
 
 ## References
 
-- [A non-coder's guide to Claude Code — Vox](https://www.vox.com/future-perfect/475370/anthropic-claude-code-artificial-intelligence-coder-jobs) — Bryan Walsh's accessible explainer on what Claude Code is and the extreme reactions it prompts
-- [Non-Determinism of "Deterministic" LLM Settings — arXiv:2408.04667](https://arxiv.org/abs/2408.04667) — empirical study showing up to 15% accuracy variation per run and 70% best-to-worst gap across five LLMs under deterministic settings
-- [Demystifying evals for AI agents — Anthropic Engineering](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) — Anthropic's engineering post defining eval structure, distinguishing eval types, and explaining how mistakes compound in agentic workflows
-- [Claude Code best practices — code.claude.com](https://code.claude.com/docs/en/best-practices) — Anthropic's official best practices guide framing verification by discipline rather than by assumption
-- [Create custom subagents — code.claude.com](https://code.claude.com/docs/en/sub-agents) — official docs on Claude Code subagents, including model routing to faster/cheaper models for cost control
-- [Common workflows — code.claude.com](https://code.claude.com/docs/en/common-workflows) — short recipes for everyday Claude Code tasks, relevant to the iteration and regression problem
-- [Extend Claude with skills — code.claude.com](https://code.claude.com/docs/en/skills) — documentation on the skills system and reusable procedures, illustrating the revision-without-measurement problem
-- [Claude Code overview — code.claude.com](https://code.claude.com/docs/en/overview) — official overview establishing Claude Code as an acting system that reads, edits, runs, and integrates
+- [Non-Determinism of "Deterministic" LLM Settings — arXiv:2408.04667](https://arxiv.org/abs/2408.04667) — empirical study showing up to 15% accuracy variation per run and a 70% best-to-worst gap across five LLMs under supposedly deterministic settings
+- [Demystifying evals for AI agents — Anthropic Engineering](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) — Anthropic's engineering post defining eval structure (input, grading criterion, check), distinguishing eval types, and explaining how mistakes compound in agentic workflows
+- [Claude Code best practices — code.claude.com](https://code.claude.com/docs/en/best-practices) — Anthropic's official best practices guide framing verification by discipline rather than by assumption, and naming "looks done" as an insufficient completion criterion
+- [Create custom subagents — code.claude.com](https://code.claude.com/docs/en/sub-agents) — official docs on Claude Code subagents, including model routing to faster and cheaper models for cost control
+- [Common workflows — code.claude.com](https://code.claude.com/docs/en/common-workflows) — short recipes for everyday Claude Code tasks, illustrating the range of workflows where iteration and regression are practical concerns
+- [Extend Claude with skills — code.claude.com](https://code.claude.com/docs/en/skills) — documentation on the skills system and reusable procedures, relevant to the revision-without-measurement problem
+- [Claude Code overview — code.claude.com](https://code.claude.com/docs/en/overview) — official overview establishing Claude Code as an acting system that reads, edits, runs, and integrates with development tools
 - [How Claude remembers your project — code.claude.com](https://code.claude.com/docs/en/memory) — documentation on CLAUDE.md and auto-memory as part of the system under test
 - [Claude Code settings and permissions — code.claude.com](https://code.claude.com/docs/en/settings) — four-tier configuration scope system showing the breadth of variables that affect behaviour
-- [Hooks reference — code.claude.com](https://code.claude.com/docs/en/hooks) — full reference for the hooks system and its silent failure surface
+- [Hooks reference — code.claude.com](https://code.claude.com/docs/en/hooks) — full reference for the hooks system, including the silent failure surface where hooks fire without executing correctly
 - [On the Use of Agentic Coding Manifests — arXiv:2509.14744](https://arxiv.org/abs/2509.14744) — empirical study of 253 CLAUDE.md files showing the breadth of real-world configuration practice
 - [Dive into Claude Code — arXiv:2604.14228](https://arxiv.org/abs/2604.14228) — architectural analysis of Claude Code identifying the core while-loop, compaction pipeline, and four extensibility mechanisms
-- [Harness Engineering for Agentic AI Coding Tools — arXiv:2602.14690](https://arxiv.org/abs/2602.14690) — systematic study of configuration in five agentic AI coding tools, finding Claude Code users employ the broadest configuration range
-- [Agentic Education — arXiv:2604.17460](https://arxiv.org/abs/2604.17460) — modular curriculum for Claude Code, evidence of broad adoption and the growing need for systematic quality assessment
+- [Harness Engineering for Agentic AI Coding Tools — arXiv:2602.14690](https://arxiv.org/abs/2602.14690) — systematic study of configuration in five agentic AI coding tools, finding Claude Code users employ the broadest configuration range of any tool examined
+- [Agentic Education: Using Claude Code to Teach Claude Code — arXiv:2604.17460](https://arxiv.org/abs/2604.17460) — modular curriculum study as evidence of broad Claude Code adoption and growing need for systematic quality assessment
+- [A non-coder's guide to Claude Code — Vox](https://www.vox.com/future-perfect/475370/anthropic-claude-code-artificial-intelligence-coder-jobs) — Bryan Walsh's accessible explainer on what Claude Code is and why it prompts strong reactions
