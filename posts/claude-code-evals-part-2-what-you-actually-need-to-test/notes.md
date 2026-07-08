@@ -154,72 +154,64 @@ It should make them feel like what they are at their best:
 # Part 2: Claude Code Evals, Part 2: What You Actually Need To Test
 ### 3.2 Why Part 2 Comes Second
 
-Once the reader understands that Claude Code is a workflowing system, the natural question becomes:
+Part 1 left the reader with a working eval for the A/B test document skill: input, success criteria, checks, and a YAML sketch. That eval graded the final document — whether it had the right headings, avoided invented metrics, and contained sound statistical reasoning.
 
-> What parts of the workflow should we evaluate?
+But the document is only one thing that could have gone wrong.
 
-Part 2 should answer that question.
+The natural question Part 2 should answer is: **what else could we have evaluated?**
 
-It should introduce the idea of **evaluation surfaces**.
+It should introduce the idea of **evaluation surfaces** — the distinct layers of a Claude Code workflow where failure can hide.
 
 Claude Code can fail at different layers:
 
-- the final answer can be wrong,
-- the code can fail tests,
-- the repository can be left messy,
-- the wrong files can be edited,
-- tools can be used poorly,
-- commands can fail silently,
-- a skill can fail to trigger,
-- a skill can trigger too often,
-- a subagent can be given the wrong task,
-- a hook can fail to block something unsafe,
-- instructions can be ignored,
-- costs and latency can become unreasonable.
+- the final document can be wrong or incomplete,
+- the file can be saved in the wrong folder,
+- the skill can have read from memory rather than the canonical metrics reference,
+- the validation hook can have fired but silently failed,
+- a cheaper model may produce worse documents without anyone noticing,
+- costs and latency can become unreasonable at volume.
 
 Those are not one failure type. They require different evals.
 
-Part 2 should therefore give the map:
+Part 2 should therefore give the map — using the A/B test document skill as the running thread, showing what each surface looks like for that one concrete workflow before naming the category.
 
 ```text
 If you care about correctness, evaluate the final output.
 If you care about repository hygiene, evaluate the git diff and final state.
-If you care about safe execution, evaluate commands and tool use.
-If you care about repeatable workflows, evaluate skills.
-If you care about delegation, evaluate subagents.
+If you care about grounded generation, evaluate the tool-use trajectory.
 If you care about workflow controls, evaluate hooks and permissions.
+If you care about cost, evaluate model routing against a fixed eval set.
 ```
+
 ## 14. Role Of Part 2 In The Series
 
-Part 2 builds the taxonomy.
+Part 2 builds the taxonomy — but grounded in one concrete example, not in the abstract.
 
-After Part 1, the reader understands that Claude Code is a workflowing system. Part 2 should explain the different surfaces that can be evaluated.
-
-This is the post where the series becomes more technical, but still conceptual.
+After Part 1, the reader has already seen one eval work. Part 2 extends that same eval to show how many more surfaces it could cover. This is the post where the series becomes more technical, but the A/B test skill anchors every surface so the taxonomy never floats free of reality.
 
 The central message is:
 
-> The right eval depends on which part of the workflow you are trying to trust.
+> The right eval depends on which part of the workflow you are trying to trust — and the final document is only one of those parts.
 
 ---
 
 ## 16. Core Question For Part 2
 
-> What types of evals exist for Claude Code, and which ones apply to outputs, repository state, tool use, skills, agents, hooks, commands, and instructions?
+> In Part 1 we evaluated whether the A/B test document was correct. What else could we have been evaluating — and which other parts of the workflow could have failed silently while the document looked fine?
 
 ---
 
 ## 17. Suggested Opening Hook
 
-Most people start evals by grading the final answer.
+In Part 1, we built an eval for the A/B test document skill. We checked whether the document had the right headings, avoided invented metrics, and contained sound statistical reasoning.
 
-That is understandable.
+The skill passed.
 
-It is also incomplete.
+But here is what we did not check: did it save the document in the right folder? Did it read the canonical metrics reference before drafting, or did it generate from memory? Did the post-write validation hook actually fire? If we had routed this to a cheaper model, would the document still pass?
 
-For Claude Code, the final answer can look good while the workflow was wrong. It may have edited the wrong files, used the wrong data source, skipped tests, ignored a hook, called the wrong skill, or delegated work to the wrong subagent.
+The final document is one surface. There are several others. And some of the most dangerous failures look like the document passing while something else went wrong.
 
-So the real question is not only:
+The real question is not only:
 
 > Was the output good?
 
@@ -253,17 +245,19 @@ It is:
 
 ## 19. Summary Table For Part 2
 
-| Evaluation surface | Core question | Example grader | Failure caught |
-|---|---|---|---|
-| Final output | Did it solve the task? | Unit tests, schema checks, rubric | Wrong answer, poor format, missing requirement |
-| Repository state | Did it leave the repo clean? | Git diff, file checks, linting | Wrong files changed, temporary files, broken formatting |
-| Tool use | Did it use tools correctly? | Transcript checks, command logs | Skipped tests, unsafe command, repeated failed command |
-| Trajectory | Did it follow an acceptable path? | Trace review, event assertions | Silent deviation, poor recovery, ungrounded answer |
-| Skill | Did the right skill trigger and help? | Trigger labels, baseline comparison | Skill miss, overtriggering, wrong skill |
-| Agent | Was delegation useful? | Agent trace, output comparison | Wrong subagent, bad integration, context loss |
-| Hook / command | Did workflow controls work? | Simulated actions, hook logs | Hook did not fire, false block, noisy workflow |
-| Cost / latency | Was the workflow efficient enough? | Runtime, turns, token cost | Too slow, too expensive, unnecessary tool use |
-| Human usefulness | Was the result practically useful? | Human review, calibrated rubric | Technically correct but not actionable |
+Each surface is illustrated using the A/B test document skill as the running example. The "A/B test example" column shows what that surface looks like for the skill the reader already knows from Part 1.
+
+| Evaluation surface | Core question | A/B test skill example | Example grader | Failure caught |
+|---|---|---|---|---|
+| Final output | Did it produce the right document? | Document has correct headings, no invented metrics, sound statistical caveats | Schema checks, LLM-as-judge rubric | Wrong content, missing sections, invented metrics |
+| Repository state | Did it save in the right place? | Document saved to `docs/experiments/`, no other files changed | `git diff --name-only`, path check | Saved to wrong folder, extra artefacts created |
+| Tool use | Did it read the canonical reference? | `Read` call to `docs/metrics.md` appears before the `Write` call | Transcript check, tool-use log | Drafted from memory, skipped context file |
+| Hook / command | Did the validation hook fire? | Post-write hook ran, wrote a validation log, no forbidden metric names in log | Hook log check, side-effect assertion | Hook silently failed, no log written |
+| Cost / latency | Does Haiku produce acceptable documents? | Run the same eval set on Haiku; compare pass rate vs Sonnet | Pass rate comparison, cost per run | Quality degrades below threshold on cheaper model |
+| Trajectory | Did it follow an acceptable path? | Read → Draft → Write, no unexpected tool calls | Trace review, event assertions | Drafted before reading context, unexpected tool use |
+| Skill | Did the right skill trigger? | Document-drafting skill triggered, not a generic completion | Trigger labels, invocation log | Wrong skill triggered, skill missed |
+| Agent | Was delegation useful? | If a subagent was used for statistical reasoning, did the main agent integrate correctly? | Agent trace, output comparison | Wrong subagent, bad integration |
+| Human usefulness | Would a statistician sign off on this? | Human reviewer checks reasoning quality, not just structure | Calibrated rubric, human review | Technically passing but not useful in practice |
 
 ---
 
@@ -789,13 +783,13 @@ A result can pass formatting checks and still be useless.
 
 ## 21. Suggested Ending For Part 2
 
-End by saying that the taxonomy is useful, but taxonomies do not ship.
+End by pulling back to the A/B test skill and showing the reader how many surfaces they could now evaluate for it — then pointing to Part 3.
 
-At some point, you need to choose one workflow, collect examples, define success, and build a tiny suite.
+The taxonomy is useful because it stops evals from being one vague question ("was Claude good?") and turns it into nine precise questions, each with its own check. But a taxonomy does not ship.
 
 Possible final paragraph:
 
-> This map is useful because it stops evals from becoming one vague question: "Was Claude good?" Instead, it lets us ask sharper questions. Did it change the right files? Did it run the right checks? Did the right skill trigger? Did the hook block the unsafe action? The next step is to stop mapping and start building, but not by building an eval platform. By building one tiny eval suite for one workflow that matters.
+> We started Part 1 with one eval: did the A/B test document have the right headings and avoid invented metrics? By the end of Part 2, that same skill has nine surfaces we could evaluate. We know which folder the document should land in, which reference file should have been read first, whether the validation hook fired, and whether the document quality holds if we swap to a cheaper model. That is the map. Part 3 is where we build the actual suite — starting small, running it, and turning the first failure into a regression case we will never miss again.
 
 ---
 
@@ -803,11 +797,12 @@ Possible final paragraph:
 
 By the end of Part 2, the reader should understand:
 
-- what different kinds of Claude Code evals exist,
-- why output-only grading is incomplete,
-- how skills, agents, hooks, commands, and repository instructions each create their own evaluation problems,
-- why the right eval depends on the surface you are trying to trust,
-- and why eval design should start from failure modes, not abstract metrics.
+- that the A/B test document eval from Part 1 only covered one surface of the workflow,
+- that the same skill has at least eight other surfaces that could be evaluated,
+- why output-only grading is incomplete — the document can pass while the tool-use trajectory, file state, and hook behaviour all failed silently,
+- how to read the evaluation surfaces table (section 19) and identify which surfaces apply to their own workflow,
+- why the right eval depends on which part of the workflow they are trying to trust,
+- and that Part 3 will take this map and build a working suite from it.
 
 ---
 # 32. Suggested Visuals Across The Series
@@ -1056,10 +1051,51 @@ When discussing subagents, link to the subagents documentation:
 # 35. Final Recommended Narrative Arc
 
 The series should feel like a progression from intuition to practice.
+
 ## Part 2: Give The Reader The Map
 
 The reader should think:
 
-> The answer is only one surface. I also need to evaluate tools, files, skills, agents, hooks, commands, and state.
+> I evaluated the document in Part 1. But the document is only one surface. The same skill has at least eight more — and some of the most dangerous failures would have looked like the document passing.
 
-Part 2 should introduce the evaluation surfaces and failure modes.
+**Narrative beat sequence for Part 2:**
+
+1. Open by recalling the Part 1 eval — the document passed. Then reveal: three other things could have silently failed on that same run.
+2. Introduce the evaluation surfaces taxonomy, using the A/B test document skill as the anchor for each surface before naming the category.
+3. Walk through the summary table (section 19) — for each surface, one sentence on what failure looks like for the A/B test skill specifically.
+4. Go deeper on the three most important surfaces for DS/ML readers: final output (already known), tool-use trajectory (did it read the right reference), and cost/latency (can Haiku do this?).
+5. Close by showing the reader how many surfaces the A/B test skill now has — and pointing to Part 3 to build the actual suite.
+
+**Tone:** more technical than Part 1, but still grounded. Every surface should feel like a natural extension of "what else could go wrong with the skill I already know," not an abstract category.
+
+---
+
+# 36. Primary Teaching Example — Series Thread
+
+## The A/B test document skill as the running example
+
+Part 1 introduced the A/B test document skill as the concrete anchor for the eval concept. It defined the task (draft an experiment design document for a homepage ranking test), the success criteria (hypothesis, primary metric, guardrail metrics, sample size, launch/rollback criteria, no invented metrics, correct headings), and the checks (deterministic structure checks + model-graded reasoning quality). It showed a YAML sketch of the eval.
+
+Part 2 should extend this same skill across the evaluation surfaces, not introduce a new example for each surface. The reader already has the mental model. The teaching move is: "Here is the same skill you already know. Now look at all the other things you could be evaluating beyond the final document."
+
+## Surface-by-surface extension of the A/B test skill
+
+**Final output (section 20.1):** Already covered in Part 1 — the document exists, has the right headings, contains no invented metrics, passes model-graded reasoning checks. Use this as the baseline that every other surface builds on.
+
+**Repository state (section 20.2):** When the skill runs, where does the document get saved? Did it save to the right folder (e.g. `docs/experiments/`)? Did it avoid touching unrelated files? Did it avoid creating extra artefacts (notebooks, intermediate files)? The eval check: `git diff --name-only` should show exactly one new file in the expected path.
+
+**Tool-use (section 20.3):** Did the skill read the right context files before drafting? For example, if the repository has a `docs/metrics.md` defining approved metrics, did Claude read it before writing the document? A tool-use eval checks whether the `Read` call to `metrics.md` appears in the trajectory — if it didn't, the model may have drafted from memory rather than ground truth.
+
+**Hook (section 20.7):** If a post-write hook is configured to validate experiment documents (e.g. checking that no invented metrics appear), did it fire? Did it produce the expected output? A hook eval checks the side-effect: the hook ran, the validation log was written, no forbidden metric names appear in the log.
+
+**Cost and latency (section 20.8):** This is the model-routing question from Part 1. Does the document quality hold if Haiku drafts it instead of Sonnet? Run the same eval suite on both model configurations and compare pass rates. This is the evidence for "can I use a cheaper model here."
+
+## What this achieves for the reader
+
+By walking one skill across five surfaces, the reader finishes Part 2 with a concrete answer to the question: "What would I actually evaluate for this workflow I already know?" The taxonomy becomes a tool, not a list.
+
+The Part 2 ending (section 21) already states: "At some point, you need to choose one workflow." Extending the A/B test skill throughout the post is the demonstration of that claim rather than the instruction to do it.
+
+## Relationship to existing worked examples in Part 3
+
+The existing Part 3 worked examples (analytics agent, section 30; writing-format agent, section 31) are kept. They serve a different purpose: showing the method generalises beyond document-generation skills. They are not replacing the A/B test thread — they extend it. Part 3 should complete the A/B test eval suite first, then point to the analytics agent as the "now try this on something more complex" beat.
