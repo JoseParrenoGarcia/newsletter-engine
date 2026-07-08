@@ -95,6 +95,22 @@
 
 ---
 
+<!-- slug: claude-code-evals-part-1-why-it-worked-once-is-not-evidence -->
+<a name="claude-code-evals-part-1-why-it-worked-once-is-not-evidence"></a>
+### Claude Code Evals — Part 1: Why "It Worked Once" Is Not Evidence
+
+| Field | Value |
+|-------|-------|
+| **Type** | series / series-genai |
+| **Series** | Claude Code Evals — Part 1 |
+| **Audience** | Engineers, technical managers, and technical PMs building with Claude Code or evaluating agents who have not yet thought seriously about evals |
+| **Topics** | `claude-code` `evals` `reliability` `probabilistic` `agent-testing` `iteration` |
+| **Path** | `posts/claude-code-evals-part-1-why-it-worked-once-is-not-evidence/long_draft.md` |
+
+**Summary:** Claude Code is not answering questions — it is acting inside an environment, changing files, running commands, and firing hooks. A single impressive run is not evidence of reliability because LLMs are probabilistic: the same prompt produces different outputs across runs, and different outputs across models. This post installs the mental model that is missing before anyone thinks seriously about evals, using the unit-test analogy as its backbone: software engineers test by discipline, not because they believe their code is broken, yet that same discipline disappears the moment they start building agents. It works through three concrete motivators — the iteration problem (how do you know a revised skill improved and not just changed?), the cost management angle (can Haiku replace Sonnet here — a question you cannot answer without data), and the failure modes that surprise teams who skipped this step. The post closes by demystifying what an eval actually is and pointing forward to Parts 2 and 3 for the map and the method.
+
+---
+
 <!-- slug: claude-code-thinking-planning-goal-mode -->
 <a name="claude-code-thinking-planning-goal-mode"></a>
 ### You Don't Need Ultrathink. You Need a Plan.
