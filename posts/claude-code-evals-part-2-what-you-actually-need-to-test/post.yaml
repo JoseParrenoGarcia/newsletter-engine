@@ -1,61 +1,76 @@
 # ── Identity ──────────────────────────────────────────────────────────
-slug: ""                    # matches the posts/<slug>/ folder name
-working_title: ""
+slug: "claude-code-evals-part-2-what-you-actually-need-to-test"
+working_title: "What you actually need to test — Claude Code evals, Part 2"
 
 # ── Post classification ────────────────────────────────────────────────
-structural_type: ""         # standalone | short_technical | series
-content_type: ""            # management | paper-explainer | book-review | series-genai
-series_name: ""             # only if structural_type: series (leave blank otherwise)
-series_position: null       # integer (1, 2, 3 …), only if structural_type: series
+structural_type: "series"
+content_type: "series-genai"
+series_name: "Claude Code Evals"
+series_position: 2
 
 # ── Core content ──────────────────────────────────────────────────────
-thesis: ""
-target_audience: ""
-target_reading_time_minutes: null  # e.g. 10, 15, 20 — set during brainstorm; drives word count (×250)
-topics_to_cover: []
-topics_to_exclude: []
+thesis: "The output check is necessary but not sufficient. A Claude Code workflow exposes nine distinct evaluation surfaces — final output, repository state, tool use, trajectory, skills, agents, hooks, cost/latency, and human usefulness — and testing only the first misses the majority of real failure modes."
+target_audience: "Engineers and technical leads using Claude Code in production workflows; anyone building or evaluating Claude Code skills, subagents, or hooks"
+target_reading_time_minutes: 20
+topics_to_cover:
+  - Nine evaluation surfaces for Claude Code workflows
+  - Final output evals (necessary but not sufficient)
+  - Repository state evals (file path, side effects)
+  - Tool-use evals (transcript assertions, process vs product)
+  - Trajectory evals (path quality, efficiency)
+  - Skill evals — three forms: trigger, negative trigger, execution
+  - Agent/subagent delegation evals (wrong delegation, bad integration)
+  - Hook and command evals (control-plane vs output-quality)
+  - Cost and latency evals (model routing with evidence)
+  - Human usefulness evals (plausible-but-wrong failure mode)
+  - A/B test document skill as running example throughout
+topics_to_exclude:
+  - How to build or run an eval suite (that is Part 3)
+  - Deep implementation details of any specific eval framework
 open_research_questions: []
 
 # ── Brainstorm output ─────────────────────────────────────────────────
-brainstorm_summary: ""
+brainstorm_summary: "Part 2 maps the nine evaluation surfaces exposed by a Claude Code workflow. The running example (A/B test document skill from Part 1) is extended surface by surface to show what each eval catches that the others cannot. Key pedagogical goal: make the reader feel the gap between 'output looks right' and 'workflow is trustworthy'."
 
 # ── Style references ──────────────────────────────────────────────────
-reference_posts: []
+reference_posts:
+  - posts/claude-code-evals-part-1-why-it-worked-once-is-not-evidence/long_draft.md
 style_guides:
   - style_guide/shared/voice.md
   - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
 
 # ── Artefacts ─────────────────────────────────────────────────────────
 artefacts:
   notes: notes.md
   research_brief: null
-  outline: null
-  long_draft: null
-  long_draft_backup: null  # populated by /revise
-  seo_brief: null
-  review_report: null
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_pre-revise.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
   promotion_posts: null
 
 # ── Pipeline stages ───────────────────────────────────────────────────
 stages:
   brainstorm:
-    status: pending         # pending | complete
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-08"
   research:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-08"
   draft:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-08"
   seo:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-08"
   revise:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-08"
   review:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-08"
   promote:
     status: pending
     completed_at: null
