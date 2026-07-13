@@ -80,6 +80,7 @@ Write the full article section by section, following `outline.md` exactly.
 
 ### Voice and style guardrails
 Apply these throughout — they are not optional:
+- **Incremental writing (always):** Never compose the full `long_draft.md` in one response. Write the file section by section — use `Write` for the frontmatter/H1/subtitle/preview section first, then one `Edit` (append) call per subsequent H2 section. Never hold more than one section's worth of prose in a single response — composing the entire draft in one shot risks exceeding the response output cap and losing the write entirely.
 - Use the extracted style anchors from Step 1 as private calibration. Every section should reflect Jose's rhythm, not a generic AI register.
 - Vary sentence length. Short sentences land a point. Longer ones build context or nuance. Mix them.
 - No generic AI filler — refer to `style_guide/shared/anti_patterns.md` and actively avoid every pattern listed there.

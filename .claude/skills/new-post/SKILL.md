@@ -149,9 +149,9 @@ For all other options, run the selected stages using the stage-skip logic and de
 When the full pipeline is requested (Mode A option 1, or Mode B option 1), run each stage in sequence:
 
 1. `/research posts/<slug>/`
-2. `/draft posts/<slug>/` — in pipeline mode (no pause after outline; proceed directly to writing)
+2. `/draft posts/<slug>/` — in pipeline mode (no pause after outline; proceed directly to writing). When spawning the `/draft` subagent, explicitly instruct it to write `long_draft.md` incrementally (`Write` for the first section, then `Edit`-append per subsequent section) rather than composing the full draft in one response — required regardless of target word count, per `.claude/rules/output-limits.md`.
 3. `/seo posts/<slug>/`
-4. `/revise posts/<slug>/`
+4. `/revise posts/<slug>/` — when spawning the `/revise` subagent, explicitly instruct it to apply edits incrementally (one `Edit` call per change, not batched) rather than reproducing large stretches of revised prose in a single response.
 5. Review loop — run up to 3 times:
 
    **Before each review run:** set `stages.review.status: pending` in `post.yaml` (bypasses the stage guard on re-runs).

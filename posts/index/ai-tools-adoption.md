@@ -48,3 +48,18 @@
 **Summary:** OpenAI and Anthropic have both built formal enterprise AI deployment arms — OpenAI via a majority-owned Deployment Company with $4B+ and ~150 Forward Deployed Engineers, Anthropic via a PE-backed services company with Blackstone, Goldman Sachs, and Hellman & Friedman. The post argues the "labs becoming consultancies" headline misframes a more precise story: the two labs are running different bets (OpenAI vertically ambitious, Anthropic ecosystem-led), targeting large enterprise and regulated industries — not individual DS teams or mid-market organisations. It traces why the consulting layer always returns across every major enterprise technology wave (ERP, RPA, cloud), grounds the economics in Salesforce, ServiceNow, and Palantir financials, and closes with three concrete actions for DS leaders: a gap analysis against FDE job descriptions, a productisation horizon question for current workflows, and a half-day team session to document AI deployment ownership before someone else defines it for you.
 
 ---
+
+<!-- slug: sonnet-5-one-benchmark-win -->
+<a name="sonnet-5-one-benchmark-win"></a>
+### Sonnet 5's cost story only holds up at matched effort tiers
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Tech-aware readers with a pinch of technicality — engineers, PMs, founders, and technical managers who make or influence AI tooling decisions. |
+| **Topics** | `model-selection` `cost-optimisation` |
+| **Path** | `posts/sonnet-5-one-benchmark-win/long_draft.md` |
+
+**Summary:** Anthropic's Sonnet 5 launch chart and the online backlash that followed both measure the model's cost the wrong way — both skip the same variable: effort level. The post walks through the mechanical changes behind the launch (a five-level effort dial, a new tokenizer that inflates token counts ~30-40% for identical text, and a mid-evaluation agent scaffold swap) before showing that the one comparison controlling for effort level — Sonnet 4.6 medium versus Sonnet 5 medium — is a real, narrow cost win. Everything louder than that, from Anthropic's own headline benchmark deltas to the viral "garbage bin" cost complaint to Zvi Mowshowitz's Opus/Fable comparison to CodeRabbit's coding construction-versus-review tradeoff, turns out to be comparing mismatched effort levels or mismatched model tiers once you check. It closes with a concrete replication procedure — 15-20 tasks, 3+ trials, cost-per-successful-task rather than cost-per-attempt — so readers can run the same controlled test on their own workload instead of trusting a launch chart or a viral tweet.
+
+---
