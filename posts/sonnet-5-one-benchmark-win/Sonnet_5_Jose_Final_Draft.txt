@@ -1,0 +1,528 @@
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Jose Parreño Garcia <joparga3@gmail.com>
+
+[TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+1 mensaje
+Jose Parreño Garcia from Senior Data Science Lead
+<joseparreogarcia@substack.com>
+Para: joparga3@gmail.com
+
+15 de julio de 2026 a las
+14:57
+
+View in browser
+
+The Senior Data Science Lead
+newsletter
+Hi! It’s Jose from Senior Data Science Lead newsletter, where I write about
+senior data science leadership, sharing hard-earned lessons from building
+teams, systems, and real-world machine learning.
+Because you are a paid subscriber, you are directly supporting this work —
+and you get full access to the practical tools built alongside the writing:
+The full Data Storytelling course, focused on turning analysis into
+insights that land with executives. Because today, anyone can build a
+chart with AI, but very few people can build the right chart.
+
+📊 Master Data Storytelling
+JOSE PARREÑO GARCIA ·
+
+Read full story
+
+NOVEMBER 27, 2025
+
+50+ Notion templates for hiring, onboarding, mentoring, and planning
+built for Data and Tech Leads. As a paid subscriber, you get 50% off
+with code PAIDSUBS-03PL.
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+1/15
+
+🧳 50+ Data Science Templates
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+JOSE PARREÑO GARCIA ·
+
+Read full story
+
+APRIL 8, 2025
+
+And as always, thank you for supporting the newsletter — your support is
+what keeps it independent, practical, and focused on real-world impact.
+
+Sonnet 5 is only good at one thing
+(beating Sonnet 4.6)
+
+An article to dissect how much can you trust Anthropic's press
+release vs the community backlash.
+JOSE PARREÑO GARCIA
+JUL 15 ∙ PAID ∙ DRAFT
+
+READ IN APP
+On the 30th of June, Anthropic released Sonnet 5 and what it should have
+been a launch to get people excited, seems to have transformed in quite the
+opposite. When I myself read that “Sonnet 5 narrows the gap: its
+performance is close to that of Opus 4.8, but at lower prices” directly from
+Anthropic’s release blog, I thought that at least Anthropic had started to tackle
+what I believe is the future of LLMs: smaller and cheaper but capable enough
+models.
+But no, the community did not buy Anthropic’s release. The amount of
+backlash I read in Reddit, Substack and LinkedIn was as if Sonnet 5 was
+pure garbage. Well I don’t buy that narrative. Now, I also totally disagree with
+Anthropic’s sales-pitch putting Sonnet 5 at Opus 4.8 levels.
+So, where does this leave us? Is Sonnet 5 a good or a bad model? Or should
+the question be, is Sonnet 5 a good or a bad model for certain tasks?
+That’s what I aim to answer in this post. We will cover the actual technical
+changes implemented in Sonnet 5, dissect Anthropic’s launch chart claims
+and do a fair comparison at the backlash it received.
+
+Subscribed
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+2/15
+
+15/07/2026, 14:58
+
+What will we cover in this post?
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+What is Claude Sonnet 5’s agentic upgrade? What actually changed
+in the model versus Sonnet 4.6: a new top effort tier, thinking that's now
+on by default, and the tokenizer swap.
+What does Anthropic claim about Sonnet 5’s benchmark gains?
+The launch chart, the official deltas, and what “most agentic Sonnet”
+actually means in numbers.
+Is Sonnet 5 actually cheaper at matched intelligence tiers? The one
+comparison that survives scrutiny: Sonnet 4.6 medium versus Sonnet 5
+medium.
+Where does Sonnet 5 down? The online backlash and the behavioural
+complaints,.
+Should you trust a launch chart or a viral tweet? A short closing
+thought on what to actually do with all of this.
+Let’s get started!
+
+What is Claude Sonnet 5’s agentic
+upgrade?
+Sonnet 5’s agentic upgrade comes down to 3 mechanical changes:
+1. A new top effort tier
+2. Thinking that turns itself on by default
+3. A new tokenizer
+
+What effort levels does Sonnet 5 support that Sonnet
+4.6 doesn’t?
+Let’s start with effort levels, because nothing else in this post makes sense
+without them.
+If you are not familiar about what the effort parameter is, then in a
+summarised way it is a dial for how long the model is allowed to think and act
+before it has to commit to an answer (more effort means more reasoning
+tokens, more tool calls, more self-checking passes, and a slower, more
+expensive response). Low effort is a model trying to get it right on the first
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+3/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+attempt. Max effort is a model given permission to inspect, act, test, and
+revise as many times as it judges useful. If you are interested in knowing
+more about thinking levels, check my detailed post about it.
+
+You don't need thinking levels in Claude Code.
+You need Planning and Goal modes.
+JOSE PARREÑO GARCIA ·
+
+Read full story
+
+JUL 5
+
+Sonnet 4.6 already had this dial — low, medium, high, and max — so the
+concept isn't new. What's new is a level Sonnet 4.6 never had at all: xhigh,
+sitting between high and max, built specifically for long-horizon coding and
+agentic work that runs for extended stretches. Anthropic's own effort
+documentation lists xhigh as available on Sonnet 5 but not on Sonnet 4.6
+(so it’s a genuine new tier).
+So, a small extra effort level we can play with in Sonnet 5 to tune our
+workflows.
+
+What is adaptive thinking in Sonnet 5?
+I think this is genuine flip. On Sonnet 4.6, a request with no thinking field
+simply ran without thinking, you literally had to opt in. On Sonnet 5, that same
+request now thinks by default; you have to explicitly pass thinking:
+{type: "disabled"} to turn it off. Manual extended thinking, where you
+handed the model a fixed budget_tokens and it thought exactly that much,
+is gone entirely on Sonnet 5 — it still worked (deprecated but functional) on
+Sonnet 4.6, and now returns an error. The model decides how much to think
+for itself; you no longer get to hand it a number.
+Some people might see this loss of control as something not great, but if we
+do believe that agents will get smarter in the future, then routing thinking
+efforts should an LLM problem to handle for most tasks.
+
+What does it mean for Sonnet 5 to have a new
+tokenizer?
+Sonnet 5 uses a new tokenizer that maps the same text to more tokens than
+before — Anthropic’s own estimate is a range of roughly 1.0 to 1.35 times,
+with about 30% as a useful planning figure. Simon Willison ran his own tokencounter tests and got sharper numbers: about 1.4x more tokens for English
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+4/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+text, 1.33x for Spanish, 1.28x for Python code, and almost no change for
+Simplified Mandarin.
+
+Screenshot taken from Simon Willison blog post
+
+At face value, it seems this is worse comparing Sonnet 4.6 vs Sonnet 5. If we
+just look at token counts, knowing that the pricing between both versions is
+the same, then a request just got roughly 40% more expensive.
+The tokenizer change also eats into the advertised context window. Sonnet
+5’s nominal context is still 1 million tokens, same as Sonnet 4.6. But if
+identical source text now consumes roughly 1.3x as many tokens, then a
+document that used to fill 769,000 old-token-equivalents of that same 1million-token window now fills the whole thing. The window is the same size
+on paper. The amount of your actual document that fits inside it went down.
+Again, this seems to be something worse.
+These are the main changes as per Anthropic’s release. I assume more
+would exist in the internal model training mechanics, but I focused on the
+official documentation. Now, none of this means much unless we look at the
+metric benchmarks.
+
+What does Anthropic claim about
+Sonnet 5’s benchmark gains?
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+5/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Anthropic positions Sonnet 5 as its most agentic Sonnet, built for advanced
+coding, long-running agents, and professional work.
+
+Do Sonnet 5 scores look strong against Sonnet 4.6?
+Yes, they do look genuinely strong. Check the launch chart below.
+
+On Anthropic’s own system-card evaluation:
+Sonnet 5 rises from 58.1% to 63.2% on SWE-bench Pro — a test of
+fixing real, harder-than-usual GitHub issues across multiple files. It rises
+from 67.0% to 80.4%
+Terminal-Bench 2.1, a command-line execution benchmark.
+FrontierCode, which grades real pull-request implementation against
+held-out tests, jumps from 15.1% to 38.8% — more than double.
+AutomationBench, an enterprise workflow-automation test, goes from
+5.3% to 13.5%, also more than double in relative terms even though the
+absolute numbers stay low.
+Those 4 are worth highlighting because they share a patternnot really:
+agentic tasks that reward a model for persisting, checking its own work, and
+reaching a working end state rather than answering correctly on the first
+pass. That’s consistent with everything the mechanics section just
+established (more effort, more turns, more self-verification).
+
+Can we trust Sonnet 5 scores benchmark scores
+against Sonnet 4.6?
+⚠️ A caveat before trusting these numbers at face value
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+6/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Anthropic's own methodology appendix discloses that the Terminal-Bench 2.1
+comparison ran Sonnet 5 at xhigh effort against Sonnet 4.6 at high effort.
+Which means the comparison is not the same tier.
+Given that Sonnet 5 medium is disclosed as comparable to Sonnet 4.6 high,
+and xhigh is a tier Sonnet 4.6 never had access to at all, Anthropic's single
+biggest headline gain on this chart is built on an effort-level mismatch, not a
+fair fight between 2 models running at the same setting.
+The appendix also doesn't state the effort settings used for Sonnet 4.6 on the
+other headline benchmarks at all, but it's reasonable to assume the same
+pattern may hold there too. Likewise, the effort levels for Opus 4.8 isn’t
+mentioned either, but I highly doubt it’s on xhigh with such small differences
+compared to Sonnet 5.
+What the chart doesn’t tell you at a glance is what any of those gains cost per
+task, or whether the effort level that produced 80.4% on Terminal-Bench is
+the effort level you’d actually run in production. Those are the 2 questions that
+determine whether “most agentic Sonnet” translates into “the model you
+should be paying for.” The first place to check is the one comparison built
+specifically to answer it.
+
+Is Sonnet 5 actually cheaper at
+matched intelligence tiers?
+
+Sonnet 5 is better than 4.6 by a substantial amount
+(on Anthropic benchmarks)
+We already saw the benchmarks of Sonnet 5 at xhigh vs Sonnet 4.6 at
+high above. Let’s look at the high only numbers though. This will make
+comparisons fairer.
+What you can see is the following:
+Pass rates of Sonnet 5 bump to 80% vs Sonnet 4.6 which are around
+75%.
+And they do so at a lower cost per task. Around $7 vs $25.
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+7/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Independent benchmarks contradict that Sonnet 5 is
+cheaper than Sonnet 4.6
+Artificial Analysis found that Sonnet 5 costs 2.29 per task on their Intelligence
+Index, which is roughly ~2x the price of Sonnet 4.6.
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+8/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+It is true that ArtificialAnalysis.ai is comparing max thinking levels, where
+Sonnet 5 used roughly 40% more output tokens and around three times as
+many agentic turns as Sonnet 4.6 based on their benchmarks. This
+contradicts the cost per task chart from Anthropic, because at max levels,
+Anthropic claims that Sonnet 5 is cheaper than Sonnet 4.6.
+So, who to trust? Probably only your own benchmarks. I guess I am in the
+middle court. I rarely use max levels and try to run well spec’d tasks with
+medium. Therefore, I am certain that Sonnet 5 will be better than Sonnet 4.6
+given the price difference reported by Anthropic, but I wouldn’t take the cost
+savings per task at face value.
+
+Sonnet 5 is more precise at catching bugs than
+Sonnet 4.6
+CodeRabbit.ai benchmarks shows that Sonnet 5 is better as a coding
+assistant. It does catch less bugs than 4.6, but it is more precise. It also adds
+less noise to PR comments.
+
+As they mention: “In plain terms: switch now if you write or ship real software
+and want a model that tests its own work and sticks with a hard problem until
+it's solved. Run it at medium effort and you get most of the upside without the
+top-tier price.”
+
+Sonnet 5 does get close to Opus 4.8
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+9/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+On max settings, it is definitely close. Both Anthropic’s and Artificialanalysis.ai
+charts show a really narrow gap in the cost per task and in pass rates (or
+intelligence indexes).
+The only thing I would highlight again is that max settings tend to be pretty
+expensive regardless of the model. So, if we look at other settings, you can
+see how, despite a cheaper price per million tokens of Sonnet 5, Opus 4.8
+matches cost and intelligence at a low level. But, at equal high settings,
+Sonnet 5 does a decent job.
+
+However, the claim must be repeated. It gets close. But the cost per task is
+pretty much the same really. So, don’t blindly take the banner news without
+checking what really matter: the money you are spending for what you are
+getting back.
+
+Where does Sonnet 5 break?
+When I looked at the numbers above, I was surprised by the amount of
+backlash the model had. But the fact is, that the users are the REAL TEST.
+You can measure everything on benchmarks, but benchmarks can be
+“gamified” or “overfitted”. Also, benchmarks dont fully capture the whole user
+base needs.
+And, unfortunately for Anthropic, the community did not like it. I recommend
+Katie Parrott’s blog post on this same topic, and would like to highlight
+comments from X that she shares.
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+10/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+It is clear that Anthropic probably got very wrong putting Sonnet 5 as a
+comparison to Opus 4.8. In my opinion, had they simply made the Sonnet 4.6
+comparison, the community take would have been more favourable.
+One thing is comparing “hey, for the same accuracy, I get a much cheaper
+cost per task”. A very different one is saying that Sonnet 5 max is similar to
+Opus 4.8 max… because then the community tries it, and it goes badly.
+Bleep.co also talks about how users feel that the new security harnesses are
+hurting Sonnet 5 over previous versions: “Longtime Sonnet users piled on
+too. Some said older versions, especially Sonnet 4.6, felt faster, smarter, or
+less censored on everyday prompts. Others complained about higher refusal
+rates, slower perceived speed, and what they called AI shrinkflation, the
+sense that each new release delivers less real improvement than the one
+before.”
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+11/15
+
+15/07/2026, 14:58
+
+Should you trust a launch chart or a
+viral tweet?
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Neither, on its own.
+On one side, a launch chart tells you what a vendor’s benchmark suite
+showed at the effort level that produced the biggest number.
+On the other, a viral tweet tells you what one person’s workload felt like at
+whatever effort level they happened to be running, usually without saying
+which one.
+Both are real data points but neither is a substitute for measuring your own
+workload at your own effort level.
+Run the same test on your own tasks, and make it a real procedure rather
+than a vibe check. Pick 15-20 representative tasks from your actual workload
+— not a benchmark suite, your workload.
+These could be coding tasks or writing tasks. Some can be measured with
+accuracy numbers, others you can measure with a “liked” or “didnt like”. If
+Sonnet 5 at the matched tier beats your current cost-per-success by a
+meaningful margin, that’s your switch signal. If you have to jump to high effort
+or above to see a real accuracy gain, price that jump in cost-per-success
+terms before assuming it’s worth it — this post’s own evidence says it usually
+isn’t.
+The answer might agree with the launch chart. It might agree with the
+backlash. It will almost certainly disagree with both a little, because your
+workload isn’t Anthropic’s benchmark suite and it isn’t a stranger’s tweet
+either.
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+12/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Now, I want to hear from you
+I’m genuinely curious about your opinions if you are heavy Claude user and
+have tried Sonnet 5.
+Which effort level are you actually running in production — and have you
+checked whether it’s the one your cost comparisons assumed?
+Have you measured cost-per-successful-task on your own workload, or
+only cost-per-attempt?
+Where have you caught a benchmark claim, positive or negative, quietly
+comparing two different effort levels or model tiers?
+Drop a comment or reply — I read everything.
+
+Further reading
+If you are interested in more content, here is an article capturing all my
+written blogs!
+
+All my articles, one convenient place
+JOSE PARREÑO GARCIA ·
+
+Read full story
+
+OCTOBER 15, 2024
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+13/15
+
+15/07/2026, 14:58
+
+References
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Introducing Claude Sonnet 5 (Anthropic) — Anthropic’s own launch
+announcement, source of the “narrows the gap... close to that of Opus
+4.8” framing quoted in the opening.
+What’s new in Claude Sonnet 5 (Simon Willison’s Weblog) —
+independent verification of the tokenizer change and confirmation that
+manual sampling controls were removed.
+Effort (Claude API docs) — Anthropic’s official documentation on effort
+levels, source of the confirmed “Sonnet 5 medium is comparable to
+Sonnet 4.6 at high effort” mapping.
+Claude Sonnet 5: strong agentic performance at a higher cost per task
+(Artificial Analysis) — the live, independent source for the $2.29-per-task
+figure and the token/turn consumption behind it.
+Claude Sonnet 5 model page and comparison data (Artificial Analysis)
+— live pricing and Intelligence Index confirmation for Sonnet 5.
+CursorBench (Cursor) — Cursor’s production coding-agent benchmark
+methodology, confirming 3.1 as the current public version.
+Claude Sonnet 5 Is Not Frontier but Has Its Uses (Don’t Worry About the
+Vase / Zvi Mowshowitz) — a named, non-anecdotal critical take on
+Sonnet 5’s positioning against Opus 4.8 and Fable 5.
+“Ask HN: Is it just me or does Claude / Sonnet 5 sound condescending
+recently?” (Hacker News) — a single anecdotal thread on tone
+complaints, cited as a live but low-confidence data point.
+Claude Sonnet 5 review: Should you switch? (CodeRabbit) —
+independent practitioner data on the construction-versus-review
+precision/recall tradeoff.
+Bleep.co - Claude Sonnet 5 called a useless flop by fans despite nearOpus benchmarks
+Katie Parrott’s blog post - Vibe Check: Sonnet 5—A Model Pitched for
+Everyone Impresses No One
+What's new in Claude Sonnet 5
+
+Thanks again for supporting the Senior Data Science Lead newsletter.
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+14/15
+
+15/07/2026, 14:58
+
+Gmail - [TEST ccb - Paid] Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+Your support makes it possible for me to keep writing openly, while also
+investing time in the more structured, hands-on work — courses, templates,
+and tools — that help people apply these ideas in practice. You can find them
+here.
+
+🧳 50+ Data Science Templates
+JOSE PARREÑO GARCIA ·
+
+Read full story
+
+APRIL 8, 2025
+
+📊 Master Data Storytelling
+JOSE PARREÑO GARCIA ·
+
+Read full story
+
+NOVEMBER 27, 2025
+
+This newsletter exists in its current form because of readers like you. I am
+genuinely grateful for that.
+Thank you.
+
+LIKE
+
+COMMENT
+
+RESTACK
+
+© 2026 Jose Parreño Garcia
+PMB 72296, San Francisco, CA 94104
+
+548 Market Street
+
+Unsubscribe
+
+https://mail.google.com/mail/u/0/?ik=9071f4bc83&view=pt&search=all&permthid=thread-f:1870785704982534345&simpl=msg-f:1870785704982534345
+
+15/15
+
+

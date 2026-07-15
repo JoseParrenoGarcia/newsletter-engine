@@ -6,14 +6,15 @@ The universal rules in `voice.md` and `templates/post_template.md` apply to this
 
 ---
 
-## Opening — thesis or contrarian reframe
+## Opening — thesis, contrarian reframe, or grounded personal moment
 
-Unlike management posts, series posts open with a position, not a story. The opening sentence should be the kind of line a reader might quote.
+Series posts open with a position or a brief personal moment — both are valid, chosen by fit. Unlike management posts, the intellectual argument still has to be the hook; a personal anecdote here is a bridge into that argument, not a story for its own sake. The opening should still land on a line a reader might quote.
 
 - **Thesis declaration:** "Your job isn't to build models; it's to solve problems."
 - **Contrarian reframe:** "Prompting is not building AI systems." / "Fine-tuning is not a magic fix."
+- **Grounded personal moment:** briefly narrate a real reaction or experience — reading a claim, hitting a problem, noticing a contradiction — that leads directly into the thesis. Keep it tight: a paragraph or two, not a full scene. This works well when the goal is to signal "I went through the same confusion/reaction the reader is having" before making the argument.
 
-**What to avoid:** Opening with personal anecdote. The intellectual argument is the hook.
+**What to avoid:** An anecdote that doesn't connect to the argument within 1-2 paragraphs, or that becomes the emotional focus rather than a bridge into the thesis.
 
 For **Part 1 of a series:** include a "What we will cover in this series" preview section (3–5 labelled bullets from `post_template.md`) immediately after the opening.
 

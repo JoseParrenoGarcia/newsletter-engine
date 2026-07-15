@@ -48,3 +48,18 @@
 **Summary:** OpenAI and Anthropic have both built formal enterprise AI deployment arms — OpenAI via a majority-owned Deployment Company with $4B+ and ~150 Forward Deployed Engineers, Anthropic via a PE-backed services company with Blackstone, Goldman Sachs, and Hellman & Friedman. The post argues the "labs becoming consultancies" headline misframes a more precise story: the two labs are running different bets (OpenAI vertically ambitious, Anthropic ecosystem-led), targeting large enterprise and regulated industries — not individual DS teams or mid-market organisations. It traces why the consulting layer always returns across every major enterprise technology wave (ERP, RPA, cloud), grounds the economics in Salesforce, ServiceNow, and Palantir financials, and closes with three concrete actions for DS leaders: a gap analysis against FDE job descriptions, a productisation horizon question for current workflows, and a half-day team session to document AI deployment ownership before someone else defines it for you.
 
 ---
+
+<!-- slug: sonnet-5-one-benchmark-win -->
+<a name="sonnet-5-one-benchmark-win"></a>
+### Sonnet 5 is only good at one thing (beating Sonnet 4.6)
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Tech-aware readers with a pinch of technicality — engineers, PMs, founders, and technical managers who make or influence AI tooling decisions. |
+| **Topics** | `model-selection` `cost-optimisation` |
+| **Path** | `posts/sonnet-5-one-benchmark-win/long_draft.md` |
+
+**Summary:** Anthropic's Sonnet 5 launch blog claims the model narrows the gap with Opus 4.8 at lower prices; the online community reacted as though Sonnet 5 were a flop. The post argues neither side has it right. It walks through what actually changed in the model versus Sonnet 4.6 (a new xhigh effort tier, adaptive thinking on by default, a new tokenizer that inflates token counts by roughly 30-40%), then scrutinizes Anthropic's own launch chart — finding that its single biggest benchmark gain (Terminal-Bench 2.1) compares Sonnet 5 at xhigh effort against Sonnet 4.6 at high effort, an effort-level mismatch baked into the headline number. It contrasts Anthropic's high-effort cost claims against Artificial Analysis's independent cost data (which shows the opposite direction at max effort) and CodeRabbit's coding construction-versus-review tradeoff (more precise, fewer bugs caught), before turning to the community backlash — arguing the Opus 4.8 comparison, not the Sonnet 4.6 upgrade itself, is what triggered much of the negative reaction. Closes with a call to test cost-per-successful-task on your own workload rather than trusting either a launch chart or a viral tweet.
+
+---

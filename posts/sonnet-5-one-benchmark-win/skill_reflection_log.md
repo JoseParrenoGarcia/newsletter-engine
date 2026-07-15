@@ -1,0 +1,8 @@
+# Skill Reflection Log: sonnet-5-one-benchmark-win
+
+## 2026-07-13 — /draft
+
+- **Stuck / had to adapt:** The first `/draft` subagent run hit the 8192-token output cap partway through composing the full ~5000-word `long_draft.md` in one response. `outline.md` had been written successfully (it's shorter), but the long draft was never saved — `long_draft.md` was left as the placeholder. Had to resume the same agent with explicit instructions to write the draft incrementally (Write for the first section, then repeated small Edit/append calls for each subsequent section) rather than composing the entire document in a single response before writing it.
+- **Skill instruction gap:** `.claude/skills/draft/SKILL.md` (Step 4) doesn't warn that a ~5000-word draft, when composed as one large tool-call payload plus surrounding narration, can exceed a subagent's per-response output limit. The skill should recommend incremental section-by-section writes (Write once, then Edit-append per section) as the default for any `target_reading_time_minutes` ≥ ~15, rather than leaving it implicit.
+- **Assumption that turned out wrong:** Assumed a single `Agent` call composing the full draft in one shot would complete normally, based on shorter drafts working fine in the past. This post's higher word-count target (20 min / 5000 words) plus the amount of source material to weave in pushed the response past the cap. Worth flagging word count as a signal for when to switch to incremental writing.
+- **Workaround applied:** Resumed the same subagent via `SendMessage` (rather than spawning a fresh one) since it already had full context of the outline and inputs — this preserved continuity and avoided re-reading all source files a second time.

@@ -181,3 +181,4 @@ Behavioural and maintenance rules live in `.claude/rules/` and are loaded automa
 
 - `.claude/rules/core-rules.md` — content, workflow, and writing guardrails
 - `.claude/rules/maintenance-rules.md` — what to update when significant changes happen
+- `.claude/rules/output-limits.md` — guardrail against losing long-form writes to the per-response output token cap

@@ -89,6 +89,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - Do not remove content — shorten sentences by cutting redundant clauses, not ideas
 > - Preserve Jose's voice — no generic AI filler phrases, no "it's important to note" or "in conclusion"
 > - One change at a time — apply each planned edit exactly as described; do not improvise
+> - **Apply edits incrementally** — make each planned edit as a separate `Edit` call rather than batching multiple section rewrites into one turn's output. If a single response would need to reproduce large stretches of revised prose, split it across multiple tool calls instead.
 > - **Heading capitalisation** — all H1, H2, and H3 headings must use sentence case (capitalise only the first word and proper nouns). If any existing heading uses title case, correct it as part of the revision pass.
 > - **TOC sync** — after applying any H2 heading change, find the `## What will we cover in this post?` section (this heading must be exact — correct it if it differs). For each changed H2, locate the bullet whose `**bold phrase**` corresponds to that section and update the bold phrase to match the new H2 text exactly. If a bullet has no clear match, leave it unchanged and note it in the revision plan as skipped. **After all H2 changes are applied, do a full ToC sync pass: read every bold phrase in the ToC section and verify it matches its corresponding H2 exactly. Flag any remaining mismatch in the revision plan — do not silently leave stale ToC entries.**
 >

@@ -1,0 +1,79 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "sonnet-5-one-benchmark-win"                    # matches the posts/<slug>/ folder name
+working_title: "Sonnet 5 is only good at one thing (beating Sonnet 4.6)"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: standalone         # standalone | short_technical | series
+content_type: series-genai            # management | paper-explainer | book-review | series-genai
+series_name: ""             # only if structural_type: series (leave blank otherwise)
+series_position: null       # integer (1, 2, 3 …), only if structural_type: series
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Anthropic's launch chart claims Sonnet 5 narrows the gap with Opus 4.8 at lower prices; the online community reacted as if Sonnet 5 were garbage. Neither is right. Sonnet 5's real, defensible improvement over Sonnet 4.6 is genuine but narrower than Anthropic's framing suggests — and much of the backlash (especially the Opus 4.8 comparison and unverified behavioral complaints) doesn't hold up either once effort levels and settings are accounted for."
+target_audience: "Tech-aware readers with a pinch of technicality — engineers, PMs, founders, and technical managers who make or influence AI tooling decisions. Same audience as the open-source-models-good-enough post."
+target_reading_time_minutes: 20
+topics_to_cover:
+  - "What Sonnet 5 actually is — the agentic upgrade and technical changes vs 4.6: effort levels (low/medium/high/xhigh/max), why effort labels aren't comparable across generations, the tokenizer change, agent scaffold swaps (mini-SWE-agent vs Terminus-2)"
+  - "What Anthropic claims — the launch chart, official benchmark deltas (SWE-bench Pro, Terminal-Bench 2.1, FrontierCode, AutomationBench, etc.), positioning as 'most agentic Sonnet'"
+  - "The matched-tier cost story — Sonnet 4.6 medium vs Sonnet 5 medium: same accuracy, real cost win — the one cleanly verifiable thesis-supporting claim"
+  - "Contrasting and verifying, broken into H3 dimensions — cost-per-successful-task across effort levels (CursorBench, Artificial Analysis Intelligence Index), the online backlash and mismatched comparisons (e.g. the 'garbage bin' cost thread), behavioral complaints (Neowin report on refusing commands/arguing with users), coding construction-vs-review split (CodeRabbit precision up / recall down)"
+  - "Where it's still genuinely worth it — agentic coding and tool-use gains that hold up outside Anthropic's own harness (CodeRabbit, GitHub Copilot GA, Cursor production evidence)"
+  - "Closing thought (short, not a full section) — run your own benchmarks at your own effort/task mix; don't trust a launch chart or a viral tweet"
+topics_to_exclude:
+  - "Writing/editing quality claims (insufficient independent evidence per the evidence report)"
+  - "Security/prompt-injection findings (different threat model, separate topic)"
+  - "Productivity studies (no Sonnet 5-specific RCT exists yet)"
+  - "Exhaustive walk-through of every benchmark in the evidence report's appendix — cherry-pick the load-bearing ones"
+open_research_questions:
+  - "Verify the Artificial Analysis Intelligence Index cost-per-task chart directly (screenshot circulating shows Sonnet 5 as ~57x DeepSeek-V4-Pro cost) — confirm against the live AA page, numbers may have moved"
+  - "Confirm CursorBench 3.2 numbers are still current (dynamic leaderboard) at time of writing"
+  - "Find primary source for the Neowin behavioral-complaints report and check if it links to original user reports"
+  - "Check the two X/Twitter links for underlying data/screenshots that can be verified independently rather than cited as anecdote"
+  - "Look for additional independent cost-per-task benchmarks beyond CursorBench and Artificial Analysis (e.g. OpenRouter usage data, other agent harness leaderboards)"
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "The post opens by explaining what Sonnet 5 actually is as a model — the technical and behavioral changes from Sonnet 4.6 (effort levels, tokenizer change, agent scaffold swaps) — before addressing what Anthropic claims about it via the launch benchmark chart. From there it isolates the one comparison that survives scrutiny: at matched intelligence tiers (4.6 medium vs 5 medium), Sonnet 5 is genuinely cheaper for equivalent accuracy. That's the thesis-supporting claim.\n\nThe rest of the post is a contrast-and-verify exercise. Independent sources (CursorBench, Artificial Analysis) show Sonnet 5's cost-per-successful-task climbing steeply across its own effort levels — at max effort it's often more expensive than Opus 4.8 or GPT-5.6 for similar or better results. Meanwhile social discourse (a viral 'garbage bin' cost thread, a Neowin report on behavioral complaints) amplifies the negative read, but much of that discourse — like Anthropic's own launch chart — compares mismatched effort settings or mismatched models rather than controlling for intelligence tier. The post treats both the hype and the backlash as symptoms of the same methodological sin: comparing scores without matching the harness, effort level, and model tier producing them.\n\nA fairness section follows, grounded in a detailed evidence report (Claude_Sonnet_5_Evidence_Report.md) already in the post folder: agentic coding and tool-use gains are real and hold up in independent, non-Anthropic evidence (CodeRabbit, GitHub Copilot's GA adoption, Cursor's production benchmark), even if the construction-vs-review split shows nuance (higher precision, lower recall on code review specifically).\n\nThe post closes briefly — not a full section — on the practical takeaway: run your own workload-specific benchmarks at your own effort/task mix rather than trusting a launch chart or a viral tweet. Tone matches open-source-models-good-enough.md: pragmatic, data-driven, contrarian but fair, not dunking on either the hype or the backlash."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/standalone/genai-ai/open-source-models-good-enough.md
+  - reference_posts/standalone/genai-ai/claude-code-agents-explained.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_pre-revise.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete         # pending | complete
+    completed_at: "2026-07-13"
+  research:
+    status: complete
+    completed_at: "2026-07-13"
+  draft:
+    status: complete
+    completed_at: "2026-07-13"
+  seo:
+    status: complete
+    completed_at: "2026-07-13"
+  revise:
+    status: complete
+    completed_at: "2026-07-13"
+  review:
+    status: complete
+    completed_at: "2026-07-13"
+  promote:
+    status: complete
+    completed_at: "2026-07-13"
