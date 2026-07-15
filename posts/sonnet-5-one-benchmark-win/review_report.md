@@ -110,3 +110,20 @@ None — every section grounds in named technical evidence (SWE-bench Pro, Termi
 ### Ready
 
 Structural completeness is all ✓, and every scored dimension is 4 or 5 — the draft is publishable as-is.
+
+---
+
+## Addendum — 2026-07-15: post-review manual revision re-check
+
+Jose manually rewrote the opening (H1 subtitle through the end of paragraph 3, before the preview section) to a first-person, anecdote-grounded intro reacting to Anthropic's launch-blog quote and the online backlash. This also prompted an update to `style_guide/types/series-genai.md`'s Opening section, which now explicitly allows a personal moment as a bridge into the thesis (previously anecdote-free was mandatory for this content type).
+
+Because this materially changed the passage most load-bearing for voice fidelity and argument build-up, `voice-critic` and `impact-critic` were re-run against the updated draft (structure-critic was not re-run — no structural elements were touched by this edit).
+
+| Critic | Re-checked dimension | Result |
+|--------|----------------------|--------|
+| Voice & Audience | Voice fidelity | **5/5** (up from 4/5) — new opening's self-disclosure ("I don't buy that narrative either... I equally disagree with Anthropic's own sales pitch") strengthens rather than dilutes voice; no anti-pattern hits |
+| Voice & Audience | Audience specificity | 5/5 (up from 4/5) |
+| Impact & Argument | Argument build-up | 5/5 (unchanged, confirmed) — new opening gives the reader two concrete, falsifiable claims (Anthropic's quote, "internet says garbage") that the rest of the post individually adjudicates, sharpening rather than loosening the thesis setup |
+| Impact & Argument | Actionability | 5/5 (unchanged, confirmed) — closing section untouched by this edit |
+
+**Updated verdict: Ready — confirmed after manual revision.** No further action needed.
