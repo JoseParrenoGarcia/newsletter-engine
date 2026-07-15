@@ -1,6 +1,6 @@
 # ── Identity ──────────────────────────────────────────────────────────
 slug: "sonnet-5-one-benchmark-win"                    # matches the posts/<slug>/ folder name
-working_title: "How Sonnet 5 Is Only Good at 1 Thing [WIP — refine at /seo stage]"
+working_title: "Sonnet 5 is only good at one thing (beating Sonnet 4.6)"
 
 # ── Post classification ────────────────────────────────────────────────
 structural_type: standalone         # standalone | short_technical | series
@@ -9,7 +9,7 @@ series_name: ""             # only if structural_type: series (leave blank other
 series_position: null       # integer (1, 2, 3 …), only if structural_type: series
 
 # ── Core content ──────────────────────────────────────────────────────
-thesis: "Anthropic's Sonnet 5 launch chart and the online backlash are both measuring the wrong thing. At matched intelligence tiers (e.g. Sonnet 4.6 medium vs Sonnet 5 medium), Sonnet 5 is genuinely cheaper for the same accuracy — a real, verifiable win. But most of the other claims flying around, both the hype and the 'garbage bin' takes, come from comparing mismatched effort levels across models or generations, which the evidence doesn't support once you control for it."
+thesis: "Anthropic's launch chart claims Sonnet 5 narrows the gap with Opus 4.8 at lower prices; the online community reacted as if Sonnet 5 were garbage. Neither is right. Sonnet 5's real, defensible improvement over Sonnet 4.6 is genuine but narrower than Anthropic's framing suggests — and much of the backlash (especially the Opus 4.8 comparison and unverified behavioral complaints) doesn't hold up either once effort levels and settings are accounted for."
 target_audience: "Tech-aware readers with a pinch of technicality — engineers, PMs, founders, and technical managers who make or influence AI tooling decisions. Same audience as the open-source-models-good-enough post."
 target_reading_time_minutes: 20
 topics_to_cover:

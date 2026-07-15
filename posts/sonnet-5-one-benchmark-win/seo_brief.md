@@ -1,5 +1,7 @@
 # SEO Brief: How Sonnet 5 Is Only Good at 1 Thing
 
+> **⚠ STALE — superseded 2026-07-15.** This brief was generated against the prior pipeline draft. Jose has since replaced `long_draft.md` in full with his own final Substack draft (title: "Sonnet 5 is only good at one thing (beating Sonnet 4.6)"). Keyword placement, title variants, and structure recommendations below no longer apply. Re-run `/seo` against the final draft if SEO review is wanted before publish.
+
 **Post:** posts/sonnet-5-one-benchmark-win/long_draft.md
 **Generated:** 2026-07-13
 

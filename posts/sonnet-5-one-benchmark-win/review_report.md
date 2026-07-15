@@ -127,3 +127,13 @@ Because this materially changed the passage most load-bearing for voice fidelity
 | Impact & Argument | Actionability | 5/5 (unchanged, confirmed) — closing section untouched by this edit |
 
 **Updated verdict: Ready — confirmed after manual revision.** No further action needed.
+
+---
+
+## Addendum — 2026-07-15: superseded by Jose's final Substack draft
+
+Jose replaced `long_draft.md` in full with his own final Substack draft (converted from a PDF export). The new draft restructures the post significantly — different title, dropped sections, new sections, new sources and figures not previously verified through this pipeline's `/research` stage. See `decision_log.md`'s "final draft replacement" entry for the full diff summary.
+
+**Everything above this addendum describes the prior draft and no longer reflects the published content.** The panel scores, structural checks, and "Ready" verdict above were never re-run against this final version. Two source citations (Katie Parrott, Bleep.co) and three chart images are open items pending Jose — see `research_brief.md`'s Research Gaps section.
+
+**Status: not re-reviewed.** Treat this report as historical for the prior draft only. Re-run `/review` on request if a formal panel check against the final version is wanted before publish.

@@ -51,7 +51,7 @@
 
 <!-- slug: sonnet-5-one-benchmark-win -->
 <a name="sonnet-5-one-benchmark-win"></a>
-### Sonnet 5's cost story only holds up at matched effort tiers
+### Sonnet 5 is only good at one thing (beating Sonnet 4.6)
 
 | Field | Value |
 |-------|-------|
@@ -60,6 +60,6 @@
 | **Topics** | `model-selection` `cost-optimisation` |
 | **Path** | `posts/sonnet-5-one-benchmark-win/long_draft.md` |
 
-**Summary:** Anthropic's Sonnet 5 launch chart and the online backlash that followed both measure the model's cost the wrong way — both skip the same variable: effort level. The post walks through the mechanical changes behind the launch (a five-level effort dial, a new tokenizer that inflates token counts ~30-40% for identical text, and a mid-evaluation agent scaffold swap) before showing that the one comparison controlling for effort level — Sonnet 4.6 medium versus Sonnet 5 medium — is a real, narrow cost win. Everything louder than that, from Anthropic's own headline benchmark deltas to the viral "garbage bin" cost complaint to Zvi Mowshowitz's Opus/Fable comparison to CodeRabbit's coding construction-versus-review tradeoff, turns out to be comparing mismatched effort levels or mismatched model tiers once you check. It closes with a concrete replication procedure — 15-20 tasks, 3+ trials, cost-per-successful-task rather than cost-per-attempt — so readers can run the same controlled test on their own workload instead of trusting a launch chart or a viral tweet.
+**Summary:** Anthropic's Sonnet 5 launch blog claims the model narrows the gap with Opus 4.8 at lower prices; the online community reacted as though Sonnet 5 were a flop. The post argues neither side has it right. It walks through what actually changed in the model versus Sonnet 4.6 (a new xhigh effort tier, adaptive thinking on by default, a new tokenizer that inflates token counts by roughly 30-40%), then scrutinizes Anthropic's own launch chart — finding that its single biggest benchmark gain (Terminal-Bench 2.1) compares Sonnet 5 at xhigh effort against Sonnet 4.6 at high effort, an effort-level mismatch baked into the headline number. It contrasts Anthropic's high-effort cost claims against Artificial Analysis's independent cost data (which shows the opposite direction at max effort) and CodeRabbit's coding construction-versus-review tradeoff (more precise, fewer bugs caught), before turning to the community backlash — arguing the Opus 4.8 comparison, not the Sonnet 4.6 upgrade itself, is what triggered much of the negative reaction. Closes with a call to test cost-per-successful-task on your own workload rather than trusting either a launch chart or a viral tweet.
 
 ---

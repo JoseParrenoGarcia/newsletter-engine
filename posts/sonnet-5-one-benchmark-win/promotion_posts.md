@@ -1,5 +1,7 @@
 # Promotion Posts — Sonnet 5 Cost Comparison
 
+> **⚠ STALE — superseded 2026-07-15.** This promotion copy was generated against the prior pipeline draft (title: "Sonnet 5's cost story only holds up at matched effort tiers"), which Jose has since fully replaced with his own final Substack draft (title: "Sonnet 5 is only good at one thing (beating Sonnet 4.6)"). The quotes, section references, and framing below no longer match `long_draft.md`. Re-run `/promote` against the final draft before using any of this copy.
+
 ## Launch Post
 
 > **Why this post:** Every AI-tooling decision-maker has either shared or seen someone share a Sonnet 5 cost take in the last few weeks — this launch post reframes both sides as the same mistake, which is a scroll-stopping angle for this audience.
