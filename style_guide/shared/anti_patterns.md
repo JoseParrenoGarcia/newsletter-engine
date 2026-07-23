@@ -100,6 +100,56 @@ These constructions are a signature of AI-generated prose. Remove on sight.
 
 ---
 
+## AI-tell sentence constructions
+
+These are additional signature AI patterns, distinct from the slop structures above.
+
+**Em dash overuse.** Em dashes used repeatedly as a rhythmic crutch instead of sparingly and only when they beat a comma, colon, or full stop.
+- Avoid: "The model didn't fail — it was never trained for this — and that's the real issue."
+- Do: Break into separate sentences, or use one em dash per paragraph at most.
+
+**Throat-clearing openers** — phrases that delay the point instead of starting with it:
+- "Here's the thing."
+- "Let me be clear."
+- "To be fair."
+
+**Fix:** Delete the opener. Start with the claim.
+
+**Faux-insight setups** — framing a claim as a secret only the writer noticed:
+- "The part everyone misses is..."
+- "What nobody tells you is..."
+- "Here's what most people get wrong..."
+
+**Fix:** State the claim directly. Let the insight be the sentence, not the announcement of one.
+
+**Colon reveals** — building tension toward a colon, then a dramatic lowercase payoff:
+- "The detail that makes it work: a separate agent grades it."
+
+**Fix:** Write it as a plain sentence: "A separate agent grades it."
+
+**Superficial "-ing" clauses** — trailing clauses that gesture at meaning without giving it:
+- "...highlighting the team's commitment to excellence."
+- "...underscoring the importance of collaboration."
+
+**Fix:** Replace with a concrete detail. What did the team actually do?
+
+**Fake-strong verbs** — inflated verbs that describe function abstractly instead of concretely:
+- "serves as a hub for", "acts as a bridge between", "functions as the backbone of"
+
+**Fix:** State plainly what the thing does.
+
+**Synonym cycling** — swapping in a different word for the same referent purely for variety, when repeating the clear term is better:
+- "The model... the algorithm... the system... the approach..." — all referring to the same thing across four sentences.
+
+**Fix:** Repeat the clear, specific term. Variety for its own sake reads as evasive, not elegant.
+
+**Fake-profound kickers** — a closing line engineered to sound deep, turning the piece into a mic-drop aphorism instead of ending on the clearest concrete point:
+- "In the end, it's not about the model. It's about the mindset."
+
+**Fix:** End on the most concrete takeaway, not an aphorism. See generic closings above for the correct closing patterns.
+
+---
+
 ## Filler language
 
 **Adverb inflation** — adverbs that add no information:
@@ -107,6 +157,10 @@ These constructions are a signature of AI-generated prose. Remove on sight.
 
 **Dramatic adjectives** — words that overstate importance or novelty:
 - amazing, mind-blowing, groundbreaking, paradigm-shifting, transformative, pivotal, paramount, invaluable, outstanding, unprecedented, game-changing
+- multifaceted, meticulous, intricate, robust, cutting-edge, ever-evolving
+
+**Corporate/AI verb inflation** — verbs that sound purposeful but say nothing specific:
+- foster, utilize, facilitate, streamline, elevate, supercharge, empower, embark (on)
 
 **Hype phrases** — buzzword constructions:
 - "a significant leap", "cut through the noise / hype", "fast-paced world", "fast-moving world"

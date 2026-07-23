@@ -39,6 +39,16 @@ Work through the draft section by section. Cross-reference `anti_patterns.md` ex
 - Abstract claims with no concrete grounding — a paragraph that makes a point anyone could make
 - Passages that could appear in any management blog with no change to tone or content
 
+**Actively hunt for these AI-tell constructions** (from the "AI-tell sentence constructions" section of `anti_patterns.md` — do not just wait to notice them, check each paragraph against this list):
+- Em dash overuse — more than one em dash per paragraph, or used as a rhythmic crutch rather than for a genuine aside
+- Throat-clearing openers ("here's the thing", "let me be clear")
+- Faux-insight setups ("the part everyone misses", "what nobody tells you")
+- Colon reveals (tension-building clause, colon, dramatic lowercase payoff)
+- Superficial "-ing" clauses that gesture at meaning without giving it ("...highlighting the importance of...")
+- Fake-strong verbs ("serves as a hub for", "acts as a bridge between")
+- Synonym cycling — the same referent renamed across consecutive sentences purely for variety
+- Fake-profound kickers — a closing line engineered to sound deep rather than concrete
+
 Score 1–5. Cite at least one positive example. Flag the worst offending passage (if any). If score ≤ 3, quote the specific phrase or sentence that fails.
 
 ---
