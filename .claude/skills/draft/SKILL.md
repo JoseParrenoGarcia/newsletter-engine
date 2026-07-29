@@ -23,19 +23,22 @@ Wait for explicit confirmation before proceeding.
 
 ### 3. Check pre-conditions
 - If `stages.brainstorm.status` is not `complete`: stop and say "Run `/brainstorm` first."
-- If `stages.research.status` is not `complete` AND `research_brief.md` does not exist in the post folder: warn with "Research stage not complete and no `research_brief.md` found. Sources will be drawn from any `.md` files in the post folder — proceed with caution." Do not stop. If `research_brief.md` exists, proceed normally regardless of stage status.
+- If `stages.research.status` is not `complete` AND `research_brief.md` does not exist in the post folder: scan `notes.md` for named source URLs. If URLs are present, proceed using `notes.md` as the source layer and note this explicitly in the outline ("Sources drawn from notes.md — no research_brief.md"). If no URLs are found in `notes.md`, warn with "Research stage not complete and no sources found. Proceed with caution." Do not stop in either case. If `research_brief.md` exists, proceed normally regardless of stage status.
 - If `target_reading_time_minutes` is null in `post.yaml`: ask Jose before proceeding:
   > "What's your target reading time for this post? (e.g. 10 min, 15 min, 20 min)"
   Update `post.yaml` with the answer before continuing.
 
 ### 4. Read all inputs silently
-Read in full before writing anything:
-- `post.yaml` — all fields
-- `notes.md` — brainstorm summary and rough Table of Contents
-- `research_brief.md` — all sources with summaries, grouped by ToC section
-- `templates/post_template.md` — universal structural skeleton
-- Every file listed in `post.yaml → style_guides` — read in full
-- Every file listed in `post.yaml → reference_posts` — read in full
+
+Spawn a subagent to read all input files in parallel and return their full contents. Pass it the post folder path and the list of files to read:
+- `post.yaml`
+- `notes.md`
+- `research_brief.md` (if it exists)
+- `templates/post_template.md`
+- Every file listed in `post.yaml → style_guides`
+- Every file listed in `post.yaml → reference_posts`
+
+The subagent reads all files concurrently and returns their contents in a single structured response. This avoids hitting the response output cap that can occur when reading 6+ large files sequentially in the main session. Once the subagent returns, proceed with all content available in context.
 
 ---
 

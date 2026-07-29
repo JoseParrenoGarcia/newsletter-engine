@@ -1099,3 +1099,115 @@ The Part 2 ending (section 21) already states: "At some point, you need to choos
 ## Relationship to existing worked examples in Part 3
 
 The existing Part 3 worked examples (analytics agent, section 30; writing-format agent, section 31) are kept. They serve a different purpose: showing the method generalises beyond document-generation skills. They are not replacing the A/B test thread — they extend it. Part 3 should complete the A/B test eval suite first, then point to the analytics agent as the "now try this on something more complex" beat.
+
+---
+
+# Brainstorm Output — Agreed Table of Contents
+
+*Settled in conversation on 2026-07-29. This ToC supersedes the narrative arc suggestions above where they conflict.*
+
+## Decisions made
+
+- **Three deep-dive surfaces:** skills/agent evals, trajectory+tool-use evals, repository state evals.
+- **Trajectory and tool-use are treated as one combined section** (not two separate sections).
+- **Repository state** was chosen as the third deep-dive over cost/latency — more DS-specific, the git-diff-as-eval concept is immediately recognisable.
+- **YAML examples:** one detailed example per deep-dive section (3 total), none in the light-touch section.
+- **Running example:** A/B test experiment design doc from Part 1 throughout. No new examples introduced.
+- **Reading time:** 15 min (~3,750 words), matching Part 1.
+
+## Table of Contents
+
+### Opening (~200 words)
+Part 1's eval passed. The document looked right. But here are three things that could have silently failed on that same run: the skill never triggered correctly, it drafted from memory instead of reading `metrics.md`, and it saved the document in the wrong folder. Reanchors the reader and sets up the map.
+
+### What this post covers (~100 words)
+One-paragraph preview of the nine surfaces and the three we'll go deep on.
+
+### 1. The evaluation map (~300 words)
+All nine surfaces introduced via the summary table. One sentence per surface. Purpose: give the reader the full landscape before the deep dives.
+
+Surfaces covered (light):
+- Final output (already known from Part 1 — used as baseline)
+- Repository state *(flagged as deep dive)*
+- Tool use + Trajectory *(flagged as deep dive)*
+- Skills / agent evals *(flagged as deep dive)*
+- Hooks and commands
+- Subagents
+- Cost and latency
+- Human usefulness
+
+### 2. Skills and agent evals [deep dive] (~800 words)
+Three types of skill eval:
+- **Trigger evals** — did the right skill fire? Should it fire for "draft an experiment design doc"? Should it NOT fire for "summarise this Python traceback"?
+- **Execution evals** — once triggered, did it follow the documented workflow? Did it load the right template and reference files?
+- **Delta evals** — is the output with the skill actually better than without it?
+
+A/B test anchor: the `experiment-design` skill should trigger for the experiment doc task, not for unrelated requests. Show a positive and a negative trigger eval.
+
+YAML example: one trigger eval (positive) + one trigger eval (negative).
+
+Key teaching point: *A skill can fail to show up, or it can show up and do the wrong thing.*
+
+Agents are covered briefly at the end of this section as "skills spawned as subagents — the same trigger/execution/delta taxonomy applies."
+
+### 3. Trajectory and tool-use evals [deep dive] (~800 words)
+The tracer concept: evaluate the path, not just the destination.
+
+- Did it read `docs/metrics.md` before drafting, or generate from memory?
+- Did the sequence follow Read → Draft → Write?
+- Did it avoid unexpected tool calls?
+- Did it recover correctly from a failed command?
+
+A/B test anchor: the metrics reference file is the ground truth for approved metrics. If the skill didn't read it, the document may have passed format checks while containing invented metrics. The tool-use eval catches this.
+
+YAML example: `must_read: docs/metrics.md` + `must_not_draft_before_reading`.
+
+Key teaching point: *The transcript matters because agents can fail in the middle, even when the final message sounds confident.*
+
+### 4. Repository state evals [deep dive] (~800 words)
+Git diff as an eval. What did the workflow leave behind?
+
+- Exactly one new file in `docs/experiments/`
+- No other paths changed
+- No leftover artifacts (intermediate files, notebooks)
+- Document saved with the expected filename pattern
+
+A/B test anchor: the experiment design doc should land in `docs/experiments/`. If it saves to the repo root, or creates a scratch notebook, those are failures the output eval would never catch.
+
+YAML example: `allowed_paths`, `forbidden_paths`, `git_diff_scope` check.
+
+Key teaching point: *A Claude Code run is not complete when it says "done". It is complete when the repository is in the state you expected.*
+
+### 5. The other six surfaces (~600 words)
+Light tour — one paragraph each, enough for the reader to identify which apply to their workflow.
+
+Order: final output (already familiar — keep brief), hooks and commands, subagents, cost and latency, human usefulness. Close with the observation that not every workflow needs all nine surfaces — the map is a menu, not a checklist.
+
+### Closing (~250 words)
+Pull back to the A/B test skill. The reader now has a map with nine surfaces: they know which folder the document should land in, which reference file should have been read first, whether the right skill triggered, and whether the quality holds on a cheaper model. That is the map. Part 3 is where we build the actual suite — starting with one surface, running it, and turning the first failure into a regression case we will never miss again.
+
+---
+
+## Additional Sources Confirmed in Research (2026-07-29)
+
+### Anthropic Engineering — Demystifying Evals for AI Agents
+URL: https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
+
+Use for: **trajectory and tool-use deep dive (section 3)**
+
+Key findings:
+- Defines "transcript" as the complete record of a trial, including outputs, tool calls, reasoning, and intermediate results.
+- Warns that rigid step-ordering checks (exact sequence of tool calls) are "too brittle" — agents find valid alternative paths.
+- Recommendation: check that required tools were used, without enforcing exact order. Example: verify `read_file` appeared before `edit_file`, but don't fail if an intermediate inspect call was inserted.
+- This gives us the nuance for the A/B test example: don't check Read → Draft → Write as a strict sequence; check that `Read docs/metrics.md` appeared at all before any Write call.
+
+### SWE-bench
+URL: https://arxiv.org/abs/2310.06770
+
+Use for: **repository state deep dive (section 4)**
+
+Key findings:
+- SWE-bench's grading model is: apply the agent's patch to the repo, run the original PR's test suite, check pass/fail.
+- This is the canonical published example of "repository state as an eval" — the entire benchmark is built on git diff + test execution.
+- Useful as a one-line citation: "SWE-bench, the standard coding agent benchmark, grades entirely on repository state — did the patch apply cleanly and do the original tests pass?"
+- Also useful nuance: solutions that work functionally but don't match the original unit tests still fail — the repo state check is the source of truth, not the agent's final message.
