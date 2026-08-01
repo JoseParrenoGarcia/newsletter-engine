@@ -43,10 +43,12 @@ For **later parts:** open with a brief "In this series so far" recap (2–4 bull
 
 ## Closing choice
 
-Two patterns across the two series — choose based on series register:
+Three patterns — choose based on series register:
 
 1. **Numbered Key Takeaways** (technical series like *LLMs Explained*): explicit `## Key Takeaways from Part N` section. Each item: **bolded label** + one-to-two-sentence explanation.
 
 2. **Closing Thoughts** (strategic/essay series like *DS in the Age of AI*): narrative prose with bolded key phrases embedded mid-paragraph.
 
-Rule: numbered for technical explainers, narrative for strategic/essay series. Never end without synthesis.
+3. **Reader interrogation CTA** (applied/practitioner series like *Claude Code Evals*): a "Now, I want to hear from you!" section that opens with a sharp reframe or challenge ("If the answer is 'I would run it and show them the output,' that is not proof."), followed by 2–3 concrete questions the reader can sit with, and a comment invitation. This pattern is appropriate when the post is grounded in the reader's own practice and the goal is to activate reflection, not just deliver knowledge. Use in combination with a Key Takeaways section when both synthesis and engagement are needed.
+
+Rule: never end without synthesis. For practitioner series, the CTA section IS the synthesis — it turns the post's argument into the reader's next action.

@@ -18,6 +18,7 @@ Your task context will specify:
 - `<post_folder>/long_draft.md` (required)
 - Anti-patterns file (path given in task context)
 - Voice guide file (path given in task context)
+- `<post_folder>/post.yaml` — read the `reference_posts` list, then read 1–2 of those reference posts. Use them to calibrate what Jose's voice actually sounds like in practice, not just what the spec describes. The reference posts are ground truth; the style guide is a derived description. If the draft satisfies the spec but sounds like a different author compared to the reference posts, that is a voice failure.
 
 ---
 
