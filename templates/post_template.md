@@ -42,7 +42,7 @@ Purpose: orients the reader before the argument begins. For longer posts (10+ mi
 
 **5–8 `##` sections.**
 
-- Headings are noun-phrase or verb-phrase declarations — not questions or imperatives.
+- **Headings are question-format:** every H2 must be a question starting with How, What, Why, When, Which, Is, Can, or Should. This is required for SEO and AI discoverability (AEO). Example: `## What does context length actually limit?` not `## Context length limits`.
 - Each section advances the argument.
 - Sections should feel inevitable: each one answers the natural question the previous section raises.
 - Close each section with a claim or observation that implies the next question. Open the next section by answering it directly. No meta-commentary transitions ("Now that we've explored X...").

@@ -1,61 +1,78 @@
 # ── Identity ──────────────────────────────────────────────────────────
-slug: ""                    # matches the posts/<slug>/ folder name
-working_title: ""
+slug: "claude-code-evals-part-2-what-you-actually-need-to-test"
+working_title: "What You Actually Need To Test"
 
 # ── Post classification ────────────────────────────────────────────────
-structural_type: ""         # standalone | short_technical | series
-content_type: ""            # management | paper-explainer | book-review | series-genai
-series_name: ""             # only if structural_type: series (leave blank otherwise)
-series_position: null       # integer (1, 2, 3 …), only if structural_type: series
+structural_type: "series"
+content_type: "series-genai"
+series_name: "Claude Code Evals"
+series_position: 2
 
 # ── Core content ──────────────────────────────────────────────────────
-thesis: ""
-target_audience: ""
-target_reading_time_minutes: null  # e.g. 10, 15, 20 — set during brainstorm; drives word count (×250)
-topics_to_cover: []
-topics_to_exclude: []
-open_research_questions: []
+thesis: "The final document is only one evaluation surface. The same Claude Code workflow has at least eight others — and some of the most dangerous failures look like the output passing while the tool-use trajectory, file state, or skill trigger all failed silently. The right eval depends on which part of the workflow you are trying to trust."
+target_audience: "Engineers, technical managers, and technical PMs who have read Part 1 and now want to understand what a complete evaluation picture looks like for a real Claude Code workflow. Comfortable with AI and software engineering; arriving from the mental model introduced in Part 1."
+target_reading_time_minutes: 15
+topics_to_cover:
+  - "The evaluation map — all nine surfaces introduced via summary table, one sentence each"
+  - "Skills and agent evals [deep dive] — trigger evals, execution evals, delta evals; A/B test skill as the anchor"
+  - "Trajectory and tool-use evals [deep dive] — the tracer concept; did it read metrics.md before drafting or generate from memory; Read→Draft→Write sequence check"
+  - "Repository state evals [deep dive] — git diff as an eval; expected file paths; no collateral changes; no leftover artifacts"
+  - "Light tour of remaining six surfaces — final output (covered in Part 1), hooks, subagents, cost/latency, human usefulness"
+  - "Closing map pull-back — the A/B test skill now has a full eval map; Part 3 builds the suite from one surface"
+topics_to_exclude:
+  - "How to build the full eval suite infrastructure (saved for Part 3)"
+  - "Specific eval frameworks like RAGAS, Inspect, or LangSmith in depth"
+  - "Cost/latency as a deep-dive section (light touch only; not DS-specific enough to warrant deep treatment here)"
+  - "New running example — everything stays anchored to the A/B test experiment design doc from Part 1"
+open_research_questions:
+  - "Whether the Anthropic skills docs describe a mechanism for verifying trigger behaviour that we can cite directly"
+  - "Whether git diff as an eval pattern has a published reference worth citing (or if it stands on its own as obvious)"
 
 # ── Brainstorm output ─────────────────────────────────────────────────
-brainstorm_summary: ""
+brainstorm_summary: "Part 2 is the map post — its job is to give the reader a complete picture of evaluation surfaces before Part 3 delivers the implementation. The sharpest entry point is the callback to Part 1: the A/B test document eval passed, but three other things could have silently failed on that same run. From there, the post introduces all nine surfaces via a summary table (light landscape), then goes deep on three chosen for their relevance to data scientists: (1) skills and agent evals — the trigger/execution/delta taxonomy, directly applicable to any DS team using Claude Code skills for experiment workflows; (2) trajectory and tool-use evals — the tracer concept, did it read the right context file before generating, what sequence did it follow; (3) repository state evals — git diff as an eval, expected file paths, no collateral changes. The remaining six surfaces get one paragraph each. The YAML examples are used sparingly: one detailed example per deep-dive section (3 total), none in the light-touch section. Target is 15 min (~3,750 words). The A/B test experiment design doc is the single running example throughout — no new examples introduced."
 
 # ── Style references ──────────────────────────────────────────────────
-reference_posts: []
+reference_posts:
+  - reference_posts/standalone/genai-ai/what-the-docs-dont-tell-you-about-claude-code-skills.md
+  - reference_posts/standalone/genai-ai/claude-code-agents-explained.md
+  - reference_posts/standalone/genai-ai/claude-code-agent-teams-when-and-how-to-go-multi-agent.md
+  - reference_posts/series/genai-ai/ds-in-the-age-of-ai/part-1-your-job-isnt-to-build-models.md
 style_guides:
   - style_guide/shared/voice.md
   - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
 
 # ── Artefacts ─────────────────────────────────────────────────────────
 artefacts:
   notes: notes.md
   research_brief: null
-  outline: null
-  long_draft: null
-  long_draft_backup: null  # populated by /revise
-  seo_brief: null
-  review_report: null
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_pre-revise.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
   promotion_posts: null
 
 # ── Pipeline stages ───────────────────────────────────────────────────
 stages:
   brainstorm:
-    status: pending         # pending | complete
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-29"
   research:
     status: pending
     completed_at: null
   draft:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-29"
   seo:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-29"
   revise:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-29"
   review:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-07-29"
   promote:
     status: pending
     completed_at: null

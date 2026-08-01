@@ -23,19 +23,22 @@ Wait for explicit confirmation before proceeding.
 
 ### 3. Check pre-conditions
 - If `stages.brainstorm.status` is not `complete`: stop and say "Run `/brainstorm` first."
-- If `stages.research.status` is not `complete` AND `research_brief.md` does not exist in the post folder: warn with "Research stage not complete and no `research_brief.md` found. Sources will be drawn from any `.md` files in the post folder — proceed with caution." Do not stop. If `research_brief.md` exists, proceed normally regardless of stage status.
+- If `stages.research.status` is not `complete` AND `research_brief.md` does not exist in the post folder: scan `notes.md` for named source URLs. If URLs are present, proceed using `notes.md` as the source layer and note this explicitly in the outline ("Sources drawn from notes.md — no research_brief.md"). If no URLs are found in `notes.md`, warn with "Research stage not complete and no sources found. Proceed with caution." Do not stop in either case. If `research_brief.md` exists, proceed normally regardless of stage status.
 - If `target_reading_time_minutes` is null in `post.yaml`: ask Jose before proceeding:
   > "What's your target reading time for this post? (e.g. 10 min, 15 min, 20 min)"
   Update `post.yaml` with the answer before continuing.
 
 ### 4. Read all inputs silently
-Read in full before writing anything:
-- `post.yaml` — all fields
-- `notes.md` — brainstorm summary and rough Table of Contents
-- `research_brief.md` — all sources with summaries, grouped by ToC section
-- `templates/post_template.md` — universal structural skeleton
-- Every file listed in `post.yaml → style_guides` — read in full
-- Every file listed in `post.yaml → reference_posts` — read in full
+
+Spawn a subagent to read all input files in parallel and return their full contents. Pass it the post folder path and the list of files to read:
+- `post.yaml`
+- `notes.md`
+- `research_brief.md` (if it exists)
+- `templates/post_template.md`
+- Every file listed in `post.yaml → style_guides`
+- Every file listed in `post.yaml → reference_posts`
+
+The subagent reads all files concurrently and returns their contents in a single structured response. This avoids hitting the response output cap that can occur when reading 6+ large files sequentially in the main session. Once the subagent returns, proceed with all content available in context.
 
 ---
 
@@ -81,14 +84,15 @@ Write the full article section by section, following `outline.md` exactly.
 ### Voice and style guardrails
 Apply these throughout — they are not optional:
 - **Incremental writing (always):** Never compose the full `long_draft.md` in one response. Write the file section by section — use `Write` for the frontmatter/H1/subtitle/preview section first, then one `Edit` (append) call per subsequent H2 section. Never hold more than one section's worth of prose in a single response — composing the entire draft in one shot risks exceeding the response output cap and losing the write entirely.
-- Use the extracted style anchors from Step 1 as private calibration. Every section should reflect Jose's rhythm, not a generic AI register.
+- Use the extracted style anchors from Step 1 as private calibration. Every section should reflect Jose's rhythm, not a generic AI register. For `series-genai` posts: default to first-person narration throughout. Use "I" to ground claims in lived experience, frame positions personally ("I don't think this is good practice"), and open sections with the author's own perspective before the analytical argument. Third-person analytical register is a consistent failure mode for this post type.
 - Vary sentence length. Short sentences land a point. Longer ones build context or nuance. Mix them.
 - No generic AI filler — refer to `style_guide/shared/anti_patterns.md` and actively avoid every pattern listed there.
+- **Example grounding:** when a section calls for a concrete example, check `notes.md` first for real examples from Jose's team, setup, or actual experience. Prefer grounded real examples over constructed plausible ones. A real example ("In my team, we are building...") earns reader trust in a way a generic scenario ("imagine a data science team that...") does not. If `notes.md` has no real example for a section, construct a specific plausible one — never a generic placeholder.
 - **Structure:** follow the skeleton in `templates/post_template.md` — intro → preview section → main body → closing section → "Now, I want to hear from you". See the type-specific style guide for any overrides.
 - **Heading capitalisation:** all H1, H2, and H3 headings must use sentence case — capitalise only the first word and proper nouns. Never use title case (capitalising every word).
 - **H2 headings — question format:** every H2 must be written as a question starting with How, What, Why, When, Which, Is, Can, or Should. Include the primary or a secondary keyword in the question where it reads naturally. This is an AI discoverability requirement — descriptive H2s will be flagged by `/seo` and rewritten by `/revise`, so get them right in the draft. Example: `## What are Claude Code plugins?` not `## Claude Code plugin overview`.
 - **"What will we cover in this post?" section:** this preview section heading must always be exactly `## What will we cover in this post?` — no variations, no paraphrasing. The bold phrase opening each bullet must match the exact text of the corresponding section H2. These phrases are the SEO anchor for that section — do not paraphrase or shorten them. Format: `**<exact H2 text>** — <one-line description of what the section covers>`.
-- **Before writing the opening paragraph:** check the opening rules in the type-specific style guide. `series-genai`: open with a thesis statement or contrarian reframe — not personal anecdote. `paper-explainer`: open with paper attribution, not anecdote.
+- **Before writing the opening paragraph:** check the opening rules in the type-specific style guide. `series-genai`: three valid openings — thesis declaration, contrarian reframe, or grounded personal moment (a real team scenario or experience that bridges directly into the thesis). All three are explicitly permitted by the `series-genai` style guide; do not default to thesis-only or exclude the personal moment. `paper-explainer`: open with paper attribution, not anecdote.
 - **Explanation depth:** the Register rule in `shared/voice.md` is a tone rule, not a depth rule. For complex or non-obvious concepts, build from first principles. Do not skip scaffolding on the assumption the reader already knows the internals.
 - **Transitions:** close each section with a claim or observation that implies the natural next question. Open the following section by answering it directly. Do not use meta-commentary transitions ("Now that we've explored X...").
 - Follow the type-specific style guide for all remaining structural conventions (technical depth, formatting, tone).

@@ -43,7 +43,7 @@ Use kebab-case tags drawn from this list. Add new tags only when none of the exi
 
 **Pipeline posts:** find all `posts/*/post.yaml` where `stages.promote.status == complete`. Extract the slug from the folder name.
 
-**Reference posts:** find all `.md` files under `reference_posts/` (exclude `.DS_Store`, PDFs). Build a flat list of paths.
+**Reference posts:** find all `.md` files under `reference_posts/` (exclude `.DS_Store`, PDFs, `reference_posts/index.md`, and anything under `reference_posts/archive/`). Build a flat list of paths.
 
 If `$ARGUMENTS` specifies a slug or path, restrict the candidate list to that entry only.
 

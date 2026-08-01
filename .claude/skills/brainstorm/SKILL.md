@@ -60,14 +60,16 @@ Jose can also say "let's wrap up" at any point — work with what you have.
 
 Run the following four steps in order once Jose agrees to wrap up.
 
-### Step 1 — Suggest reference posts
-Scan `reference_posts/` for files matching the `content_type` and `structural_type` you've identified. Propose 2–4 relevant posts with a one-line reason for each. Ask Jose to confirm, reject, or substitute.
+### Step 1 — Select reference posts
+Read `reference_posts/index.md`. It lists Jose's best-performing posts with path and voice notes for each.
 
-Example:
-> "Based on what we've discussed (standalone × management), here are the reference posts I'd suggest:
-> - `reference_posts/standalone/management/how-i-broke-3-myths.md` — similar personal-experience framing
-> - `reference_posts/standalone/management/the-5-traits.md` — comparable structural arc
-> Does this look right, or would you swap any out?"
+Select 2–3 posts by **post type proximity**, not topic proximity — voice is consistent across topics. Prefer:
+- A post with a similar structural type (series part → series part, paper explainer → paper explainer, opinion → opinion)
+- A post whose voice notes describe patterns relevant to this post (personal-story opener, contrarian reframe, reader-challenge closing)
+
+Do not ask Jose to confirm unless the post type is ambiguous or Jose has specifically asked to review reference post selection. Write the selected paths directly to `post.yaml → reference_posts` in Step 3.
+
+**Exception — `paper-explainer` posts:** also include at least one paper explainer from the index (entries 2 or 6), since those have a distinct structural pattern.
 
 ### Step 2 — Suggest style guide
 Based on `content_type`, add the matching type-specific guide:

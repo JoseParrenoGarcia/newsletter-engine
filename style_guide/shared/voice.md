@@ -52,10 +52,13 @@ If the source cannot be named with confidence, flag uncertainty explicitly: "I a
 - Do: "But why skip-gram and not CBOW? The key is directionality."
 - Avoid: "Have you ever wondered what makes a great manager? Keep reading to find out!"
 
-**Reader-direct address is permitted.** Addressing the reader as "you" at key moments is a legitimate rhetorical device — to anticipate an objection, make a concept land concretely, or signal a shift in stakes. Use sparingly (2–3 moments per post at most).
+**Reader-direct address is permitted.** Addressing the reader as "you" is a legitimate rhetorical device — to anticipate an objection, make a concept land concretely, or signal a shift in stakes. Use sparingly in the body (2–3 moments per post at most).
 
 - Do: "If you have 100 skills available, this distinction becomes a deal-breaker."
+- Do: "You could argue that evaluating this is equivalent to evaluating the final output." (objection-anticipation, followed immediately by taking a clear position against it)
 - Avoid: sustained second-person narration that reads like a tutorial ("Now you will need to...", "You should always...").
+
+**Exception — closing CTA sections:** the "Now, I want to hear from you" section is intentionally sustained direct address. The 2–3 body limit does not apply to this section. Three reader questions plus a comment invitation is the correct pattern, not a violation.
 
 ---
 

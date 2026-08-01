@@ -107,6 +107,9 @@ Read each critic's preliminary verdict:
 - If 2 agree and 1 differs → note the split and which criterion is decisive (e.g. "Structure & Depth says Major rework due to ✗ structural element — this overrides Voice's 'Revise first' per verdict logic")
 - If all 3 differ → apply the deterministic rule directly and note which dimension drove the outcome
 
+### 2a. Cross-skill conflict resolution
+Before scoring, check each critic finding against the rules in `/draft` and `/revise`. If a critic flags something that directly conflicts with an explicit rule from an upstream skill (e.g. the structure critic flags question-format H2s as wrong, but `/draft` mandates question-format H2s for SEO), do not treat it as a revision target. Document the conflict in the review report with a note identifying which rule takes precedence (upstream skill rules override template defaults), and exclude it from the priority actions.
+
 ### 3. Apply final verdict logic deterministically:
 - **Ready** — Structural completeness is all ✓ or at most one ~, and all scored dimensions are 4 or 5.
 - **Revise first** — Any scored dimension is 3, or two or more structural elements are ~.
