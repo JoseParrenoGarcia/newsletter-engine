@@ -22,11 +22,11 @@
 ## 2. Meta Description
 
 **Recommended (≤160 chars):**
-> Every AI eval framework — from DeepEval to Azure AI Foundry — implements the same 5 modules. Here's the architecture, a cluster map, and a decision tree.
+> I mapped 9 eval frameworks to 5 modules. Anthropic defined the architecture. The industry rediscovered it. Now you can use it.
 
-- Primary keyword included: Yes
-- Call to action present: Yes (decision tree)
-- Character count: 157
+- Primary keyword included: Yes (eval frameworks, modules)
+- Call to action present: Yes ("Now you can use it")
+- Character count: 126
 
 ---
 

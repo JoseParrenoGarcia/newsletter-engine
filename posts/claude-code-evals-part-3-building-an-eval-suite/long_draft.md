@@ -4,17 +4,23 @@
 
 ---
 
-I was looking at LangSmith's evaluation dashboard last year, trying to figure out what to configure first, and found myself thinking: this looks exactly like that other thing. The exact same structure as the OpenAI Evals README I'd read two weeks earlier. The same structure as the Microsoft eval-guide I'd skimmed the week before that. Same structure as DeepEval's getting started docs.
+Part 2 of this series ended with a promise: Part 3 would show you how to actually build and run a small eval suite.
+
+I have been using skill-creator — Anthropic's Claude Code-native eval framework — across several skills my team has built. Writing skills, knowledge management skills, digest automation. I have compared Haiku vs Sonnet on the same task bank. I have used it to catch a skill hallucinating fields not in the source spec, and to confirm a rewritten version was genuinely better than the one it replaced. By the time I sat down to write this, I had enough real runs to show you what the framework looks like in practice.
+
+But I did not want to stop there.
+
+Once I was comfortable with skill-creator, I started asking what other teams were using. I opened LangSmith's dashboard, the OpenAI Evals README, DeepEval's docs, the Microsoft eval-guide. Four frameworks — and they all looked structurally identical. The same five pieces, in the same relationship, with different names.
 
 Task bank. Runner. Grader. Transcript. Baseline comparison.
 
-Five things, every time. Different names, same five things.
+Every time.
 
-I went and read Anthropic's engineering post on evaluating AI agents. They named the same five modules. Their post was written before most of those frameworks released their current architecture. The frameworks hadn't copied Anthropic — they'd all independently arrived at the same place.
+I read Anthropic's engineering post on evaluating AI agents. They named the same five modules — written before most of those frameworks existed. Nobody had copied anyone. They had all arrived at the same place independently.
 
-That convergence is the point of this post. The AI eval framework space looks fragmented from the outside: a dozen frameworks, three clusters of platforms, competing paradigms, different price points. But the underlying architecture is shared. If you understand the five modules, you can work with any tool, pick the right one for your context, and stop being confused by framework marketing.
+That convergence is the spine of this post. The eval landscape looks fragmented: a dozen tools, three platform clusters, competing paradigms. But the architecture is shared. Once you know the five modules, the marketing stops being confusing. You can see exactly what each tool optimises for — and what it trades off.
 
-The Anthropic architecture is the right place to start — not because Anthropic makes Claude Code, but because the [Anthropic engineering post on demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) defines the modules most precisely. We'll use it as the spine. Then we'll look at how every other framework maps onto it.
+We will start with skill-creator and work outward from there. The [Anthropic engineering post on demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) defines the modules most precisely. We will use it as the reference throughout.
 
 ---
 
@@ -126,15 +132,130 @@ Skill-creator is Anthropic's Claude Code-native eval framework. It ships as a [C
 
 I want to show how it instantiates each of the five modules — not in enough depth to replicate it, but enough to make the architecture concrete. Part 4 goes inside it fully.
 
-**Task bank → `evals.json`.** Skill-creator uses a JSON file as its task bank. Each entry has the same shape: a `task_id`, an `input` (the task the agent will be given), an `expected_output` (what a correct result looks like), and a `grader_ref` (which grader configuration to use). The entries in this file define the full scope of what is being evaluated. If a capability isn't in `evals.json`, it isn't being tested.
+**Task bank → `evals.json`.** Skill-creator uses a JSON file as its task bank. Each entry has the same shape:
+
+1. An `id`
+2. A `prompt` — the task the agent will be given
+3. An `expected_output` — a high-level description of what correct behaviour looks like
+4. `expectations` — an array of discrete grading assertions
+5. `files` — fixture files the agent gets access to. Useful if you want evals on mock data without touching your repository structure (like a unit test fixture). Sometimes you don't need this field at all.
+
+**The difference between `expected_output` and `expectations`.** Where `expected_output` captures intent at a summary level, the `expectations` array breaks that into 4 or 5 concrete claims that can each independently pass or fail.
+
+This matters because a single rubric from `expected_output` collapses into a binary score and hides where the agent went wrong. Discrete `expectations` let you see whether the agent missed the scope guard entirely, or got the scope right but still produced an overlong response.
+
+**Here is a small example.** Say you're building a skill that helps engineers document a new API endpoint. A task bank entry for it might look like this:
+
+```json
+{
+  "id": 1,
+  "prompt": "Document this new endpoint: evals/files/fixture-api/endpoints/create-order.json. Treat that path as the endpoint spec. Do not touch any other file.",
+  "expected_output": "Skill reads the endpoint spec and produces a documentation block covering purpose, required parameters, and a usage example.",
+  "files": ["evals/files/fixture-api/endpoints/create-order.json"],
+  "expectations": [
+    "The documentation explains what the endpoint does, not just what its fields are named",
+    "The documentation lists all required parameters from the spec (customer_id, items, payment_method)",
+    "The documentation includes at least one usage example with a realistic request body",
+    "The response does not invent fields or behaviours not present in the spec"
+  ]
+}
+```
+
+The `files` field points to a fixture spec — the agent reads a fake endpoint definition, not anything in your live codebase. The `expected_output` tells you the intent at a glance. The `expectations` give you four independent checks: if the agent produces a field list without explaining purpose, expectation 1 fails while 2 passes, and you know exactly what to fix in the skill.
 
 **Runner → parallel subagent execution.** The runner is a set of Claude Code subagents. Skill-creator spawns one subagent per task in the eval bank. Each subagent runs the target skill (or the raw agent loop without the skill, for baseline comparison) against the task input and returns the full output. The [Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview) surfaces a `ResultMessage` with `num_turns`, `usage`, `total_cost_usd`, `session_id`, and `stop_reason` — which feeds directly into the trace module.
 
-**Graders → `grader.md` + assertions.** The grader configuration lives in a `grader.md` file that defines the evaluation criteria. The hierarchy mirrors Anthropic's: deterministic assertions run first (key presence, exact match, JSON validation), then LLM-as-judge criteria for qualities that need semantic evaluation. The assertions are explicit code checks; the LLM-as-judge criteria are natural language rubric items. You choose which tier each criterion lives at when you write the grader.
+**Graders → built into skill-creator, driven by your `expectations`.** This is the module that trips people up the most, because you never configure a grader directly. There is no `grader.md` you write per skill.
 
-**Trace/transcript → `timing.json`.** Every eval run produces a `timing.json` file that captures per-task metrics: `total_tokens`, `duration_ms`, cost, and which tasks passed or failed. This is your queryable record of what happened. When a task fails, you look at the timing file to see the token spend and duration — and you look at the subagent's raw output to understand why.
+The grader exists — it lives in `agents/grader.md` inside skill-creator itself — but it's part of the framework, not something you touch. What you do write is the `expectations` array in each `evals.json` entry. Those expectations become the grading criteria at runtime: after the runner finishes a task, skill-creator spawns the Grader agent, hands it the transcript, the output files, and the `expectations` list from that task, and the Grader evaluates each expectation as PASS/FAIL with cited evidence, writing the result to `grading.json`.
 
-**Baseline comparison → with/without baseline runs.** Skill-creator supports running the same eval bank against two configurations: the skill invocation (with skill) and the raw agent loop (without skill). Comparing the two gives you a direct signal of what the skill is actually contributing. If pass rates are similar, the skill isn't adding value. If pass rates diverge, you know what the skill is doing.
+The practical implication: writing good `expectations` is the grader configuration. A weak expectation ("the response looks reasonable") produces a grader that can't distinguish a passing run from a failing one. A strong expectation ("the response does not require rewriting the article's structure for a typo fix") is discriminating — it passes when the skill got it right and fails when it didn't.
+
+The Grader is entirely LLM-based. The one nuance: `grader.md` instructs it to write and run a script for anything verifiable programmatically — checking a file exists, validating JSON structure — rather than eyeballing the transcript. But that's a judgment call inside the Grader agent, not a separate deterministic tier you configure.
+
+**Trace/transcript → `grading.json` + `timing.json`.** Every eval run produces two output files. `timing.json` captures per-task metrics: tokens, duration, cost, and aggregate pass/fail counts. `grading.json` is the richer record — per-expectation verdicts with cited evidence, extracted claims the agent made, and any notes the executor flagged during the run.
+
+This is what makes the trace module useful for iteration. When a task fails, you don't just know the pass rate dropped — you can read exactly which expectation failed and what evidence the Grader cited. Continuing the endpoint documentation example from the task bank section, a failing run might produce this:
+
+```json
+{
+  "eval_id": 1,
+  "eval_name": "document-create-order-endpoint",
+  "configuration": "with_skill",
+  "run_number": 1,
+  "result": {
+    "pass_rate": 0.75,
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "time_seconds": 38.2,
+    "tokens": 4100,
+    "tool_calls": 6,
+    "errors": 0
+  },
+  "expectations": [
+    {
+      "text": "The documentation explains what the endpoint does, not just what its fields are named",
+      "passed": true,
+      "evidence": "Output opens with 'Use this endpoint to place a new order on behalf of a customer. It validates stock, reserves inventory, and initiates payment in a single call.' — purpose is stated before any field is listed."
+    },
+    {
+      "text": "The documentation lists all required parameters from the spec (customer_id, items, payment_method)",
+      "passed": true,
+      "evidence": "Parameters table covers all three required fields with type, description, and a note that all are required."
+    },
+    {
+      "text": "The documentation includes at least one usage example with a realistic request body",
+      "passed": true,
+      "evidence": "Output contains a curl example with a plausible request body: customer_id, a two-item array with product_id and quantity, and payment_method set to 'card'."
+    },
+    {
+      "text": "The response does not invent fields or behaviours not present in the spec",
+      "passed": false,
+      "evidence": "Output includes a 'discount_code' parameter and mentions retry-on-failure behaviour. Neither appears in the fixture spec — these were hallucinated from general API conventions."
+    }
+  ],
+  "notes": [
+    "Invented 'discount_code' field not in spec — skill may need an explicit instruction to only document fields present in the source file"
+  ]
+}
+```
+
+Three expectations pass, one fails. The failing expectation tells you exactly what to fix: add an instruction to the skill telling the agent to only document what is present in the source file. Without per-expectation evidence in the trace, a 75% pass rate is a number. With it, it's a specific next action.
+
+**Baseline comparison → two configurations, context-dependent.** Skill-creator always runs two configurations in parallel — a primary run and a baseline — but what fills those slots depends on where you are in the development cycle.
+
+When you're building a new skill from scratch, the baseline is the raw agent loop with no skill at all: same prompt, no skill path. That tells you what the skill is actually contributing over zero.
+
+When you're improving an existing skill, the baseline is the previous version. Skill-creator snapshots the old skill before editing and points the baseline subagent at the snapshot. So you're comparing new version vs old version, not skill vs no-skill.
+
+The benchmark schema uses `with_skill` and `without_skill` as the configuration labels regardless of what the baseline actually contains — it's a naming convention, not a constraint on what you're comparing. In practice this means you could also run the same skill against two different models (Haiku vs Sonnet) or two different prompting strategies, and the framework will handle it the same way: parallel runs, aggregated pass rates, delta between the two.
+
+The output is a `benchmark.json` with mean pass rate, stddev, timing, and token counts per configuration, plus per-eval breakdowns and analyst observations. Continuing the endpoint documentation example, a Haiku vs Sonnet comparison might produce this `run_summary`:
+
+```json
+"run_summary": {
+  "haiku": {
+    "pass_rate": { "mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0 },
+    "time_seconds": { "mean": 38.2, "stddev": 3.1, "min": 34.1, "max": 41.4 },
+    "tokens": { "mean": 41200, "stddev": 820, "min": 40100, "max": 42300 }
+  },
+  "sonnet": {
+    "pass_rate": { "mean": 0.75, "stddev": 0.0, "min": 0.75, "max": 0.75 },
+    "time_seconds": { "mean": 61.4, "stddev": 9.2, "min": 52.0, "max": 70.8 },
+    "tokens": { "mean": 64800, "stddev": 1540, "min": 63200, "max": 66900 }
+  },
+  "delta": {
+    "pass_rate": "+0.25",
+    "time_seconds": "-23.2",
+    "tokens": "-23600"
+  }
+}
+```
+
+Haiku passes all four expectations. Sonnet fails the hallucination check — it invents a `discount_code` field. Haiku is also faster and uses 36% fewer tokens. That delta is the signal: for this skill, the more capable model is actively worse on the criterion that matters most, and the cheaper model is both faster and more reliable. Without the benchmark you'd default to Sonnet on instinct. The numbers say Haiku.
+
+If the delta is near zero, the skill isn't moving the needle. If it's large, you know what the skill is doing — and the per-expectation grading tells you which specific behaviours drove the difference.
 
 **Continuous loop → iteration-N.** Skill-creator makes the iteration loop explicit. After the first eval run, you examine the failing tasks, refine the skill's description or instructions, and run the eval again. Each run is iteration-N. The loop continues until the pass rate is where you want it, or you've identified a class of failures that require a different kind of intervention.
 
