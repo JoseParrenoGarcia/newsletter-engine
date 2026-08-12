@@ -123,3 +123,35 @@
 | **Path** | `posts/claude-code-thinking-planning-goal-mode/long_draft.md` |
 
 **Summary:** Thinking levels, planning mode, and goal mode are three distinct concepts that most practitioners conflate. The post untangles them: thinking levels are budgeted deliberation with a cost/quality/speed trade-off; planning mode is the discipline of separating design from execution before an agent acts; goal mode extends that discipline to long-running autonomous work by specifying a verifiable completion condition. Planning mode is positioned as the umbrella concept — it encapsulates model selection (Opus for planning, Sonnet for execution), effort level, and pre-execution discipline. Closes with four reusable patterns for combining planning mode and goal mode in practice.
+
+<!-- slug: claude-code-evals-part-2-what-you-actually-need-to-test -->
+<a name="claude-code-evals-part-2-what-you-actually-need-to-test"></a>
+### Claude Code Evals — Part 2: What You Actually Need To Test
+
+| Field | Value |
+|-------|-------|
+| **Type** | series / series-genai |
+| **Series** | Claude Code Evals, Part 2 |
+| **Audience** | Engineers, technical managers, and technical PMs who have read Part 1 and want to understand what a complete evaluation picture looks like for a real Claude Code workflow |
+| **Topics** | `claude-code` `skills` `agents` `capability-gap` `claude-code` |
+| **Path** | `posts/claude-code-evals-part-2-what-you-actually-need-to-test/long_draft_final.md` |
+
+**Summary:** The final document is one of eight evaluation surfaces in a Claude Code workflow — and some of the most dangerous failures look like passing output while skill trigger, tool-use trajectory, and file state all failed silently. The post introduces an evaluation map derived from Anthropic's transcript framing, then goes deep on three surfaces most teams skip: trigger evals (does the right skill fire, and does the wrong skill stay quiet?), trajectory evals (did Claude read the right context file before writing?), and cost evals (did the workflow stay within token and turn budgets?). The transcript is positioned as a free source of evidence — tool calls, file reads, token counts, and turn counts are already there, not requiring new instrumentation. Closes with the honest state of transcript access today: what the Agent SDK exposes, what requires parsing unstable JSONL files, and what is not yet documented.
+
+---
+
+<!-- slug: claude-code-evals-part-3-building-an-eval-suite -->
+<a name="claude-code-evals-part-3-building-an-eval-suite"></a>
+### Claude Code Evals — Part 3: Anthropic's skill-creator is good enough for your evals
+
+| Field | Value |
+|-------|-------|
+| **Type** | series / series-genai |
+| **Series** | Claude Code Evals, Part 3 |
+| **Audience** | Data scientists and ML engineers using Claude Code who want to understand how to actually evaluate their AI workflows; may not have built a formal eval suite before |
+| **Topics** | `claude-code` `skills` `agents` `capability-gap` `model-selection` |
+| **Path** | `posts/claude-code-evals-part-3-building-an-eval-suite/long_draft.md` |
+
+**Summary:** Every eval framework — from a shell script to Azure AI Foundry — implements the same five modules: task bank, runner, graders, transcript, and baseline comparison. Anthropic named this architecture first in their demystifying evals engineering post; the entire industry independently rediscovered it. The post uses skill-creator (Anthropic's Claude Code-native eval framework) to make each module concrete, with real examples from actual runs: an evals.json task bank with fixture files and discrete expectations, a Grader agent that evaluates each expectation against the execution transcript, and a benchmark.json showing a Haiku vs Sonnet comparison where Haiku outperforms on both pass rate and cost. The framework landscape is then mapped to the same five modules across three clusters — code-first open-source, tracing-first, and enterprise end-to-end — so readers can identify when skill-creator is enough and when to reach for something else. Closes with a decision tree anchored to where a Claude Code team actually is.
+
+---

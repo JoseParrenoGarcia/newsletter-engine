@@ -1,61 +1,81 @@
 # ── Identity ──────────────────────────────────────────────────────────
-slug: ""                    # matches the posts/<slug>/ folder name
-working_title: ""
+slug: "claude-code-evals-part-3-building-an-eval-suite"
+working_title: "Claude Code Evals Part 3: The Evaluation Frameworks Landscape"
 
 # ── Post classification ────────────────────────────────────────────────
-structural_type: ""         # standalone | short_technical | series
-content_type: ""            # management | paper-explainer | book-review | series-genai
-series_name: ""             # only if structural_type: series (leave blank otherwise)
-series_position: null       # integer (1, 2, 3 …), only if structural_type: series
+structural_type: "series"
+content_type: "series-genai"
+series_name: "Claude Code Evals"
+series_position: 3
 
 # ── Core content ──────────────────────────────────────────────────────
-thesis: ""
-target_audience: ""
-target_reading_time_minutes: null  # e.g. 10, 15, 20 — set during brainstorm; drives word count (×250)
-topics_to_cover: []
-topics_to_exclude: []
-open_research_questions: []
+thesis: "Every eval framework — from a shell script to Azure AI Foundry — implements the same five conceptual modules. Anthropic defined this architecture first. Understanding it means you can build evals with any tool, or choose the right one without drowning in feature tables."
+target_audience: "Data scientists and ML engineers using Claude Code who want to understand how to actually evaluate their AI workflows. Comfortable with agents and LLMs; may not have built a formal eval suite before. Familiar with Parts 1 and 2 of this series."
+target_reading_time_minutes: 15
+topics_to_cover:
+  - "Anthropic's demystifying evals post as the conceptual spine — the eval structure (input, grading criterion, check) and why agent evals compound mistakes"
+  - "The five common modules shared by every eval framework: task bank, runner, graders, trace/transcript, baseline comparison, continuous loop"
+  - "The grader hierarchy in depth: deterministic → LLM-as-judge → human, and why most teams get the order wrong"
+  - "Skill-creator as the Claude Code-native implementation of these modules (light-to-medium depth — full dissection is Part 4)"
+  - "The industry landscape in three clusters: code-first open-source (OpenAI Evals, DeepEval, Promptfoo), tracing-first (LangSmith, Arize Phoenix), enterprise end-to-end (MS AI Foundry, Galileo, Maxim)"
+  - "How the industry converged on the same architecture — validating the concepts are right, not vendor-specific"
+  - "How to pick: a decision tree anchored to where a Claude Code team actually is"
+  - "Forward pointer to Part 4 (skill-creator deep dive) and Part 5 (example runs)"
+topics_to_exclude:
+  - "Deep feature-by-feature enterprise platform comparison (Lazzeri's article covers this — reference it, don't replicate it)"
+  - "Step-by-step tutorial for building an eval suite (that is Part 5)"
+  - "The A/B testing skill worked example thread from original Part 3 notes (moved to Part 5)"
+  - "Analytics agent and writing-format agent worked examples (moved to Part 5)"
+  - "Pricing, SLA, or procurement guidance for eval platforms"
+open_research_questions:
+  - "Validate the exact OpenAI Evals YAML schema and module names before drafting"
+  - "Check whether Microsoft's eval-guide repo (github.com/microsoft/eval-guide) adds anything not covered in the Lazzeri PDF"
+  - "Confirm the Anthropic Agent SDK surface for transcript/trace access — what is officially documented vs unstable"
 
 # ── Brainstorm output ─────────────────────────────────────────────────
-brainstorm_summary: ""
+brainstorm_summary: "Part 3 of the Claude Code Evals series is a conceptual orientation post that sits between the 'why' (Part 1) and 'what to test' (Part 2) on one side, and the hands-on deep dives (Parts 4 and 5) on the other. The central argument is that Anthropic defined the architecture for evaluating AI agents first — in their demystifying evals engineering post — and that the entire eval tooling industry has independently converged on the same five modules. That convergence is the evidence that the concepts are right, not vendor-specific. The post is Anthropic-first: the Anthropic engineering post is the spine, skill-creator is the worked Claude Code-native implementation, and the industry frameworks (LangSmith, OpenAI Evals, DeepEval, MS AI Foundry, Arize Phoenix, Galileo) appear as corroboration. The opening hook is the Anthropic-first angle — here is how Anthropic thinks about evaluating agents — rather than a tooling explosion framing. The grader hierarchy (deterministic → LLM-as-judge → human) gets its own section because it is the most underappreciated module and the one where most teams get the order wrong. Skill-creator is introduced at light-to-medium depth: enough to show how it instantiates each module, but without the running-it-and-interpreting-results content that belongs in Part 4. The post ends with a practical decision tree for Claude Code teams: start with what you already have, know when to reach for a platform."
 
 # ── Style references ──────────────────────────────────────────────────
-reference_posts: []
+reference_posts:
+  - posts/claude-code-thinking-planning-goal-mode/long_draft_v2.md
+  - reference_posts/claude-code-agents-explained.md
+  - posts/anthropic-agentic-data-analytics/long_draft_v3.md
 style_guides:
   - style_guide/shared/voice.md
   - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
 
 # ── Artefacts ─────────────────────────────────────────────────────────
 artefacts:
   notes: notes.md
-  research_brief: null
-  outline: null
-  long_draft: null
-  long_draft_backup: null  # populated by /revise
-  seo_brief: null
-  review_report: null
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_pre-revise.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
   promotion_posts: null
 
 # ── Pipeline stages ───────────────────────────────────────────────────
 stages:
   brainstorm:
-    status: pending         # pending | complete
-    completed_at: null
+    status: complete
+    completed_at: "2026-08-01"
   research:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-08-01"
   draft:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-08-01"
   seo:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-08-01"
   revise:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-08-01"
   review:
-    status: pending
-    completed_at: null
+    status: complete
+    completed_at: "2026-08-01"
   promote:
     status: pending
     completed_at: null
