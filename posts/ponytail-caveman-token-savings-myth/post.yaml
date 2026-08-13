@@ -1,0 +1,89 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "ponytail-caveman-token-savings-myth"
+working_title: "Ponytail, Caveman, and the myth of magic token savings"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"
+series_name: ""
+series_position: null
+
+# ── Core content ────────────────────────────────────────────────────────
+thesis: "Ponytail and Caveman get lumped together as 'token savers,' but they are three distinct mechanisms (Ponytail's code-minimisation, Caveman's output-style compression, Caveman Proxy's input compression) operating on different channels of the token bill — and once independent benchmarks replace each project's own headline numbers, the real savings are real but far smaller, narrower, and more content-dependent than the hype suggests. The right question is never 'how many tokens did this save' but 'cost per successfully completed task at held quality,' because tokens saved in one channel (output, code) can silently reappear in another (input, reasoning, recovery calls, cache misses)."
+target_audience: "Claude Code users and practitioners of agentic coding patterns who are token-conscious and have heard the hype around ponytail/caveman-style token-saving skills, but haven't verified the mechanics or claims themselves."
+target_reading_time_minutes: 20
+topics_to_cover:
+  - "The reputation: why ponytail and caveman get treated as easy, near-magical token savers, and the flawed shared assumption that 'fewer visible tokens = lower total cost'"
+  - "The token bill has multiple channels (fresh input, cache write, cache read, reasoning, output prose, code, tool recovery, image/vision tokens) — the mental model needed before any claim can be judged"
+  - "Ponytail is not compression at all: it's a behavioural decision ladder (YAGNI → reuse → stdlib → platform → existing dependency → one-liner → minimum implementation) that changes what gets built, not how it's expressed"
+  - "Caveman's original skill is output-style compression only (telegraphic prose) — input and reasoning tokens are explicitly untouched, and the skill itself adds ~1-1.5k input tokens per turn"
+  - "Caveman Proxy/Engine is a separate, more ambitious mechanism: content-aware input compression with a lossy-but-recoverable local store (CCR) sitting between agent and provider — a genuinely different technical bet than the original skill"
+  - "Each project's self-reported headline: Ponytail's 54% code reduction, Caveman's 65% output-token reduction, Caveman Proxy's 33.2% provider-input reduction — and the benchmark conditions behind each number"
+  - "Independent JetBrains SkillsBench results that retest the same claims: ~15% code / 10.3% cost / 11% time for Ponytail; 8.5% output tokens for Caveman skill — both roughly a third or less of the headline"
+  - "Why headline and independent numbers can both be 'true': effect size depends entirely on how much over-build/verbosity/redundancy headroom exists in the task, not on a universal property of the tool"
+  - "Caveman Proxy's own benchmark shows the same content-dependency internally: -55% on fraud CSV outliers down to +9.9% (compression became expansion) on a dashboard HTML fixture"
+  - "External academic counter-evidence: CAVEWOMAN paper shows output compression often helps but linguistic input compression can be lose-lose (net cost ~1.15x, worse accuracy) as models compensate with longer responses; SkillReducer shows semantic selection (removing truly redundant content) beats indiscriminate terseness"
+  - "The correct objective function: cost-per-successfully-completed-task at held quality, not raw token deltas — and why stacking all three tools at once would confound attribution"
+  - "Practical verdict per tool: when each is worth adopting, what it risks (over-minimisation, lost nuance, silent context loss/recovery overhead), and why 'organisation-wide default without local eval' is not supported by any evidence gathered"
+topics_to_exclude:
+  - "Skills or token-saving patterns beyond ponytail and caveman — no broader survey of the ecosystem"
+  - "General Claude Code tutorial content unrelated to token mechanics"
+  - "Caveman's Pixel/skill-to-PNG mode and Browse product — interesting but a tangent from the core input/output/code compression comparison; mention only in passing if needed for completeness"
+  - "Licensing deep-dive (Caveman Proxy's BSL boundary) — flag briefly as a practical adoption note, not a section of its own"
+open_research_questions:
+  - "No independent, broad paired benchmark exists yet for Caveman Proxy comparable to JetBrains' tests of Ponytail and the original Caveman skill — the 33.2% figure rests only on the maintainers' own six-fixture CaveBench Wrap suite. Flag this evidence gap explicitly in the draft rather than treating 33.2% as validated the way the other two numbers are."
+  - "No data found on how these three mechanisms interact when stacked (e.g. Ponytail's smaller diffs reducing Caveman Proxy's remaining compression headroom) — treat as an open question / limitation, not a claim to make."
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "This post examines Ponytail and Caveman, two Claude Code skills widely praised as easy, near-magical token savers. Jose wants to go past the hype and do two things: (1) understand their actual mechanics and map them honestly onto how Claude Code and LLMs actually process context, tool calls, and output tokens, and (2) take the benchmark numbers each skill publishes about itself and hold them up against independent, external benchmark evidence to see if the claims survive scrutiny. The reader is anyone using Claude Code or agentic patterns who has heard the hype and assumes there's a skill that magically solves token costs — the goal is to replace that assumption with a grounded, mechanics-first understanding of where the savings are real, where they're overstated, and when the skills are actually worth adopting.
+
+Research (via Ponytail_and_Caveman_Technical_Due_Diligence_Agent_Ready.md) resolved the open questions and sharpened the thesis considerably. The core finding is that 'Ponytail' and 'Caveman' are not one thing each — they are three distinct mechanisms operating on different channels of the token bill: Ponytail is a behavioural decision ladder that changes what code gets built (not compression at all), Caveman's original skill is output-style compression (terser prose, input/reasoning untouched), and Caveman Proxy is a separate, newer, more ambitious input-compression system with a lossy-but-recoverable local store. Treating all three as one 'token saver' category is itself part of the myth.
+
+Each project's self-reported headline (Ponytail 54% code reduction, Caveman 65% output-token reduction, Caveman Proxy 33.2% input reduction) shrinks substantially under independent JetBrains SkillsBench testing — Ponytail lands at ~15% code / 10.3% cost / 11% time, Caveman skill at 8.5% output tokens. Both are real, statistically detectable effects with no measured quality loss, but roughly a third or less of the marketed number. Caveman Proxy has no comparable independent benchmark yet — only the maintainers' own six-fixture suite, which itself shows the same content-dependency internally, ranging from -55% (fraud CSV) to +9.9% i.e. expansion (dashboard HTML). Academic work (CAVEWOMAN, SkillReducer) supports the general mechanism split: output compression tends to genuinely help, but naive linguistic input compression can be a net loss as models compensate with longer responses, while semantic/structural selection (removing genuinely redundant content) is what actually works.
+
+The thesis that emerged from research: the correct unit of analysis is never 'tokens saved' but 'cost per successfully completed task at held quality' — because savings in one channel (output, code) can silently reappear in another (fresh input, reasoning, recovery calls, cache misses). Given this, the verdict is not 'these are scams' nor 'these are magic' — it's that each tool has a real, narrower, more conditional case than its marketing suggests, and the honest answer to 'should I use this' is 'depends on your task distribution, and you should measure it yourself rather than trust either the vendor benchmark or blind adoption.'"
+
+# ── Style references ────────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/claude-code-agents-explained.md
+  - posts/claude-code-thinking-planning-goal-mode/long_draft_v2.md
+  - posts/sonnet-5-one-benchmark-win/long_draft.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_pre-revise.md
+  seo_brief: seo_brief.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-08-12"
+  research:
+    status: complete
+    completed_at: "2026-08-12"
+  draft:
+    status: complete
+    completed_at: "2026-08-12"
+  seo:
+    status: complete
+    completed_at: "2026-08-12"
+  revise:
+    status: complete
+    completed_at: "2026-08-13"
+  review:
+    status: complete
+    completed_at: "2026-08-13"
+  promote:
+    status: complete
+    completed_at: "2026-08-13"
