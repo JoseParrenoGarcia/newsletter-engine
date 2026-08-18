@@ -170,3 +170,18 @@
 **Summary:** Ponytail and Caveman are both praised as easy Claude Code token savers, but the post argues they're three distinct mechanisms sitting on three different channels of a coding agent's actual token bill — Ponytail's behavioural decision ladder that changes what code gets built, Caveman's original output-style compression, and Caveman Proxy's separate, more ambitious input-compression system with a recoverable local store. It introduces an eight-channel mental model for how a coding-agent session actually spends tokens, then holds each project's self-reported headline (54% code reduction, 65% output-token reduction, 33.2% input reduction) up against independent JetBrains SkillsBench retests, which land at roughly a third or less of the marketed numbers, with no comparable independent check yet for Caveman Proxy. Two academic papers (CAVEWOMAN, SkillReducer) supply the theoretical backdrop for why headline and independent numbers can both be true — effect size tracks task-level headroom, not a fixed tool property. Closes with a per-tool practical verdict and a concrete, scoped self-test protocol readers can run on their own repository instead of trusting either the vendor benchmark or the hype.
 
 ---
+
+<!-- slug: rtk-token-savings -->
+<a name="rtk-token-savings"></a>
+### RTK promises to cut your Claude Code token bill. Does it?
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Claude Code users and practitioners of agentic coding patterns who are token-conscious and have heard the RTK headline numbers, but haven't verified the mechanics or the economics themselves |
+| **Topics** | `claude-code` `cost-optimisation` `skills` `agents` |
+| **Path** | `posts/rtk-token-savings/long_draft.md` |
+
+**Summary:** RTK (Rust Token Killer) compresses CLI output before it reaches a coding agent, with headline savings of 60–90% on eligible Bash output. The post works through why those numbers don't translate to equivalent bill reductions: in a 2,848-run empirical corpus, tool outputs were roughly 3.3% of billed cost, so even 80% local compression produces a theoretical ceiling of 2.64 percentage points — and agent-trajectory effects (extra turns, cache replay) can erase even that. Two independent external studies are examined in detail: JetBrains SkillsBench found +7.6% cost at low reasoning effort and +0.1% at high effort (quality unchanged), while Weinberger & Hozez (2026) found −2.7% in their main arm with a holdout interval crossing zero. Five failure modes are covered — missing diagnostics, stripped edit anchors, transformed machine-readable stdout, parser drift, and trajectory expansion — with concrete historical examples for each. The post closes with a five-step deployment ladder anchored to estimating addressable surface first, and frames the correct evaluation metric throughout as cost per successfully completed task at held quality, not tokens removed per command.
+
+---
