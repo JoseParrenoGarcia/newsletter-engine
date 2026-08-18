@@ -20,6 +20,7 @@ This post is not a takedown. Both projects encode real, useful ideas, and I'll s
 
 ## What will we cover in this post?
 
+- **What are Ponytail and Caveman?** — a quick introduction to both projects before we put any numbers under a microscope.
 - **Why do Ponytail and Caveman get treated as easy wins?** — the assumption behind that reputation.
 - **How does the token bill actually work?** — the eight channels a coding-agent session spends tokens on, and why a saving in one can quietly reappear in another.
 - **Are Ponytail and Caveman actually the same kind of tool?** — three distinct mechanisms, not one category.
@@ -29,15 +30,46 @@ This post is not a takedown. Both projects encode real, useful ideas, and I'll s
 - **What does the token-compression research say?** — two academic papers that back up (and complicate) the pattern.
 - **So should you use Ponytail or Caveman on Claude Code?** — a practical, per-tool verdict.
 
-Let's start with why the reputation formed in the first place.
+Let's start with the basics.
+
+## What are Ponytail and Caveman?
+
+If you haven't encountered either project yet, here is what you need to know before any number in this post makes sense.
+
+**Ponytail** is a Claude Code skill — and now a multi-host plugin — that enforces minimal code generation. The tagline is "the lazy senior developer," and the pitch is behavioural: before the agent writes a single line, it works through a fixed decision ladder. Does this need to exist at all? Is it already in the codebase? Does the standard library handle it? Does the native platform feature cover it? Is there an installed dependency that already solves it? Can it be written in one line? Only if every rung says no does it proceed to write the minimum that works. Safety, validation, and accessibility are explicitly protected — they're never cut. The project lives at [github.com/DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), currently sits at 102,000 stars and 5,600 forks, and is MIT licensed. To install it in Claude Code:
+
+```
+/plugin marketplace add DietrichGebert/ponytail
+/plugin install ponytail@ponytail
+```
+
+**Caveman** started as a single prompt skill — and the name tells you the mechanism. The agent is instructed to respond the way a caveman would: drop articles, drop filler, drop hedging, use fragments and short synonyms, skip tool-call narration. The tagline is "why use many token when few do trick." That original skill is MIT licensed, takes about thirty seconds to install, and has no moving parts:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/v1.10.0/install.sh | bash
+```
+
+Caveman has since grown. Caveman 2 added Caveman Proxy — a local server that sits between the agent and the provider, compresses what the agent *reads* (tool results, logs, fetched HTML, JSON payloads) before they reach the model, and stores the original bytes in a local content-addressed store so the agent can retrieve anything it needs. The CLI install is:
+
+```bash
+npm install -g @caveman-ai/cli && caveman setup --install
+```
+
+The original skill and CLI are MIT licensed. The Proxy and Engine components are BSL-1.1 — source-available but not OSI open source until a Change Date, currently set to 2030 or four years after each version ships, at which point they convert to Apache-2.0. The repository is at [github.com/JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman), currently at 98,100 stars and 5,700 forks.
+
+Both projects have more than 90,000 GitHub stars. Both get described in the same breath, under the same label — "token savers" — as if they were two flavours of the same idea. That framing is where the trouble starts, and it's why I want to look at the reputation before the numbers.
 
 ## Why do Ponytail and Caveman get treated as easy wins?
 
-Ponytail describes itself as "the lazy senior developer." Before writing any code, the agent is supposed to ask whether the requirement needs to exist at all, and whether the codebase already solves it. Only after that does it check whether the standard library or platform can do it, and only then write the minimum new code. Caveman's original pitch is simpler still: make the agent talk like a caveman — drop articles, drop filler, drop hedging — and the output gets shorter. Both stories are intuitive enough to spread on their own. Both projects now sit north of 90,000 GitHub stars.
+Three problems. One install each. 90,000-plus people already doing it. That is the pitch, and it is worth taking seriously — not because the numbers are right, but because the three underlying problems are real.
 
-That number matters more than any benchmark I'm about to show you, so look at it first. A [2018 study of what a GitHub star actually signals](https://arxiv.org/abs/1811.07643) found that stars track attention and adoption, not correctness or measured effect size. A star can mean "I use this daily." It can also mean "interesting," "bookmark for later," or "I enjoyed the meme in the README." Ninety-two thousand stars is a strong signal that the *problem* resonates — developers recognise their agents over-building things, and recognise their agents being unnecessarily verbose. It is not ninety-two thousand independent confirmations of a 54% number.
+**The star problem.** Over 100,000 developers have starred Ponytail. Nearly 100,000 have starred Caveman. When something reaches that scale, a particular kind of social reasoning kicks in: if this many people installed it and kept using it, it probably works. A [2018 study of what a GitHub star actually signals](https://arxiv.org/abs/1811.07643) is more precise about what that number means — stars track attention and adoption, not correctness or measured effect size. A star can mean "I use this daily." It can also mean "interesting," "bookmark for later," or "I enjoyed the meme in the README." But the social reasoning is still pulling in a direction: the *problem* clearly resonates. Developers recognise their agents over-building things. They recognise agents being unnecessarily verbose. That recognition is real. The star count is not evidence that any particular solution works — it is evidence that the complaint is widespread enough to make a solution feel worth trying with minimal scrutiny.
 
-The deeper issue is the assumption riding along with the reputation: that a shorter answer, a shorter diff, or a smaller payload is automatically a cheaper task. That assumption treats a coding-agent session as if it had one bill, denominated in one channel. It doesn't. Before I can tell you whether Ponytail or Caveman earns its reputation, I need to show you what that bill actually looks like — because "fewer tokens" is not one measurement. It's at least eight.
+**The context window problem.** The context window is the finite resource everything else depends on. Even with 1-million-token windows available on frontier models, real workflows hit the ceiling faster than the number suggests. Long sessions accumulate tool results, file reads, and intermediate outputs. Agentic loops using smaller, faster subagents for specific tasks — a common pattern for keeping the main session clean and costs down, [discussed in detail when we covered Claude Code agent teams](#) — run on models with much tighter limits. Every token that lands in context stays there unless you actively manage it. Ponytail and Caveman both promise to reduce what arrives in context in the first place. If they deliver that, the ceiling rises or gets hit later. That is a genuinely useful property, independent of any percentage claim.
+
+**The cost problem.** Token pricing is not stable background infrastructure. It moves, and it moves in both directions. We covered the full economics in [the open-source models post](#) — frontier model output can cost $15 to $30 per million tokens, with open-weight alternatives available at a fraction of that, but requiring your own infrastructure. Whatever you are paying today is not necessarily what you will pay next quarter. In that environment, any tool that credibly reduces token consumption looks like a hedge: if your cost goes up, your savings go up proportionally. If the tool saves 20% and your bill doubles, you saved twice as much in absolute terms. That logic is not wrong. It just assumes the tool actually reduces your total bill, which requires being clear about which part of the bill it touches.
+
+One or two shell commands, three real problems, six figures of social proof. The case assembles itself. Which is exactly why it is worth slowing down before the install: two of those three problems are solved by reducing something specific, and neither tool reduces all of the same things. Before I can tell you whether Ponytail or Caveman earns its reputation, I need to show you what the token bill actually looks like — because "fewer tokens" is not one measurement. It's at least eight.
 
 ## How does the token bill actually work?
 
