@@ -155,3 +155,18 @@
 **Summary:** Every eval framework — from a shell script to Azure AI Foundry — implements the same five modules: task bank, runner, graders, transcript, and baseline comparison. Anthropic named this architecture first in their demystifying evals engineering post; the entire industry independently rediscovered it. The post uses skill-creator (Anthropic's Claude Code-native eval framework) to make each module concrete, with real examples from actual runs: an evals.json task bank with fixture files and discrete expectations, a Grader agent that evaluates each expectation against the execution transcript, and a benchmark.json showing a Haiku vs Sonnet comparison where Haiku outperforms on both pass rate and cost. The framework landscape is then mapped to the same five modules across three clusters — code-first open-source, tracing-first, and enterprise end-to-end — so readers can identify when skill-creator is enough and when to reach for something else. Closes with a decision tree anchored to where a Claude Code team actually is.
 
 ---
+
+<!-- slug: ponytail-caveman-token-savings-myth -->
+<a name="ponytail-caveman-token-savings-myth"></a>
+### Ponytail, Caveman, and the myth of Claude Code token savings
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Claude Code users and practitioners of agentic coding patterns who are token-conscious and have heard the hype around Ponytail/Caveman-style token-saving skills, but haven't verified the mechanics or claims themselves |
+| **Topics** | `claude-code` `skills` `cost-optimisation` `model-selection` |
+| **Path** | `posts/ponytail-caveman-token-savings-myth/long_draft.md` |
+
+**Summary:** Ponytail and Caveman are both praised as easy Claude Code token savers, but the post argues they're three distinct mechanisms sitting on three different channels of a coding agent's actual token bill — Ponytail's behavioural decision ladder that changes what code gets built, Caveman's original output-style compression, and Caveman Proxy's separate, more ambitious input-compression system with a recoverable local store. It introduces an eight-channel mental model for how a coding-agent session actually spends tokens, then holds each project's self-reported headline (54% code reduction, 65% output-token reduction, 33.2% input reduction) up against independent JetBrains SkillsBench retests, which land at roughly a third or less of the marketed numbers, with no comparable independent check yet for Caveman Proxy. Two academic papers (CAVEWOMAN, SkillReducer) supply the theoretical backdrop for why headline and independent numbers can both be true — effect size tracks task-level headroom, not a fixed tool property. Closes with a per-tool practical verdict and a concrete, scoped self-test protocol readers can run on their own repository instead of trusting either the vendor benchmark or the hype.
+
+---
