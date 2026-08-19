@@ -4,7 +4,7 @@ description: "Reads long_draft.md to produce promotion_posts.md — 1 launch pos
 license: proprietary
 metadata:
   author: jose-parreno-garcia
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Promote skill
@@ -95,7 +95,7 @@ Rules:
 
 ### Step 8 — Write promotion_posts.md
 
-Create the `promotion/` directory if it doesn't exist. Write `promotion_posts.md` with this structure:
+Write `promotion_posts.md` at the root of the post folder with this structure. Do not create a `promotion/` subdirectory.
 
 ```
 ## Launch Post

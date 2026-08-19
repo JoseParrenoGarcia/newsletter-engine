@@ -33,6 +33,7 @@ artefacts:
   long_draft: null
   long_draft_backup: null  # populated by /revise
   seo_brief: null
+  decision_log: null
   review_report: null
   promotion_posts: null
 

@@ -33,16 +33,14 @@ If an agent can read markdown files and update repo files, it can operate this s
 
 ---
 
-## What Is Provider-Specific
+## Runtime Adapter Notes
 
-These parts are convenience wrappers, not the core workflow:
+The active runtime adapter is OpenCode:
 
-- Claude slash-command invocation such as `/draft` or `/review`
-- Claude-native agent spawning and parallel sub-agent execution
-- Claude-specific MCPs, hooks, and session ergonomics
-- Any instruction that assumes a Claude Code-only tool exists
-
-If a provider lacks one of these capabilities, preserve the intended outcome and execute the same file contract manually.
+- Skills are discovered from `.opencode/skills/<name>/SKILL.md`.
+- Reviewer personas are discovered from `.opencode/agents/`.
+- Skills are triggered through natural-language requests and the runtime's skill discovery, not command-wrapper files.
+- If a native subagent or web-search capability is unavailable, follow the sequential or fallback procedures written in the relevant skill.
 
 ---
 
@@ -61,9 +59,9 @@ Agents should prefer updating durable files over returning chat-only results.
 
 ---
 
-## How Non-Claude Agents Should Interpret This Repo
+## How Agents Should Interpret This Repo
 
-If you are not running inside Claude Code:
+Regardless of the agent runtime:
 
 - Treat each `.opencode/skills/*/SKILL.md` as a procedure to execute directly
 - Treat each `.opencode/agents/*.md` as a reusable role prompt or review persona
@@ -79,13 +77,13 @@ The repo structure matters more than the runtime. If the files are updated corre
 
 Use these defaults when a provider lacks Claude-specific runtime features:
 
-- No slash commands: open the corresponding `SKILL.md` and execute it manually
+- No native skill trigger: open the corresponding `SKILL.md` and execute it manually
 - No sub-agent primitive: use `.opencode/agents/*.md` as role instructions and run them in the main session
 - No parallel agent execution: run critic roles sequentially, then synthesize the results
-- No Claude MCP equivalent: continue with local repo files unless the skill truly requires external research
+- No web-search capability: continue with local repo files and report unresolved research gaps unless the skill truly requires external research
 - No hook system: perform the required file updates directly if the workflow depends on them
 
-Do not stop just because a Claude-native convenience is missing. Fall back to the file contract and continue.
+Do not stop just because a runtime convenience is missing. Fall back to the file contract and continue.
 
 ---
 
@@ -97,7 +95,7 @@ Do not stop just because a Claude-native convenience is missing. Fall back to th
 | `style_guide/` | Voice, anti-patterns (shared/), per-type rules, promotion_formats.md |
 | `.opencode/skills/` | Skill instruction files (one per skill) |
 | `.opencode/agents/` | Critic agent definitions invoked by the review skill (voice, structure, impact) |
-| `archive/claude-code/` | Retired Claude Code runtime assets (settings, hooks) — see `RESTORE.md` |
+| `archive/claude-code/` | Retired legacy runtime assets (settings, hooks) — see `RESTORE.md` |
 | `templates/` | Post folder template (`post.yaml`, `notes.md`, `placeholder.md`) |
 | `posts/` | Per-post working folders with artefacts |
 | `posts/INDEX.md` | TOC only — read this before brainstorming or ideating to see all covered topics at a glance (cheap, ~50 lines) |
@@ -133,25 +131,22 @@ These are the only truly required dependencies for the workflow itself:
 - Ability to read and write files in `posts/<slug>/`
 - Ability to update `post.yaml` and stage artefacts predictably
 
-### Provider-specific conveniences
+### Runtime conveniences
 
-These are helpful in Claude Code but are not required for another agent to operate the repo:
+These are optional capabilities that improve execution but are not part of the file contracts:
 
-| Tool | Purpose |
-|------|---------|
-| `context-mode` | Context window management — `ctx_fetch_and_index`, `ctx_execute`, `ctx_search` |
-| Chrome DevTools MCP | Browser automation for research gap-filling (DuckDuckGo searches via `new_page`, `fill`, `press_key`) |
-| `rtk` | Token-optimised Bash proxy — rewrites all Bash commands transparently via `BASH_ENV` hook |
-
-### Fallback expectation for other agents
-
-If these conveniences are unavailable, continue by reading the repo files directly, performing the skill steps manually, and only skipping capabilities that genuinely require an unavailable external tool.
+| Capability | Purpose |
+|------------|---------|
+| Native subagents | Run independent critic or analysis work separately; skills define sequential fallbacks |
+| `websearch` | Open-ended research searches; the research skill defines a webfetch fallback |
+| `webfetch` | Retrieve known URLs and DuckDuckGo Lite fallback results |
+| `poppler` | PDF → text conversion for the import-pdf skill |
 
 ---
 
 ## Retired: Automation Hooks
 
-Earlier versions of this repo ran two Claude Code-specific hooks (`detect-skill-complete.js`, `skill-reflector.js`) that produced a per-post `skill_reflection_log.md` telemetry file after each skill run. These were retired during the OpenCode migration: they were fragile (shared `/tmp` marker, heuristic detection, early triggering) and not workflow-critical — the pipeline already persists authoritative completion state in `post.yaml` and the artefact files themselves.
+Earlier versions of this repo ran lifecycle hooks (`detect-skill-complete.js`, `skill-reflector.js`) that produced a per-post `skill_reflection_log.md` telemetry file after each skill run. These were retired during the runtime migration: they were fragile (shared `/tmp` marker, heuristic detection, early triggering) and not workflow-critical — the pipeline already persists authoritative completion state in `post.yaml` and the artefact files themselves.
 
 No replacement mechanism exists. Existing `skill_reflection_log.md` files in completed posts remain as historical artifacts. The retired hook scripts are preserved in `archive/claude-code/hooks/` — see `archive/claude-code/RESTORE.md` if they ever need to be restored.
 
