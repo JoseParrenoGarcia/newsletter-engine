@@ -1,20 +1,20 @@
 ---
 name: research
-description: "Validates existing URLs and fills research gaps with targeted web searches to produce research_brief.md grouped by ToC section. DO trigger: after brainstorm is complete and post.yaml exists; when URLs in notes.md need validation; when sources are needed to support draft sections. DO NOT trigger: before brainstorm is complete; when research is already marked complete and no redo is requested; for tasks that do not involve sourcing external references. Keywords: research, web search, URL validation, sources, research_brief, ctx_fetch_and_index, Chrome DevTools, ToC gaps."
-argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
+description: "Validates existing URLs and fills research gaps with targeted web searches to produce research_brief.md grouped by ToC section. DO trigger: after brainstorm is complete and post.yaml exists; when URLs in notes.md need validation; when sources are needed to support draft sections. DO NOT trigger: before brainstorm is complete; when research is already marked complete and no redo is requested; for tasks that do not involve sourcing external references. Keywords: research, web search, URL validation, sources, research_brief, ToC gaps."
 license: proprietary
-compatibility: "Claude Code; requires ctx_fetch_and_index and Chrome DevTools MCP tools. WebSearch is not required — Chrome DevTools is used as the search fallback."
 metadata:
   author: jose-parreno-garcia
-  version: "1.0"
+  version: "1.1"
 ---
 
-Run research for the post in `$ARGUMENTS` (or the current post folder if no argument given).
+Input: `posts/<slug>/` path, passed as the skill argument (`postFolder`) or defaulted from the current directory.
+
+Run research for the post in `postFolder` (or the current post folder if none given).
 
 ## Before you start
 
 ### 1. Locate the post folder
-If `$ARGUMENTS` is provided, that is the post folder. Otherwise look for a `post.yaml` in the current directory. If neither exists, stop and tell Jose to provide a folder path.
+If `postFolder` is provided, that is the post folder. Otherwise look for a `post.yaml` in the current directory. If neither exists, stop and tell Jose to provide a folder path.
 
 ### 2. Check stage guard
 Read `post.yaml`. If `stages.research.status` is `complete`, say:
@@ -23,14 +23,16 @@ Wait for explicit confirmation before proceeding.
 
 ### 3. Check brainstorm stage
 If `stages.brainstorm.status` is not `complete`, say:
-> "Brainstorm has not been completed for this post. Run `/brainstorm` first to produce a `post.yaml` and rough ToC before researching."
+> "Brainstorm has not been completed for this post. Run the brainstorm skill first to produce a `post.yaml` and rough ToC before researching."
 Stop.
 
 ---
 
 ## Research execution
 
-Spawn a subagent using the Agent tool with the following prompt (substitute `POST_FOLDER` with the resolved folder path before spawning):
+Invoke a subagent with the following prompt (substitute `POST_FOLDER` with the resolved folder path before invoking):
+
+**Sequential fallback (no subagent capability):** run the same steps directly in the main session against the resolved post folder.
 
 > Run research for the post at `POST_FOLDER`.
 >

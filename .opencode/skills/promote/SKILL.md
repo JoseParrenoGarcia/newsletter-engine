@@ -1,15 +1,15 @@
 ---
 name: promote
-description: "Reads long_draft.md to produce promotion_posts.md — 1 launch post and 3 section deep-dives formatted for copy-paste to LinkedIn and Substack Notes. DO trigger: after long_draft.md exists; when social promotion copy is needed for a post; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; when SEO review or revision is the goal (use /seo or /revise); for full article editing. Keywords: promote, LinkedIn, Substack, social posts, launch post, deep-dive, promotion, copy-paste."
-argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
+description: "Reads long_draft.md to produce promotion_posts.md — 1 launch post and 3 section deep-dives formatted for copy-paste to LinkedIn and Substack Notes. DO trigger: after long_draft.md exists; when social promotion copy is needed for a post; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; when SEO review or revision is the goal (use the seo skill or the revise skill); for full article editing. Keywords: promote, LinkedIn, Substack, social posts, launch post, deep-dive, promotion, copy-paste."
 license: proprietary
-compatibility: "Claude Code"
 metadata:
   author: jose-parreno-garcia
-  version: "1.0"
+  version: "1.1"
 ---
 
-# /promote
+# Promote skill
+
+Input: `posts/<slug>/` path, passed as the skill argument (`postFolder`) or defaulted from the current directory.
 
 Generate copy-paste-ready promotional posts from any `long_draft.md`.
 
@@ -21,7 +21,7 @@ Generate copy-paste-ready promotional posts from any `long_draft.md`.
 
 ### Step 1 — Locate the post folder
 
-If an argument was given (e.g. `/promote posts/my-post/`), use that path.
+If `postFolder` was given, use that path.
 
 Otherwise check if the current directory contains a `long_draft.md`.
 
@@ -43,7 +43,7 @@ Wait for confirmation before proceeding. If `post.yaml` doesn't exist, skip this
 
 If `long_draft.md` is missing from the post folder, stop and tell Jose clearly:
 
-> "`long_draft.md` not found in `<path>`. Run `/draft` first or provide the path to a draft."
+> "`long_draft.md` not found in `<path>`. Run the draft skill first or provide the path to a draft."
 
 ---
 

@@ -1,15 +1,15 @@
 ---
 name: new-post
 description: "Pipeline orchestrator. Creates a new post folder from the standard template and chains the full pipeline (brainstorm → research → draft → seo → revise → review → promote) with stage-skip logic and a decision_log. DO trigger: when starting a new post from scratch; when running post-draft stages on an existing draft (--from-draft); when the full pipeline needs to run unattended. DO NOT trigger: when a single isolated stage is needed (invoke that skill directly instead). Keywords: new post, pipeline, orchestrator, full pipeline, from-draft, stage-skip, decision_log, brainstorm, template."
-argument-hint: "[slug or --from-draft posts/<slug>/ — optional]"
 license: proprietary
-compatibility: "Claude Code"
 metadata:
   author: jose-parreno-garcia
-  version: "1.0"
+  version: "1.1"
 ---
 
-Two entry modes depending on `$ARGUMENTS`:
+Input: a slug, or `--from-draft posts/<slug>/`, passed as the skill argument (`postFolder`) or asked for if not given.
+
+Two entry modes depending on the argument given:
 
 - **No argument or a plain slug** → Mode A: new post from scratch
 - **`--from-draft posts/<slug>/`** → Mode B: run post-draft stages on an existing draft
@@ -20,7 +20,7 @@ Two entry modes depending on `$ARGUMENTS`:
 
 ### Step 1 — Determine the slug
 
-If `$ARGUMENTS` is a plain string (not `--from-draft`), use it as the slug. Apply these rules:
+If the argument given is a plain string (not `--from-draft`), use it as the slug. Apply these rules:
 - Lowercase
 - Replace spaces and special characters with hyphens
 - Remove punctuation
@@ -39,7 +39,7 @@ If `posts/<slug>/` already exists:
 
 Check whether `posts/<slug>/long_draft.md` exists and is not a placeholder:
 - **Draft exists** → say: "A folder at `posts/<slug>/` already exists and it has a draft. Do you want to run post-draft stages on it (SEO → revise → promote)? Or start fresh with a different slug?" — if yes, switch to Mode B with this slug.
-- **No draft** → say: "A folder at `posts/<slug>/` already exists. Do you want to continue with a different slug, or open the existing post and run `/brainstorm` on it directly?"
+- **No draft** → say: "A folder at `posts/<slug>/` already exists. Do you want to continue with a different slug, or open the existing post and run the brainstorm skill on it directly?"
 
 Stop and wait for Jose's answer.
 
@@ -68,11 +68,11 @@ slug: "<slug>"
 Tell Jose:
 > "Created `posts/<slug>/`. Starting the brainstorm now."
 
-Then immediately run the `/brainstorm` skill on `posts/<slug>/`.
+Then immediately run the brainstorm skill on `posts/<slug>/`.
 
 ### Step 5 — After brainstorm — pipeline menu
 
-Once `/brainstorm` has finished and `post.yaml` is written, present:
+Once the brainstorm skill has finished and `post.yaml` is written, present:
 
 > "Brainstorm complete. What would you like to do next?
 > 1. Run full pipeline (research → draft → seo → revise → review → promote)
@@ -81,25 +81,25 @@ Once `/brainstorm` has finished and `post.yaml` is written, present:
 
 **Option 1:** Run the full pipeline — see "Full pipeline execution" section below.
 
-**Option 2:** Run `/research posts/<slug>/` only.
+**Option 2:** Run the research skill on `posts/<slug>/` only.
 
-**Option 3:** Exit. Remind Jose they can resume at any point with the relevant skill (e.g. `/research posts/<slug>/`).
+**Option 3:** Exit. Remind Jose they can resume at any point with the relevant skill (e.g. the research skill on `posts/<slug>/`).
 
 ---
 
 ## Mode B — From existing draft
 
-Triggered by: `/new-post --from-draft posts/<slug>/` OR by the conflict-check branch in Mode A when a draft already exists.
+Triggered by: this skill invoked with `--from-draft posts/<slug>/` OR by the conflict-check branch in Mode A when a draft already exists.
 
 ### Step 1 — Locate the post folder
 
-Parse the slug or path from `$ARGUMENTS`. If no path given (just `--from-draft` alone), ask:
+Parse the slug or path from the argument given. If no path given (just `--from-draft` alone), ask:
 > "Which post? Give me the slug (e.g. `claude-code-skills-explained`) or the full path to the post folder."
 
 ### Step 2 — Verify draft exists
 
 If `long_draft.md` is missing or is a placeholder, stop:
-> "No draft found at `posts/<slug>/long_draft.md`. Run `/draft` first, or use `/new-post <slug>` to start from scratch."
+> "No draft found at `posts/<slug>/long_draft.md`. Run the draft skill first, or start this skill with `<slug>` to start from scratch."
 
 ### Step 3 — Report stage status
 
@@ -126,19 +126,19 @@ Present:
 
    **Before each review run:** set `stages.review.status: pending` in `post.yaml` (bypasses the stage guard on re-runs).
 
-   Run `/review posts/<slug>/`.
+   Run the review skill on `posts/<slug>/`.
 
    After the run, read `review_report.md` and find the `### [verdict]` heading under `## Publish Readiness Verdict`.
 
-   - **If verdict is "Ready":** exit the loop and run `/promote posts/<slug>/`. Then run `/index posts/<slug>/` to append the post to `posts/INDEX.md`.
+   - **If verdict is "Ready":** exit the loop and run the promote skill on `posts/<slug>/`. Then run the index skill on `posts/<slug>/` to append the post to `posts/INDEX.md`.
    - **If verdict is "Revise first" or "Major rework needed"** AND this is run 1 or 2:
      - Read the numbered priority actions under `### Priority actions` in `review_report.md`
      - Apply targeted editorial fixes directly to `long_draft.md`, addressing the priority actions in order of impact. Name the section and what was changed.
      - Append to `decision_log.md`: review iteration number, verdict, what was changed and why.
      - Repeat from the top of the loop.
    - **If verdict is not "Ready" after run 3:** stop. Tell Jose:
-     > "The post has gone through 3 review iterations and is still not ready. Final verdict: [verdict]. Remaining priority actions: [list]. Do you want to make manual changes and re-run `/review`, or proceed to promote anyway?"
-     Wait for Jose's instruction. Do not run `/promote` automatically.
+     > "The post has gone through 3 review iterations and is still not ready. Final verdict: [verdict]. Remaining priority actions: [list]. Do you want to make manual changes and re-run review, or proceed to promote anyway?"
+     Wait for Jose's instruction. Do not run the promote skill automatically.
 
 For all other options, run the selected stages using the stage-skip logic and decision_log appending described in the sections below.
 
@@ -148,15 +148,15 @@ For all other options, run the selected stages using the stage-skip logic and de
 
 When the full pipeline is requested (Mode A option 1, or Mode B option 1), run each stage in sequence:
 
-1. `/research posts/<slug>/`
-2. `/draft posts/<slug>/` — in pipeline mode (no pause after outline; proceed directly to writing). When spawning the `/draft` subagent, explicitly instruct it to write `long_draft.md` incrementally (`Write` for the first section, then `Edit`-append per subsequent section) rather than composing the full draft in one response — required regardless of target word count, per `.claude/rules/output-limits.md`.
-3. `/seo posts/<slug>/`
-4. `/revise posts/<slug>/` — when spawning the `/revise` subagent, explicitly instruct it to apply edits incrementally (one `Edit` call per change, not batched) rather than reproducing large stretches of revised prose in a single response.
+1. Run the research skill on `posts/<slug>/`
+2. Run the draft skill on `posts/<slug>/` — in pipeline mode (no pause after outline; proceed directly to writing). When invoking the draft skill's subagent, explicitly instruct it to write `long_draft.md` incrementally (write the first section, then append per subsequent section) rather than composing the full draft in one response — required regardless of target word count, per the long-form file write discipline in `AGENTS.md`.
+3. Run the seo skill on `posts/<slug>/`
+4. Run the revise skill on `posts/<slug>/` — when invoking the revise skill's subagent, explicitly instruct it to apply edits incrementally (one edit per change, not batched) rather than reproducing large stretches of revised prose in a single response.
 5. Review loop — run up to 3 times:
 
    **Before each review run:** set `stages.review.status: pending` in `post.yaml` (bypasses the stage guard on re-runs).
 
-   Run `/review posts/<slug>/`.
+   Run the review skill on `posts/<slug>/`.
 
    After the run, read `review_report.md` and find the `### [verdict]` heading under `## Publish Readiness Verdict`.
 
@@ -167,11 +167,11 @@ When the full pipeline is requested (Mode A option 1, or Mode B option 1), run e
      - Append to `decision_log.md`: review iteration number, verdict, what was changed and why.
      - Repeat from the top of the loop.
    - **If verdict is not "Ready" after run 3:** stop. Tell Jose:
-     > "The post has gone through 3 review iterations and is still not ready. Final verdict: [verdict]. Remaining priority actions: [list]. Do you want to make manual changes and re-run `/review`, or proceed to promote anyway?"
-     Wait for Jose's instruction. Do not run `/promote` automatically.
+     > "The post has gone through 3 review iterations and is still not ready. Final verdict: [verdict]. Remaining priority actions: [list]. Do you want to make manual changes and re-run review, or proceed to promote anyway?"
+     Wait for Jose's instruction. Do not run the promote skill automatically.
 
-6. `/promote posts/<slug>/` — only if the loop exited with "Ready".
-7. `/index posts/<slug>/` — append the post to `posts/INDEX.md`.
+6. Run the promote skill on `posts/<slug>/` — only if the loop exited with "Ready".
+7. Run the index skill on `posts/<slug>/` — append the post to `posts/INDEX.md`.
 
 After each stage completes, append to `decision_log.md` — see [decision_log format](#decision_log-format) below.
 

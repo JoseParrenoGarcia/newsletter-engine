@@ -1,21 +1,21 @@
 ---
 name: revise
 description: "Applies SEO-driven revisions to long_draft.md based on seo_brief.md — keyword placement, readability fixes, H1/H2 rewording, and Quick Wins. Creates a backup (long_draft_pre-revise.md) before writing changes. DO trigger: after both long_draft.md and seo_brief.md exist; when the draft needs improvement for search and readability. DO NOT trigger: when only one of the two required inputs exists; for general editorial rewrites not driven by an SEO brief; when revise is already complete and no redo is requested. Keywords: revise, revision, SEO, keyword placement, readability, Quick Wins, long_draft, seo_brief."
-argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
 license: proprietary
-compatibility: "Claude Code"
 metadata:
   author: jose-parreno-garcia
-  version: "1.0"
+  version: "1.1"
 ---
 
-Apply SEO-driven revisions to the draft in `$ARGUMENTS` (or ask if no argument is given).
+Input: `posts/<slug>/` path, passed as the skill argument (`postFolder`) or asked for if not given.
+
+Apply SEO-driven revisions to the draft in `postFolder` (or ask if none given).
 
 ## Before you start
 
 ### 1. Locate the post folder
 
-If `$ARGUMENTS` is provided, that is the post folder. Otherwise look for `long_draft.md` and `seo_brief.md` in the current directory.
+If `postFolder` is provided, that is the post folder. Otherwise look for `long_draft.md` and `seo_brief.md` in the current directory.
 
 If neither is found, ask:
 > "Which post do you want to revise? Give me the slug (e.g. `claude-code-skills-explained`) or the path to the folder."
@@ -32,15 +32,17 @@ Wait for explicit confirmation before proceeding.
 ### 3. Verify both inputs exist
 
 - If `long_draft.md` is missing or is a placeholder, stop and say:
-  > "No draft found at `<path>/long_draft.md`. Run `/draft` first."
+  > "No draft found at `<path>/long_draft.md`. Run the draft skill first."
 - If `seo_brief.md` is missing or is a placeholder, stop and say:
-  > "No SEO brief found at `<path>/seo_brief.md`. Run `/seo` first."
+  > "No SEO brief found at `<path>/seo_brief.md`. Run the seo skill first."
 
 ---
 
 ## Revision execution
 
-Spawn a subagent using the Agent tool with the following prompt (substitute `POST_FOLDER` with the resolved folder path before spawning):
+Invoke a subagent with the following prompt (substitute `POST_FOLDER` with the resolved folder path before invoking).
+
+**Sequential fallback (no subagent capability):** run the same steps directly in the main session against the resolved post folder.
 
 > Apply SEO-driven revisions to the draft at `POST_FOLDER`.
 >
@@ -89,7 +91,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - Do not remove content — shorten sentences by cutting redundant clauses, not ideas
 > - Preserve Jose's voice — no generic AI filler phrases, no "it's important to note" or "in conclusion"
 > - One change at a time — apply each planned edit exactly as described; do not improvise
-> - **Apply edits incrementally** — make each planned edit as a separate `Edit` call rather than batching multiple section rewrites into one turn's output. If a single response would need to reproduce large stretches of revised prose, split it across multiple tool calls instead.
+> - **Apply edits incrementally** — make each planned edit as a separate edit rather than batching multiple section rewrites into one turn's output. If a single response would need to reproduce large stretches of revised prose, split it across multiple tool calls instead.
 > - **Heading capitalisation** — all H1, H2, and H3 headings must use sentence case (capitalise only the first word and proper nouns). If any existing heading uses title case, correct it as part of the revision pass.
 > - **TOC sync** — after applying any H2 heading change, find the `## What will we cover in this post?` section (this heading must be exact — correct it if it differs). For each changed H2, locate the bullet whose `**bold phrase**` corresponds to that section and update the bold phrase to match the new H2 text exactly. If a bullet has no clear match, leave it unchanged and note it in the revision plan as skipped. **After all H2 changes are applied, do a full ToC sync pass: read every bold phrase in the ToC section and verify it matches its corresponding H2 exactly. Flag any remaining mismatch in the revision plan — do not silently leave stale ToC entries.**
 >
@@ -114,7 +116,9 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - SEO verification: keyword placement before → after score, Quick Wins pass rate (N/3), any remaining ✗ items
 >
 > **Step 8 — SEO verification pass**
-> Spawn a second subagent to verify the revisions landed correctly. Pass it `POST_FOLDER` and the revision plan from Step 3.
+> Invoke a second subagent to verify the revisions landed correctly. Pass it `POST_FOLDER` and the revision plan from Step 3.
+>
+> **Sequential fallback (no subagent capability):** run the verification checks below directly in the main session after completing Step 5, instead of invoking a second subagent.
 >
 > The verification subagent must:
 >

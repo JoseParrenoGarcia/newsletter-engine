@@ -1,15 +1,15 @@
 ---
 name: index
-description: "Maintains posts/INDEX.md — a ledger of all published pipeline posts and reference posts. Appends only new entries; never regenerates existing ones. DO trigger: after /promote completes for a new post; when a reference post has been added and is not yet indexed. DO NOT trigger: to re-summarise posts already in the index; when no new content has been added. Keywords: index, wiki, post index, table of contents, ledger, content catalogue."
-argument-hint: "[posts/<slug>/ to index a specific pipeline post | blank to scan for all unindexed content]"
+description: "Maintains posts/INDEX.md — a ledger of all published pipeline posts and reference posts. Appends only new entries; never regenerates existing ones. DO trigger: after the promote skill completes for a new post; when a reference post has been added and is not yet indexed. DO NOT trigger: to re-summarise posts already in the index; when no new content has been added. Keywords: index, wiki, post index, table of contents, ledger, content catalogue."
 license: proprietary
-compatibility: "Claude Code"
 metadata:
   author: jose-parreno-garcia
-  version: "1.1"
+  version: "1.2"
 ---
 
-# /index
+# Index skill
+
+Input: `posts/<slug>/` to index a specific pipeline post, passed as the skill argument (`postFolder`) — or blank to scan for all unindexed content.
 
 Append new entries to `posts/INDEX.md`. Entries are written once and never regenerated.
 
@@ -19,7 +19,7 @@ Append new entries to `posts/INDEX.md`. Entries are written once and never regen
 
 All posts must be assigned to exactly one topic group:
 
-- `Claude Code` — skills, memory, agents, rules, planning, anything Claude Code-specific
+- Runtime-specific assets — skills, memory, agents, rules, planning, or other provider-specific material
 - `AI Tools & Adoption` — model selection, cost, open source vs frontier, tooling decisions
 - `Data Science & Future of Work` — DS workflows, automation impact, career, LLM impact on DS practice
 - `Data Science Leadership & Management` — managing DS teams, hiring, feedback, org design
@@ -45,7 +45,7 @@ Use kebab-case tags drawn from this list. Add new tags only when none of the exi
 
 **Reference posts:** find all `.md` files under `reference_posts/` (exclude `.DS_Store`, PDFs, `reference_posts/index.md`, and anything under `reference_posts/archive/`). Build a flat list of paths.
 
-If `$ARGUMENTS` specifies a slug or path, restrict the candidate list to that entry only.
+If `postFolder` specifies a slug or path, restrict the candidate list to that entry only.
 
 ---
 
@@ -65,9 +65,11 @@ If delta is empty, report "Index is up to date — no new entries to add." and s
 
 ## Step 3 — Summarise each new entry
 
-**When invoked from `/new-post`:** the post's content is already in context. Do not re-read `long_draft.md`. Use the `working_title`, `thesis`, `target_audience`, and `topics_to_cover` already available from `post.yaml` to write the summary card directly.
+**When invoked from the new-post skill:** the post's content is already in context. Do not re-read `long_draft.md`. Use the `working_title`, `thesis`, `target_audience`, and `topics_to_cover` already available from `post.yaml` to write the summary card directly.
 
-**When invoked standalone:** spawn a subagent for each delta entry (batch by topic group if multiple). Each subagent must:
+**When invoked standalone:** invoke a subagent for each delta entry (batch by topic group if multiple). Each subagent must:
+
+**Sequential fallback (no subagent capability):** work through each delta entry one at a time in the main session, following the same read/extract steps below.
 
 **For a pipeline post:**
 1. Read `posts/<slug>/post.yaml` only. Extract: `working_title`, `content_type`, `structural_type`, `series_name`, `series_position`, `thesis`, `target_audience`, `topics_to_cover`.
@@ -130,6 +132,6 @@ Print:
 
 ---
 
-## Integration with /new-post
+## Integration with the new-post skill
 
-After `/promote` marks `stages.promote.status: complete`, `/new-post` automatically invokes `/index posts/<slug>/` to append the new entry.
+After the promote skill marks `stages.promote.status: complete`, the new-post skill automatically invokes the index skill on `posts/<slug>/` to append the new entry.

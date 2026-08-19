@@ -1,25 +1,27 @@
 ---
 name: import-pdf
 description: "Converts a PDF reference post to clean markdown. DO trigger: when importing a Substack PDF export as a reference post — strips date headers, page numbers, UI noise, and subscription prompts; restores heading hierarchy, bold, blockquotes, and visual placeholders; writes frontmatter; moves the PDF to a pdf/ subfolder. DO NOT trigger: for non-PDF files; for files already in markdown; when the goal is content editing rather than format conversion. Keywords: import, PDF, convert, markdown, Substack, reference post, pdftotext."
-argument-hint: "[path/to/file.pdf]"
 license: proprietary
-compatibility: "Claude Code; requires poppler (pdftotext) installed"
 metadata:
   author: jose-parreno-garcia
-  version: "1.0"
+  version: "1.1"
 ---
 
-Convert the PDF at `$ARGUMENTS` into a clean markdown reference post.
+Requires `poppler` (`pdftotext`) installed.
+
+Input: PDF file path, passed as the skill argument (`pdfPath`) or asked for if not given.
+
+Convert the PDF at `pdfPath` into a clean markdown reference post.
 
 ## Steps
 
 ### 1. Validate input
-Confirm `$ARGUMENTS` ends in `.pdf` and the file exists. If not, stop and tell the user what's wrong.
+Confirm `pdfPath` ends in `.pdf` and the file exists. If not, stop and tell the user what's wrong.
 
 ### 2. Convert PDF to text
-Run:
+Run (substituting the actual path for `pdfPath`):
 ```
-pdftotext "$ARGUMENTS" "/tmp/import_pdf_working.txt"
+pdftotext "<pdfPath>" "/tmp/import_pdf_working.txt"
 ```
 
 ### 3. Read the text file
@@ -31,7 +33,7 @@ Full noise patterns to strip (date headers, page numbers, Substack UI text, subs
 Capture the Substack URL (from the noise) to use as the `source` field in frontmatter.
 
 ### 5. Infer metadata from file path
-From the PDF path `$ARGUMENTS`:
+From `pdfPath`:
 - `theme` = parent directory name (e.g. `data-science-management`)
 - `type` = grandparent directory name (e.g. `standalone`, `series`, `short_technical`)
 
@@ -67,7 +69,7 @@ Markdown formatting conventions and visual placeholder format (with type/source/
 Create a `pdf/` directory inside the same directory as the input file (if it doesn't exist), then move the PDF there:
 ```
 mkdir -p "<input_file_dir>/pdf"
-mv "$ARGUMENTS" "<input_file_dir>/pdf/"
+mv "<pdfPath>" "<input_file_dir>/pdf/"
 ```
 For example, a PDF at `reference_posts/standalone/data-science-management/post.pdf` moves to `reference_posts/standalone/data-science-management/pdf/post.pdf`.
 
