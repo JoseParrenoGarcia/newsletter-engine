@@ -55,7 +55,7 @@ artefacts:
   long_draft_backup: long_draft_pre-revise.md
   seo_brief: seo_brief.md
   review_report: review_report.md
-  promotion_posts: promotion/promotion_posts.md
+  promotion_posts: promotion_posts.md
 
 
 # ── Pipeline stages ───────────────────────────────────────────────────

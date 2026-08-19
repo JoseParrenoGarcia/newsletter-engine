@@ -4,7 +4,7 @@ description: "Pipeline orchestrator. Creates a new post folder from the standard
 license: proprietary
 metadata:
   author: jose-parreno-garcia
-  version: "1.1"
+  version: "1.2"
 ---
 
 Input: a slug, or `--from-draft posts/<slug>/`, passed as the skill argument (`postFolder`) or asked for if not given.
@@ -55,6 +55,7 @@ posts/<slug>/
   outline.md                # copy of templates/placeholder.md
   long_draft.md             # copy of templates/placeholder.md
   seo_brief.md              # copy of templates/placeholder.md
+  review_report.md          # copy of templates/placeholder.md
   promotion_posts.md        # copy of templates/placeholder.md
 ```
 
