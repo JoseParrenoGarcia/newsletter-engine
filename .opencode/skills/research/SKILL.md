@@ -4,7 +4,7 @@ description: "Validates existing URLs and fills research gaps with targeted web 
 license: proprietary
 metadata:
   author: jose-parreno-garcia
-  version: "1.1"
+  version: "1.2"
 ---
 
 Input: `posts/<slug>/` path, passed as the skill argument (`postFolder`) or defaulted from the current directory.
@@ -30,6 +30,8 @@ Stop.
 
 ## Research execution
 
+Use the runtime's `webfetch` capability to retrieve known URLs. For open-ended searches, prefer the runtime's native `websearch` capability when available. If `websearch` is unavailable, use `webfetch` against DuckDuckGo Lite at `https://lite.duckduckgo.com/lite/?q=<url-encoded-query>` and parse its numbered results. Do not require context-mode, browser automation, or an MCP-specific search tool.
+
 Invoke a subagent with the following prompt (substitute `POST_FOLDER` with the resolved folder path before invoking):
 
 **Sequential fallback (no subagent capability):** run the same steps directly in the main session against the resolved post folder.
@@ -48,9 +50,9 @@ Invoke a subagent with the following prompt (substitute `POST_FOLDER` with the r
 >
 > **Step 3 — Validate and enrich existing URLs**
 > For each URL in the incoming list:
-> - Fetch the page using `ctx_fetch_and_index` (source label = the URL domain)
-> - If unreachable or returns an error: drop silently
-> - If reachable: search the indexed content for the post thesis keywords to extract page title + write 1-3 sentence summary of what it covers and why relevant to the post's thesis + map to the most relevant ToC section
+> - Fetch the page using `webfetch`.
+> - If unreachable or returns an error: add it to Dropped Sources with the observed reason. Do not silently discard it.
+> - If reachable: inspect the returned page content for the post thesis keywords, extract the page title, write a 1-3 sentence summary of what it covers and why it is relevant to the post's thesis, and map it to the most relevant ToC section.
 >
 > Keep a running list of: `{ url, title, summary, toc_section }` for surviving sources.
 >
@@ -60,17 +62,13 @@ Invoke a subagent with the following prompt (substitute `POST_FOLDER` with the r
 > **Step 5 — Fill gaps with targeted searches**
 > For each item in the gaps list (working through ToC order):
 > 1. Formulate a specific search query based on the section/concept and the post's thesis
-> 2. Search using Chrome DevTools MCP:
->    - Call `new_page` to open `https://duckduckgo.com` (or navigate if a page is already open)
->    - Call `take_snapshot` to find the search input uid
->    - Call `fill` with the search query on the combobox input
->    - Call `press_key` with `Enter`
->    - Call `wait_for` with `["results", "Web results"]` (timeout 5000ms)
->    - Call `take_snapshot` to read the results page — extract the top result URLs and titles
-> 3. Scan the extracted results — select the most relevant, credible URL not already in the list
-> 4. Check domain variety: if the selected domain already has 2 sources in the list, skip it and pick the next best result
-> 5. Fetch the selected URL using `ctx_fetch_and_index`. If unreachable: try the next result. If reachable: search the indexed content to extract title + write 1-3 sentence summary, map to the gap section
-> 6. Add to the running list
+> 2. Search using native `websearch` if available. Otherwise use `webfetch` against `https://lite.duckduckgo.com/lite/?q=<url-encoded-query>`.
+> 3. Parse the numbered DuckDuckGo Lite results when using the fallback. Extract the top 3-5 result URLs and titles.
+> 4. If the search call or fallback fetch fails, record the query as an unresolved research gap and continue with the next gap. Never claim a source was found when search failed.
+> 5. Scan the results — select the most relevant, credible URL not already in the list.
+> 6. Check domain variety: if the selected domain already has 2 sources in the list, skip it and pick the next best result.
+> 7. Fetch the selected URL using `webfetch`. If unreachable, try the next result and record dropped URLs with their observed reasons. If reachable, inspect the returned page content to extract the title, write a 1-3 sentence summary, and map it to the gap section.
+> 8. Add the verified source to the running list only after the page fetch succeeds.
 >
 > Hard cap: stop adding new sources via search once 10 have been added via search. Pre-existing validated sources from the post folder do not count toward this cap.
 > Variety rule: never exceed 2 sources from the same domain across the entire brief.
@@ -119,7 +117,8 @@ Invoke a subagent with the following prompt (substitute `POST_FOLDER` with the r
 > Return:
 > - Total sources (X from post folder files, Y found via search)
 > - Any sections in Research Gaps
-> - Count of URLs dropped and reason (e.g. "2 dropped: signup wall")
+> - Count of URLs dropped and reasons (e.g. "2 dropped: signup wall, 404")
+> - Any search queries that could not be completed, clearly marked as unresolved
 
 Once the subagent completes, tell Jose:
 - Total sources and breakdown
