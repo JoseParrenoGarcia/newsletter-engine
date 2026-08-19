@@ -4,15 +4,19 @@ description: "Pipeline orchestrator. Creates a new post folder from the standard
 license: proprietary
 metadata:
   author: jose-parreno-garcia
-  version: "1.2"
+  version: "1.3"
 ---
 
-Input: a slug, or `--from-draft posts/<slug>/`, passed as the skill argument (`postFolder`) or asked for if not given.
+Input: a slug, `--run-all <slug>`, `--from-draft posts/<slug>/`, or `--run-all --from-draft posts/<slug>/`, passed as the skill argument (`postFolder`) or asked for if not given.
+
+`--run-all` is the unattended mode. It selects the full pipeline automatically after folder creation and brainstorm, without presenting the post-brainstorm or from-draft stage-selection menus. Stage guards still apply, and review verdict gates remain active.
 
 Two entry modes depending on the argument given:
 
 - **No argument or a plain slug** → Mode A: new post from scratch
+- **`--run-all <slug>`** → Mode A, unattended full pipeline
 - **`--from-draft posts/<slug>/`** → Mode B: run post-draft stages on an existing draft
+- **`--run-all --from-draft posts/<slug>/`** → Mode B, unattended full pipeline with stage-skip logic
 
 ---
 
@@ -20,7 +24,7 @@ Two entry modes depending on the argument given:
 
 ### Step 1 — Determine the slug
 
-If the argument given is a plain string (not `--from-draft`), use it as the slug. Apply these rules:
+If the argument includes `--run-all`, set `run_all=true` and parse the remaining slug argument. If the argument is a plain string (not `--from-draft`), use it as the slug. Apply these rules:
 - Lowercase
 - Replace spaces and special characters with hyphens
 - Remove punctuation
@@ -71,9 +75,12 @@ Tell Jose:
 
 Then immediately run the brainstorm skill on `posts/<slug>/`.
 
-### Step 5 — After brainstorm — pipeline menu
+### Step 5 — After brainstorm — pipeline menu or unattended continuation
 
-Once the brainstorm skill has finished and `post.yaml` is written, present:
+Once the brainstorm skill has finished and `post.yaml` is written:
+
+- **If `run_all=true`:** do not present a menu. Continue immediately to **Full pipeline execution** below.
+- **Otherwise:** present:
 
 > "Brainstorm complete. What would you like to do next?
 > 1. Run full pipeline (research → draft → seo → revise → review → promote)
@@ -90,7 +97,7 @@ Once the brainstorm skill has finished and `post.yaml` is written, present:
 
 ## Mode B — From existing draft
 
-Triggered by: this skill invoked with `--from-draft posts/<slug>/` OR by the conflict-check branch in Mode A when a draft already exists.
+Triggered by: this skill invoked with `--from-draft posts/<slug>/` or `--run-all --from-draft posts/<slug>/` OR by the conflict-check branch in Mode A when a draft already exists.
 
 ### Step 1 — Locate the post folder
 
@@ -113,9 +120,11 @@ Read `post.yaml` if it exists and report which stages are already complete:
 > - review: pending
 > - promote: pending"
 
-### Step 4 — From-draft menu
+### Step 4 — From-draft menu or unattended continuation
 
-Present:
+If `run_all=true`, do not present the menu. Continue immediately to **Full pipeline execution** below, applying stage-skip logic to the existing draft.
+
+Otherwise present:
 
 > "Which stages do you want to run?
 > 1. Run from SEO (seo → revise → review loop → promote)
@@ -147,7 +156,7 @@ For all other options, run the selected stages using the stage-skip logic and de
 
 ## Full pipeline execution
 
-When the full pipeline is requested (Mode A option 1, or Mode B option 1), run each stage in sequence:
+When the full pipeline is requested (Mode A `--run-all` or option 1, or Mode B `--run-all` or option 1), run each stage in sequence:
 
 1. Run the research skill on `posts/<slug>/`
 2. Run the draft skill on `posts/<slug>/` — in pipeline mode (no pause after outline; proceed directly to writing). When invoking the draft skill's subagent, explicitly instruct it to write `long_draft.md` incrementally (write the first section, then append per subsequent section) rather than composing the full draft in one response — required regardless of target word count, per the long-form file write discipline in `AGENTS.md`.
@@ -192,4 +201,4 @@ Apply this logic for every stage in the sequence, regardless of how the pipeline
 
 ## decision_log format
 
-Entry format, full pipeline example, and initialisation instructions are in `references/decision-log-format.md` — load that file when writing to `decision_log.md`.
+Entry format, full pipeline example, and initialisation instructions are in `.opencode/skills/new-post/references/decision-log-format.md` — load that file when writing to `decision_log.md`.
