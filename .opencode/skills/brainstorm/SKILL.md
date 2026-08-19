@@ -1,20 +1,20 @@
 ---
 name: brainstorm
-description: "Runs an interactive brainstorm conversation to populate post.yaml and expand notes.md with a rough Table of Contents. DO trigger: at the start of a new post, before research or drafting; when post.yaml needs to be written from scratch or rough notes need shaping into a structured brief. DO NOT trigger: when brainstorm is already marked complete and no redo is requested; when a draft already exists and the goal is post-draft stages (use /new-post --from-draft instead). Keywords: brainstorm, new post, post.yaml, ideas, rough notes, table of contents, content_type, thesis."
-argument-hint: "[posts/<slug>/ — optional, defaults to current directory]"
+description: "Runs an interactive brainstorm conversation to populate post.yaml and expand notes.md with a rough Table of Contents. DO trigger: at the start of a new post, before research or drafting; when post.yaml needs to be written from scratch or rough notes need shaping into a structured brief. DO NOT trigger: when brainstorm is already marked complete and no redo is requested; when a draft already exists and the goal is post-draft stages (use the new-post skill with --from-draft instead). Keywords: brainstorm, new post, post.yaml, ideas, rough notes, table of contents, content_type, thesis."
 license: proprietary
-compatibility: "Claude Code"
 metadata:
   author: jose-parreno-garcia
-  version: "1.0"
+  version: "1.1"
 ---
 
-Run an interactive brainstorm session for the post in `$ARGUMENTS` (or the current post folder if no argument given).
+Input: `posts/<slug>/` path, passed as the skill argument (`postFolder`) or defaulted from the current directory.
+
+Run an interactive brainstorm session for the post in `postFolder` (or the current post folder if none given).
 
 ## Before you start
 
 ### 1. Locate the post folder
-If `$ARGUMENTS` is provided, that is the post folder. Otherwise look for a `post.yaml` in the current directory. If neither exists, Jose may want to brainstorm before a folder exists — this is normal when starting from a paper, idea, or rough notes rather than a slug. In that case: proceed with the brainstorm conversation as normal. At the output step, derive the slug from the working title agreed during wrap-up, create the folder `posts/<slug>/`, then write `post.yaml` and `notes.md` into it.
+If `postFolder` is provided, that is the post folder. Otherwise look for a `post.yaml` in the current directory. If neither exists, Jose may want to brainstorm before a folder exists — this is normal when starting from a paper, idea, or rough notes rather than a slug. In that case: proceed with the brainstorm conversation as normal. At the output step, derive the slug from the working title agreed during wrap-up, create the folder `posts/<slug>/`, then write `post.yaml` and `notes.md` into it.
 
 ### 2. Check stage guard
 Read `post.yaml`. If `stages.brainstorm.status` is `complete`, say:

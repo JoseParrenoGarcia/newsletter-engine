@@ -1,20 +1,20 @@
 ---
 name: review
-description: "Editorial quality gate — 3-critic multi-agent debate → 6-dimension rubric + panel consensus + publish readiness verdict. DO trigger: after /revise is complete; before publishing to Substack or Medium. DO NOT trigger: before long_draft.md exists; as a substitute for /revise (SEO-driven revision runs separately). Keywords: review, editorial, rubric, quality, voice, flow, publish, ready, score, multi-agent, debate, critics."
-argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
+description: "Editorial quality gate — 3-critic multi-agent debate → 6-dimension rubric + panel consensus + publish readiness verdict. DO trigger: after the revise skill is complete; before publishing to Substack or Medium. DO NOT trigger: before long_draft.md exists; as a substitute for the revise skill (SEO-driven revision runs separately). Keywords: review, editorial, rubric, quality, voice, flow, publish, ready, score, multi-agent, debate, critics."
 license: proprietary
-compatibility: "Claude Code"
 metadata:
   author: jose-parreno-garcia
-  version: "2.0"
+  version: "2.1"
 ---
 
-Produce `review_report.md` for the post in `$ARGUMENTS` (or ask if no argument is given).
+Input: `posts/<slug>/` path, passed as the skill argument (`postFolder`) or asked for if not given.
+
+Produce `review_report.md` for the post in `postFolder` (or ask if none given).
 
 ## Before you start
 
 ### 1. Locate the post folder
-If `$ARGUMENTS` is provided, that is the post folder. Otherwise look for `long_draft.md` in the current directory. If neither exists, stop and ask:
+If `postFolder` is provided, that is the post folder. Otherwise look for `long_draft.md` in the current directory. If neither exists, stop and ask:
 > "Which post do you want to review? Give me the slug (e.g. `claude-code-skills-explained`) or the path to the folder."
 
 ### 2. Check stage guard
@@ -25,7 +25,7 @@ Wait for explicit confirmation before proceeding.
 
 ### 3. Verify `long_draft.md` exists
 If `long_draft.md` is missing or is a placeholder, stop and say:
-> "No draft found at `<path>/long_draft.md`. Run `/draft` (and optionally `/revise`) before reviewing."
+> "No draft found at `<path>/long_draft.md`. Run the draft skill (and optionally the revise skill) before reviewing."
 
 ### 4. Read `post.yaml` silently
 Read `post.yaml` if present. Extract:
@@ -54,7 +54,9 @@ For structural completeness: **✓** present and correct, **~** present but weak
 
 ## Critic agents
 
-Spawn all 3 agents **in parallel** using the Agent tool. Do not wait for one to complete before starting the others.
+Invoke all 3 critic subagents **in parallel** if the runtime supports it. Do not wait for one to complete before starting the others.
+
+**Sequential fallback (no parallel subagent capability):** invoke the three critics one at a time, then synthesize their results using the same rubric and verdict logic.
 
 Use the resolved `POST_FOLDER`, `THESIS` (from `post.yaml`, or `"(not available)"`), and the known paths to the shared style guide files.
 
@@ -62,7 +64,7 @@ Use the resolved `POST_FOLDER`, `THESIS` (from `post.yaml`, or `"(not available)
 
 ### Agent 1 — Voice & Audience Critic
 
-Invoke the `voice-critic` agent with this task prompt (substitute values before spawning):
+Invoke the `voice-critic` subagent with this task prompt (substitute values before invoking):
 
 > Post folder: `POST_FOLDER`
 > Anti-patterns path: `style_guide/shared/anti_patterns.md`
@@ -72,7 +74,7 @@ Invoke the `voice-critic` agent with this task prompt (substitute values before 
 
 ### Agent 2 — Structure & Depth Critic
 
-Invoke the `structure-critic` agent with this task prompt:
+Invoke the `structure-critic` subagent with this task prompt:
 
 > Post folder: `POST_FOLDER`
 
@@ -80,7 +82,7 @@ Invoke the `structure-critic` agent with this task prompt:
 
 ### Agent 3 — Impact & Argument Critic
 
-Invoke the `impact-critic` agent with this task prompt:
+Invoke the `impact-critic` subagent with this task prompt:
 
 > Post folder: `POST_FOLDER`
 > Thesis: `THESIS`
@@ -108,7 +110,7 @@ Read each critic's preliminary verdict:
 - If all 3 differ → apply the deterministic rule directly and note which dimension drove the outcome
 
 ### 2a. Cross-skill conflict resolution
-Before scoring, check each critic finding against the rules in `/draft` and `/revise`. If a critic flags something that directly conflicts with an explicit rule from an upstream skill (e.g. the structure critic flags question-format H2s as wrong, but `/draft` mandates question-format H2s for SEO), do not treat it as a revision target. Document the conflict in the review report with a note identifying which rule takes precedence (upstream skill rules override template defaults), and exclude it from the priority actions.
+Before scoring, check each critic finding against the rules in the draft and revise skills. If a critic flags something that directly conflicts with an explicit rule from an upstream skill (e.g. the structure critic flags question-format H2s as wrong, but the draft skill mandates question-format H2s for SEO), do not treat it as a revision target. Document the conflict in the review report with a note identifying which rule takes precedence (upstream skill rules override template defaults), and exclude it from the priority actions.
 
 ### 3. Apply final verdict logic deterministically:
 - **Ready** — Structural completeness is all ✓ or at most one ~, and all scored dimensions are 4 or 5.

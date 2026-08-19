@@ -1,21 +1,21 @@
 ---
 name: seo
-description: "Analyses long_draft.md to produce seo_brief.md — primary and secondary keywords, meta description, H1/H2 structure review, readability assessment, keyword placement checklist, and 5 title variants. DO trigger: after long_draft.md exists; when keyword optimisation and title options are needed before publishing to Medium or Substack; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; for social copy (use /promote); when seo_brief is already complete and no redo is requested. Keywords: SEO, keywords, meta description, title variants, readability, H1, H2, Medium, Substack, seo_brief."
-argument-hint: "[posts/<slug>/ — optional, defaults to current directory or asks]"
+description: "Analyses long_draft.md to produce seo_brief.md — primary and secondary keywords, meta description, H1/H2 structure review, readability assessment, keyword placement checklist, and 5 title variants. DO trigger: after long_draft.md exists; when keyword optimisation and title options are needed before publishing to Medium or Substack; works on any draft, pipeline or standalone. DO NOT trigger: before a draft exists; for social copy (use the promote skill); when seo_brief is already complete and no redo is requested. Keywords: SEO, keywords, meta description, title variants, readability, H1, H2, Medium, Substack, seo_brief."
 license: proprietary
-compatibility: "Claude Code"
 metadata:
   author: jose-parreno-garcia
-  version: "1.0"
+  version: "1.1"
 ---
 
-Produce `seo_brief.md` for the post in `$ARGUMENTS` (or ask if no argument is given).
+Input: `posts/<slug>/` path, passed as the skill argument (`postFolder`) or asked for if not given.
+
+Produce `seo_brief.md` for the post in `postFolder` (or ask if none given).
 
 ## Before you start
 
 ### 1. Locate the post folder
 
-If `$ARGUMENTS` is provided, that is the post folder. Otherwise look for a `post.yaml` or `long_draft.md` in the current directory.
+If `postFolder` is provided, that is the post folder. Otherwise look for a `post.yaml` or `long_draft.md` in the current directory.
 
 If neither exists, ask:
 > "Which post do you want to run SEO review on? Give me the slug (e.g. `claude-code-skills-explained`) or the path to the draft file."
@@ -32,13 +32,15 @@ Wait for explicit confirmation before proceeding.
 ### 3. Verify `long_draft.md` exists
 
 If `long_draft.md` is missing or is a placeholder, stop and say:
-> "No draft found at `<path>/long_draft.md`. Run `/draft` first, or point me at the draft file directly."
+> "No draft found at `<path>/long_draft.md`. Run the draft skill first, or point me at the draft file directly."
 
 ---
 
 ## SEO execution
 
-Spawn a subagent using the Agent tool with the following prompt (substitute `POST_FOLDER` with the resolved folder path before spawning):
+Invoke a subagent with the following prompt (substitute `POST_FOLDER` with the resolved folder path before invoking).
+
+**Sequential fallback (no subagent capability):** run the same steps directly in the main session against the resolved post folder.
 
 > Run SEO analysis for the post at `POST_FOLDER`.
 >
@@ -56,10 +58,10 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > - If `topics_to_exclude` is set, do not suggest any overlapping term.
 >
 > **Step 3 — Analyse the draft**
-> Work through each assessment area. Full definitions for each area are in `.claude/skills/seo/references/assessment-processes.md` — load that file. Assessment areas: meta description, URL slug, H1 recommendation, H2/H3 structure review, AI discoverability (question-format headings, answer blocks, links in answer zone — scored X / total H2s), keyword placement checklist (5 positions, scored out of 5), readability assessment, content quality signals.
+> Work through each assessment area. Full definitions for each area are in `.opencode/skills/seo/references/assessment-processes.md` — load that file. Assessment areas: meta description, URL slug, H1 recommendation, H2/H3 structure review, AI discoverability (question-format headings, answer blocks, links in answer zone — scored X / total H2s), keyword placement checklist (5 positions, scored out of 5), readability assessment, content quality signals.
 >
 > **Step 4 — Generate title variants**
-> Produce 5 titles, one per style. For each, write a suggested subtitle (1 sentence, ≤120 chars). Style definitions and guardrails are in `.claude/skills/seo/references/title-styles.md` — load that file.
+> Produce 5 titles, one per style. For each, write a suggested subtitle (1 sentence, ≤120 chars). Style definitions and guardrails are in `.opencode/skills/seo/references/title-styles.md` — load that file.
 >
 > **Step 5 — Identify Quick Wins**
 > Select the top 3 changes with the most impact on discoverability or click-through on Medium. Be specific — name the exact change, not a category.
@@ -67,7 +69,7 @@ Spawn a subagent using the Agent tool with the following prompt (substitute `POS
 > Bad: "Improve keyword placement"
 >
 > **Step 6 — Write `seo_brief.md`**
-> Write to `POST_FOLDER/seo_brief.md` using the template at `.claude/skills/seo/assets/seo_brief_template.md` — load that template now and fill every section. Do not omit any section.
+> Write to `POST_FOLDER/seo_brief.md` using the template at `.opencode/skills/seo/assets/seo_brief_template.md` — load that template now and fill every section. Do not omit any section.
 >
 > **Step 7 — Update `post.yaml`**
 > If `post.yaml` exists, re-read `post.yaml` from disk immediately before writing — do not use any cached version from earlier in this run. Update only these fields, leaving all other fields exactly as they are:
