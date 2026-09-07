@@ -1,0 +1,84 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "rtk-token-savings"
+working_title: "RTK promises to cut your Claude Code token bill. Does it?"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "RTK is a credible, technically defensible CLI-output compressor — but its headline savings (60-90%) measure the wrong denominator. Independent benchmarks show single-digit end-to-end cost changes, and the mathematics explains why: tool output is roughly 3.3% of a typical agent's billed cost, so even aggressive local compression produces a small first-order saving. Add agent-trajectory effects (extra turns, cache replay) and the picture becomes conditional rather than universal. The correct question is never 'how many tokens did this save' but 'cost per successfully completed task at held quality, on your task distribution.'"
+target_audience: "Claude Code users and practitioners of agentic coding patterns who are token-conscious and have heard the RTK headline numbers, but haven't verified the mechanics or the economics themselves."
+target_reading_time_minutes: 20
+topics_to_cover:
+  - "The problem RTK solves: coding agents ingest an absurd amount of machine-generated, human-readable CLI output that the agent may not need verbatim"
+  - "What RTK actually is: a deterministic, command-aware observability filter — not an LLM summariser, not a compressed-language scheme, not a generic context compressor"
+  - "The redundancy vs evidence distinction: RTK wins when verbosity and information are weakly correlated; it becomes risky when seemingly boring lines contain decisive evidence"
+  - "Command-by-command variation: high-compression candidates (verbose test suites, logs, large Git ops, build tools) vs low-compression or neutral candidates (already-terse commands, short grep results)"
+  - "RTK's own claims: what 'up to 90%' actually measures, that it refers to Bash output not total bill, and that rtk gain uses a bytes/4 approximation not provider tokenisation"
+  - "The ceiling arithmetic: tool output is ~3.3% of billed cost in external studies; 80% compression of a 3.3% surface ≈ 2.64 percentage points, not 80%"
+  - "Agent-loop effects: how a compressed result that forces an extra turn can erase local savings through context replay, cache re-reads, and additional reasoning"
+  - "JetBrains SkillsBench: +7.6% cost at low effort, ~neutral at high effort, unchanged quality — addressable surface was only ~20% of tool-result characters in their replay"
+  - "Weinberger & Hozez (2026): -2.7% in primary arm, holdout crossed zero, Opus replications approximately flat — shipped RTK, 2,848 billed runs"
+  - "Failure modes: missing diagnostics, exact edit anchors disappearing, machine-readable stdout transformed, parser drift, compression overhead on tiny outputs, extra turns erasing savings"
+  - "Counter-intuitive conclusion: RTK can compress by 70%, produce equal quality, and barely move total cost — simultaneously true, no contradiction"
+  - "Practical verdict: yes selectively, not universally — estimate addressable surface first, start with verbose/repetitive commands, keep raw-output escape hatches, measure cost per successful task"
+topics_to_exclude:
+  - "Ponytail, Caveman, or Caveman Proxy as comparison subjects beyond a brief closing mention — this post is about RTK only"
+  - "RTK's rtk discover and meta commands as standalone features — mention only in context of evaluating addressable surface"
+  - "Licensing, BSL, or open-source politics — not relevant to the technical and economic argument"
+  - "General Claude Code tutorial content unrelated to token mechanics or RTK"
+open_research_questions:
+  - "No independent broad paired benchmark for RTK on non-Bash-heavy (source-read-dominant) workflows exists yet — JetBrains and W&H both used mixed workloads; pure feature-work vs debugging breakdown not published"
+  - "rtk gain vs provider-billed divergence magnitude: JetBrains documented the mismatch qualitatively but exact per-run deltas not published; flag as instrumentation caveat"
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "This post investigates RTK (Rust Token Killer), a high-popularity CLI proxy that compresses shell command output before it reaches a coding agent. The post follows the same mechanics-first, benchmark-honest structure as the ponytail-caveman post. Jose wants to do two things: (1) explain how RTK actually works and map its savings onto the real cost structure of a Claude Code agent session, and (2) hold the headline numbers against independent external benchmarks to show where the savings are real, where they are overstated, and what conditions determine which. The reader is a Claude Code practitioner who has seen the 60-90% marketing claims and wants a grounded understanding before adopting or dismissing the tool. The key finding is that RTK has a sounder architectural premise than most token-saving tools (deterministic parser, no synthetic compressed language), but the economics are governed by how small the addressable surface is relative to total billed cost — and independent studies (JetBrains, Weinberger & Hozez 2026) find single-digit end-to-end effects, not tens of percent. The post ends with a conditional yes, a deployment ladder, and a testing framework."
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/claude-code-agents-explained.md
+  - posts/claude-code-thinking-planning-goal-mode/long_draft_v2.md
+  - posts/ponytail-caveman-token-savings-myth/long_draft.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_pre-revise.md
+  seo_brief: seo_brief.md
+  decision_log: decision_log.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-08-18"
+  research:
+    status: complete
+    completed_at: "2026-08-18"
+  draft:
+    status: complete
+    completed_at: "2026-08-18"
+  seo:
+    status: complete
+    completed_at: "2026-08-18"
+  revise:
+    status: complete
+    completed_at: "2026-08-18"
+  review:
+    status: complete
+    completed_at: "2026-08-18"
+  promote:
+    status: complete
+    completed_at: "2026-08-18"
