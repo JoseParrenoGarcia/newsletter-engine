@@ -2,39 +2,228 @@
 
 *A mechanics-first look at what context-mode's sandboxed context savings do and don't change: the context window, the token bill, and why they aren't the same thing.*
 
-I read about context-mode the same way I read about RTK and Ponytail before it: a GitHub repo with an eye-catching context-window number attached, this time "98% context reduction," 20,000-plus stars, and a Hacker News launch thread that hit the front page. The pattern was familiar enough that I went looking for the mechanism before I went looking for the number.
+As part of my investigations into reducing token usage in agentic coding workflows, I came across context-mode. I had already written about what RTK, Ponytail and Caveman help with, so I initially assumed context-mode was another tool for shrinking or rewriting what an agent sees. Its headline claim—"98% context reduction"—made it worth investigating, but the number alone did not tell me what was actually being reduced.
 
 What I found is a genuinely different kind of tool than the ones I'd already covered. RTK compresses shell output. Ponytail changes what code gets written. Caveman shortens prose. Context-mode does none of those things. It runs a sandboxed process, keeps the raw output local, and returns a small result to the conversation — while the full data stays queryable in a local database. That is a real architectural idea, and the project's own benchmark numbers for it are plausible.
 
-The claim that needs unpacking is what those numbers actually mean. "98% context reduction" and "cuts your token bill" sound like the same statement. They are not. A context window and a token bill are governed by different mechanics, and a tool can genuinely shrink one without touching the other. This post works through why, where context-mode earns its keep despite that gap, and where it doesn't. It also covers what happened when I ran its underlying mechanism against a real file in this repo, instead of trusting the headline.
+In this post, I want to understand that architecture before judging the headline. How does context-mode move data outside the main context window? What does the sandbox actually do? When is it better to compute a compact answer, and when should the agent retrieve the original material? Most importantly, where does context-mode genuinely help, and where does the claim become weaker than the number suggests? I will work through the mechanism, the evidence and a small test on a real file in this repository.
 
 ## What will we cover in this post?
 
-- **What does context-mode actually claim to do?** The mechanism behind the headline — sandboxed execution, local indexing, and what "the other half of the context problem" actually means.
-- **Why isn't a smaller context window the same as a smaller bill?** How Anthropic's own context-window and prompt-caching mechanics show these are related but distinct quantities.
-- **Where does context-mode actually earn its place?** The input shapes — large logs, CSVs, multi-file surveys, documentation — where the project's fixture benchmark holds up.
-- **Where does context-mode fall short?** Small outputs, files about to be edited, and a specific, independently confirmed blind spot around external MCP tools.
-- **What happens when you actually test the mechanism on a real file?** A self-run A/B on a file in this exact repo, with real byte counts instead of a projected estimate.
-- **What breaks, and how do you catch it?** The concrete failure modes documented by the maintainer and the community, not hypothetical ones.
-- **How should you decide when to reach for context-mode?** A scoped adoption ladder rather than a blanket yes or no.
+- **What problem is context-mode trying to solve?** A concrete look at how large browser snapshots, logs and documents consume an agent's context window even when the task needs only a small answer.
+- **What does context-mode claim to do for the context window?** The distinction between tool definitions, tool results, assistant output and session state.
+- **How does context-mode handle the raw data?** The hooks, local process, SQLite index and the boundary between output isolation and security sandboxing.
+- **Which context-mode tools help manage the context window?** The difference between computing a compact answer and retrieving an exact fragment later.
+- **Why isn't a smaller context window the same as a smaller bill?** Why context usage, prompt caching and token pricing must be measured separately.
+- **Where does context-mode actually earn its place?** The large-input workloads where the project's benchmark supports the mechanism.
+- **What happens when you test the mechanism on a real file?** A self-run comparison of raw reading, compact computation and targeted retrieval.
+- **Where does context-mode fall short?** The small-input, exact-content and external-MCP cases where the trade-off becomes less attractive.
+- **What breaks, and how do you catch it?** Wrong extraction questions, retrieval misses, hook overhead and local execution risks.
+- **How should you decide when to reach for context-mode?** A task-based adoption framework rather than a blanket yes or no.
 
-## What does context-mode actually claim to do?
+## What problem is context-mode trying to solve?
 
-Context-mode's core claim is that it handles the output side of context management — what comes back after a tool runs — while a different class of tool addresses the input side: what an agent needs to know about its tools beforehand. Cloudflare's Code Mode is the clearest example of that other half. It converts MCP tool *definitions* into a TypeScript API an agent codes against. An agent connected to a server exposing thousands of endpoints then carries roughly 1,000 tokens of schema, not the full tool catalogue. That is an input-side fix — it shrinks what an agent has to know about its tools before it does anything. Context-mode's own [README](https://github.com/mksglu/context-mode) frames this explicitly as "the other half of the context problem," positioned opposite [Code Mode](https://blog.cloudflare.com/code-mode/) itself.
+Context-mode addresses a specific context-window problem: a tool can produce far more data than the agent needs to answer the question. The tool may return a 56 KB browser snapshot, while the agent only needs to know whether a particular button exists.
 
-Its core tools are `ctx_execute`, `ctx_execute_file`, `ctx_batch_execute` for running code in a sandbox and returning only stdout, plus `ctx_index`, `ctx_search`, and `ctx_fetch_and_index` for storing content in a local SQLite full-text index and retrieving exact chunks on demand. The README's own instruction to the model is blunt: "think in code." Instead of reading fifty files into context to count functions, the agent writes a script that does the counting and logs only the result. One script call replaces what would otherwise be dozens of raw reads.
+Without any filtering, the whole result enters the main conversation:
 
-That is a coherent idea, and it is not new in spirit — it is the same "compute, don't transcribe" instinct behind any tool that pipes verbose output through a filter before a human or a model reads it. The distinguishing detail is where the filtering happens: not by shortening the prose that comes back, and not by changing what code gets written, but by moving the *reading* itself into a subprocess and returning only what that subprocess decided was worth printing.
+```text
+Browser snapshot ──► 56 KB of raw output ──► agent context
+```
 
-Two details in the [README](https://github.com/mksglu/context-mode) matter before going further. First, `ctx_execute` runs in a child process with timeouts and output caps — that is output isolation, not a security sandbox. Code still executes on the machine running the agent, so a malicious repository file or a poisoned page reaching the executor carries real risk, not just a context-management trade-off. Second, context-mode bundles a separate feature that has nothing to do with sandboxing: it captures session events — decisions, rejected approaches, active files, errors — into a local SQLite database, and rebuilds a priority-tiered snapshot before the conversation compacts. That's a second, independent value proposition (session continuity across a long or interrupted session) riding alongside the first (output externalisation), and the two are worth judging separately rather than as one bundled 98% claim.
+The snapshot is not necessarily bad data. Most of it is just irrelevant to the question at hand. It occupies working memory, competes with the instructions and files the agent does need, and remains part of the conversation until the platform removes or summarises it.
+
+Context-mode changes the route that data takes:
+
+```text
+Raw input ──► local computation or index ──► answer / exact fragment ──► agent context
+                  (raw data stays local)
+```
+
+That is the basic promise. Context-mode does not make the browser snapshot smaller at its source. It processes the snapshot outside the main conversation and returns only the result that the analysis script or search query produces.
+
+The trade-off is just as important as the saving. The agent sees less because some information has been left out. If the script asks the wrong question, the missing detail may not appear in the result at all. Context-mode therefore exchanges raw visibility for a smaller working set and on-demand retrieval.
+
+## What does context-mode claim to do for the context window?
+
+Context-mode's primary claim is that it keeps bulky tool results out of the agent's main context by processing them locally and returning a compact result. It is not a larger context window, and it is not a guarantee of a smaller token bill.
+
+This places it alongside several related tools, but they operate at different points in the system:
+
+| Layer | What it manages | Example |
+|---|---|---|
+| Tool definitions | What the agent needs to know before calling a tool | Cloudflare Code Mode |
+| Tool results | What enters context after a tool runs | RTK and context-mode |
+| Assistant output | What the model writes back to the user | Ponytail / Caveman |
+| Session state | What remains available after compaction | Context-mode's session layer |
+
+The distinction matters because “input” and “output” can mean different things here. RTK filters command output. Code Mode reduces the size of the tool surface the model has to understand. Context-mode mainly handles the result side by moving analysis or storage outside the main conversation. Cloudflare's [Code Mode](https://blog.cloudflare.com/code-mode/) is therefore a useful contrast, not an equivalent implementation. Context-mode describes this relationship in its [README](https://github.com/mksglu/context-mode) as addressing “the other half of the context problem.”
+
+### How does context-mode handle the raw data?
+
+In the browser example above, the useful result might be ten lines describing the button the agent is looking for. The other 990 lines still matter as source material, but they do not all need to enter the main conversation. Context-mode handles that trade-off in two ways: it can compute over the raw data and return a small answer, or store the raw data and retrieve selected fragments later.
+
+The word “sandbox” makes this sound more mysterious than it is. It is best understood as a separate local execution path between the agent and the main context window:
+
+```text
+Agent context ──► context-mode tool ──► local process or SQLite store
+      ▲                                      │
+      └──────── compact answer / exact chunk ┘
+```
+
+The next questions are therefore practical ones. Is this another Claude session? What actually runs there? Who decides what comes back? And how does context-mode get a normal tool call onto this alternative path?
+
+### What is the context-mode sandbox?
+
+The context-mode sandbox is not another Claude session. There is no second model independently reading the browser snapshot and writing a summary. Context-mode is an MCP server that starts a local child process when the agent invokes one of its execution tools.
+
+That child process runs the code supplied by the agent. Depending on the command, it can read a local file, parse JSON or CSV, inspect a log, call a command-line program or fetch data. The process writes its intended result to standard output, or `stdout`. Context-mode captures that output and sends it back to the main conversation.
+
+```text
+Main Claude session
+        │ asks context-mode to run code
+        ▼
+Local child process
+        │ reads the 1,000-line snapshot
+        │ finds the relevant button
+        │ prints ten lines or one compact answer
+        ▼
+Main Claude session receives only that output
+```
+
+The process uses the runtimes and commands available on the host. Context-mode can run supported languages and shell commands, but it does not automatically create a fresh Python virtual environment for every request. Whether a package is available depends on the local installation and runtime configuration.
+
+That distinction matters for both reliability and security. The child process separates intermediate data and output from the conversation, but it does not turn the machine into an isolated hostile-code environment. The code still runs locally and may inherit filesystem access, environment variables or network permissions. A repository instruction, poisoned web page or prompt injection could influence what the model writes and executes. Host-level permissions and tool approvals remain the real security boundary.
+
+### What controls the result returned from the sandbox?
+
+Context-mode does not have a second model making a hidden relevance judgement. In the compute path, the agent writes the analysis code, and the code decides what to print. If the script counts errors, only the count needs to reach the main context. If it prints every matching button and its attributes, that larger result comes back instead.
+
+The output contract is deliberately narrow:
+
+```text
+raw files + intermediate calculations ──► stay in the local process
+script's stdout                         ──► returns to the main context
+```
+
+`ctx_execute` runs inline code. `ctx_execute_file` applies code to a local file. `ctx_batch_execute` combines several independent operations. Context-mode captures their `stdout`, while timeouts and output caps prevent an unbounded process or response from filling the conversation again.
+
+This is why the quality of the returned answer depends on the question encoded in the script. A script that prints “button found” may omit the button's selector, parent element or disabled state. A script that prints only a commit count cannot answer a later question about the commit messages. The reduction is real, but it is not free: the agent has chosen which information to preserve.
+
+The retrieval path makes a different trade-off. `ctx_index` stores the source in a local SQLite database. `ctx_search` later uses that index to return matching chunks. `ctx_fetch_and_index` fetches a web page, stores it and makes it searchable. Here, the agent does not need to predict every useful detail in advance, but retrieval quality depends on the search terms, chunking and ranking.
+
+SQLite also supports a separate session feature. The content store keeps source documents available for later retrieval. The session store records decisions, active files, errors and rejected approaches so context-mode can rebuild a compact snapshot around compaction. These features share local persistence, but they solve different problems: one manages bulky source material; the other manages continuity.
+
+### How does context-mode retrieve information later?
+
+The compute path works well when the main agent already knows what it wants to calculate. For example, it can ask for the number of failed tests in a large log and return only that number.
+
+But sometimes the agent does not know which detail it will need yet. A long documentation page may contain an API signature, an example configuration and an explanation of an edge case. Summarising the page upfront could discard the exact detail needed later.
+
+That is where the retrieval path helps.
+
+`ctx_index` stores source content in a local SQLite full-text index. `ctx_fetch_and_index` can fetch a web page, store it and index it in the same step. The raw content remains available locally rather than entering the main conversation all at once.
+
+Later, the main agent calls `ctx_search` with a query such as:
+
+```text
+How do I configure the retry policy?
+```
+
+Context-mode searches the local index and returns matching chunks. Those chunks—not the entire original document—then enter the main context.
+
+```text
+Full document ──► local SQLite index
+                         │
+                         │ ctx_search("retry policy")
+                         ▼
+                 relevant chunks ──► main context
+```
+
+This is better understood as external local memory than as memory inside Claude. The document is available to the agent, but it is not continuously occupying the agent's context window. The main agent still controls the reasoning: it decides what to index, when to search and how to interpret the returned text. SQLite performs the retrieval; Claude turns the retrieved evidence into an answer.
+
+The trade-off is different from the compute path. A computed summary can be much smaller, but it may permanently omit a detail that the script was not asked to preserve. Retrieval keeps more of the source available, but it depends on the agent asking a useful query and on the search system finding the right chunk. Context-mode uses SQLite FTS5 and BM25-style lexical ranking, so it searches terms and patterns rather than understanding every conceptual synonym.
+
+The two paths therefore answer different questions:
+
+| Need | Better path |
+|---|---|
+| “How many errors are in this large log?” | Compute with `ctx_execute_file` |
+| “What exact API signature does this document use?” | Retrieve with `ctx_index` and `ctx_search` |
+| “What will I need from this document later?” | Index it first, then retrieve relevant chunks on demand |
+
+### What is the intercept mechanism that context-mode uses?
+
+The interception mechanism is a host hook, not a `PostToolUse` filter that waits for every result and rewrites it afterwards. In Claude Code, context-mode registers `PreToolUse` hooks. These run before a tool executes, when the eventual size and contents of the result are still unknown.
+
+That timing gives the hook several possible jobs:
+
+- It can deny or redirect known routes, such as WebFetch or shell commands likely to produce large output.
+- It can modify a call or add instructions telling the agent to use a context-mode tool instead.
+- It can provide periodic guidance for calls that context-mode recognises but cannot safely transform itself.
+
+For example, the hook may redirect a web-fetch request toward `ctx_fetch_and_index`, allowing the page to be stored and searched locally. For an external MCP tool, the hook can advise the agent to pipe the result through context-mode, but it does not automatically rewrite the external server's response after the call returns.
+
+So the complete path is conditional:
+
+```text
+Normal tool call
+      │
+      ▼
+PreToolUse hook
+      │
+      ├── passthrough: normal result enters context
+      ├── redirect: context-mode processes the input
+      └── guidance: agent may choose context-mode itself
+```
+
+This is the boundary behind the later MCP discussion. Context-mode is not a universal proxy sitting after every tool. It is a set of local tools, supported by hooks that try to route suitable calls toward them before bulky output reaches the main context.
+
+### Which context-mode tools help manage the context window?
+
+The six main tools fall into two groups. The first group computes an answer from raw data. The second group preserves the source and retrieves selected parts later.
+
+| Tool | What it does | How it helps the context window |
+|---|---|---|
+| `ctx_execute` | Runs an inline script and returns its standard output | Lets the agent compute over bulky data without returning all intermediate output |
+| `ctx_execute_file` | Runs analysis code against a local file | Suits logs, CSVs, JSON, test output and large text files |
+| `ctx_batch_execute` | Runs several independent commands or searches together | Reduces repeated tool calls and duplicated setup |
+| `ctx_index` | Stores content in the local SQLite search index | Keeps the full source available without placing it all in context |
+| `ctx_search` | Retrieves matching chunks from indexed content | Returns targeted text instead of the entire document |
+| `ctx_fetch_and_index` | Fetches, stores and indexes web content | Avoids repeatedly loading a full web page into the conversation |
+
+The central choice is therefore not “use context-mode or do not use context-mode.” It is “should this input be summarised by computation, or preserved for exact retrieval?” A count of errors in a large log is a good compute question. The exact API signature needed for an edit is a retrieval question. A file the agent is about to modify may need to be read directly.
+
+This distinction also tells us how to interpret the project's headline benchmark numbers. Before asking whether “98% context reduction” means a smaller bill, we first need to ask what was reduced, where the raw data went, and whether the returned result still contained the information the task required.
 
 ## Why isn't a smaller context window the same as a smaller bill?
 
-A smaller context window and a smaller bill are governed by separate mechanisms — shrinking one doesn't guarantee the other moves. The context window is "working memory": everything counted toward it, including cached content, and more context is not automatically better. Accuracy and recall degrade as token count grows, a phenomenon Anthropic calls context rot. That's the "context" half of the claim, and it is real: a smaller working set can mean a model that reasons better, independent of what it costs. Anthropic's own [context window documentation](https://platform.claude.com/docs/en/build-with-claude/context-windows) draws this line explicitly, and it's worth reading before evaluating any context-management tool against it.
+Context-mode can genuinely reduce the amount of data entering the main context. It does not automatically reduce every cost associated with the task. Those are separate claims, and the project's “98% context reduction” headline describes the first one rather than proving the second.
 
-The "bill" half is governed by a separate mechanism: [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching). Cache reads are priced at roughly a tenth of ordinary input tokens, but — and this is the detail that matters here — a cached prefix still occupies the context window. Caching changes what you pay for those tokens, not whether they count toward the window. The API's usage fields split the two apart explicitly: `cache_read_input_tokens`, `cache_creation_input_tokens`, and `input_tokens` are reported separately precisely because a smaller context window and a smaller bill are not the same event.
+Think back to the browser snapshot. Without context-mode, the agent might receive 56 KB of snapshot data in the main conversation. With `ctx_execute_file`, the local process can inspect those 56 KB and return only “the Submit button exists, and it is enabled.” The raw snapshot was not moved into a second Claude context window. It was read by a local process, so those bytes were never converted into model input tokens in the first place.
 
-This is the same discipline I used in the [RTK post](https://substack.com/@joseparreogarcia): "cost per successfully completed task at held quality" is the only metric that actually settles whether a tool is worth adopting. For context-mode, there's an extra wrinkle on top of that discipline. Anthropic's caching documentation describes a lookback window: a cache write happens only at a declared breakpoint, and a later request can reuse it only if the prefix up to that breakpoint matches exactly, within a limited number of blocks. Context-mode's `PreToolUse` hook intercepts a tool call and injects routing guidance before a WebFetch or a large Bash command runs, which changes the sequence of blocks the platform sees. That doesn't necessarily break the cache. It is, however, a variable the byte-counter framing skips entirely. A shrink in what enters the conversation is not automatically a shrink in what you're billed. The only way to know is to read the usage fields on an identical prompt — `cache_read_input_tokens`, `cache_creation_input_tokens`, `input_tokens` — not to infer it from how many bytes a tool result used to take up.
+```text
+Without context-mode
+56 KB tool result ──► model input ──► main context
+
+With context-mode
+56 KB local file ──► local process ──► small result ──► main context
+                                      └─ script + result still use some tokens
+```
+
+That is a real context-window benefit. The main agent receives less material to reason over, and the raw input does not consume the same model context that it would have consumed if the tool had returned it directly. Context-mode is not merely moving those 56 KB into another Claude conversation. The executor is a local process, not a second model session.
+
+There are still tokens involved. The main agent must describe the task, choose a context-mode tool, generate a script or query, and read the returned result. If the script needs several attempts, those tool calls and responses also enter the conversation. A small result can therefore cost more overall than reading a small file directly. The saving appears when the raw input is large and the compact result answers the question without requiring many recovery calls.
+
+The context window is best understood as the model's working memory: the material counted as part of the conversation available for the current request. More context is not automatically better. Accuracy and recall can degrade as irrelevant material accumulates, a phenomenon Anthropic calls context rot. A smaller working set can therefore improve reasoning even when the invoice remains unchanged. Anthropic's [context-window documentation](https://platform.claude.com/docs/en/build-with-claude/context-windows) describes this distinction between what the model can currently work with and what a request costs.
+
+The bill is governed by a separate mechanism. [Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) can make repeated input cheaper, but cached content still occupies the context window. Caching changes the price of those tokens; it does not make them disappear from the model's working memory. The API reports `cache_read_input_tokens`, `cache_creation_input_tokens` and ordinary `input_tokens` separately because these quantities answer different questions.
+
+Context-mode can reduce future input by preventing a large result from entering the conversation at all. That may reduce billed model input, but it is not guaranteed. The tool call itself has an input and output cost, the agent may need follow-up searches, and a hook may inject routing instructions into the prompt. Local execution also does not eliminate costs charged by an external API or command that the script invokes. The honest claim is narrower: context-mode can avoid sending raw tool output to the model. Whether that produces a smaller invoice depends on the complete task.
+
+This is the same discipline I used in the [RTK post](https://substack.com/@joseparreogarcia): the useful metric is cost per successfully completed task at held quality. For context-mode, compare identical tasks with and without the tool and record the full usage data. Look at `cache_read_input_tokens`, `cache_creation_input_tokens`, `input_tokens`, output tokens, tool-call count and recovery calls. Do not infer a billing reduction from a byte counter alone.
+
+The distinction also matters for prompt caching. Anthropic's caching documentation describes exact prefix matching and a limited lookback window. Context-mode's `PreToolUse` hook can add routing guidance before a WebFetch or large Bash command runs. That may change the sequence of blocks the platform sees, even if the raw payload itself never enters the conversation. It does not necessarily break the cache, but it is another reason to measure usage on identical prompts rather than assume that less visible output means a proportionally smaller bill.
 
 ## Where does context-mode actually earn its place?
 
@@ -50,9 +239,9 @@ Both numbers are genuine at the level they were measured — component-level, au
 
 The project's own documentation is candid about the first limit: a 0.4 KB network-request fixture in the benchmark shows only 13% savings, because the fixed cost of spawning a subprocess and writing to SQLite doesn't scale down for small payloads. Files an agent is about to edit are a second, structural limit — editing needs the exact byte content, not a compact description of it, so routing a file-you're-about-to-modify through a summariser just adds a round trip.
 
-The most consequential limit is one I didn't expect going in, and it came from testing the vendor's own claim against community scrutiny rather than from the vendor's documentation. A Hacker News commenter, [re5i5tor, on the project's launch thread](https://news.ycombinator.com/item?id=47193064), did the actual work of checking: they called their own Obsidian MCP server directly, and confirmed by inspecting the code that context-mode's `PreToolUse` hook matches only `Bash|Read|Grep|Glob|WebFetch|WebSearch|Task` — not MCP tool calls. Zero entries showed up in context-mode's FTS5 index for that call, while web-fetch calls in the same session were indexed normally. The maintainer confirmed it directly in the same thread: context-mode "handles the output side" for built-in tools and CLI wrappers, but for third-party MCP tools with their own capabilities, "the MCP author has to apply context-mode's concepts server-side."
+The most consequential limit is one I didn't expect going in, and it came from testing the vendor's own claim against community scrutiny rather than from the vendor's documentation. A Hacker News commenter, [re5i5tor, on the project's launch thread](https://news.ycombinator.com/item?id=47193064), did the actual work of checking: they called their own Obsidian MCP server directly, and found that the result was not transformed or added to context-mode's FTS5 index, while web-fetch calls in the same session were indexed normally. The maintainer confirmed the boundary in the same thread: context-mode "handles the output side" for built-in tools and CLI wrappers, but for third-party MCP tools with their own capabilities, "the MCP author has to apply context-mode's concepts server-side."
 
-That is a real, sourced boundary, not a hypothetical one. If a meaningful share of your context pressure comes from MCP servers rather than Bash, WebFetch, or file reads, context-mode is not currently in that loop at all.
+That is a real, sourced boundary, not a hypothetical one. If a meaningful share of your context pressure comes from MCP servers rather than Bash, WebFetch or file reads, context-mode may remind the agent to use it, but it does not currently transform those MCP results automatically.
 
 There's a fourth limit worth naming even though it's more of a design critique than a failure: the retrieval side (`ctx_index` plus `ctx_search`) uses SQLite's FTS5 with BM25 ranking — lexical, keyword-based matching, not semantic search. On the same [launch thread](https://news.ycombinator.com/item?id=47193064), commenter blakec pointed out that pure BM25 underperforms on tool output specifically because it mixes structured data (JSON keys, config, IDs) with natural language (comments, error messages) — keyword matching handles the natural-language half well and struggles with the structured half. A query for "authentication failure" won't reliably surface a source that says "credential rejection." That's a real gap for anyone expecting the search side to behave like a semantic assistant rather than a fast, exact, keyword-driven index.
 
@@ -81,7 +270,7 @@ None of this argues against context-mode. It argues against treating "98% contex
 - Start with `ctx_execute_file` on the input shapes where the fixture benchmark is strongest — large logs, CSVs, build output, and browser snapshots where an aggregate answer genuinely satisfies the question being asked.
 - Reach for `ctx_index` plus `ctx_search` when the actual need is documentation, code examples, or anything where an exact snippet matters more than a description of it.
 - Keep a raw artefact and a note of what query or script produced the summary, the same audit discipline I'd apply to any lossy transformation — so a wrong extraction is recoverable rather than silently final.
-- Don't expect it to touch your MCP-heavy calls. If that's where your context pressure actually lives, this tool isn't currently the fix for it.
+- Don't expect it to transform your MCP-heavy calls automatically. If that's where your context pressure actually lives, measure whether advisory routing changes the agent's behaviour before treating context-mode as the fix.
 - Measure your own delta on your own repository before adopting it as a default, the same rule that applied to RTK and to Ponytail/Caveman. A two-line script and a `wc -c` command, as I used above, is a lower bar than it sounds.
 - Judge session continuity on its own merits, separately from the sandboxing debate. Preserving decisions and active-file state across a compaction event is a real, distinct problem from context-window bloat — test whether the SQLite snapshot actually survives a real compaction event on a multi-hour session before trusting it, rather than assuming it works because the sandboxing half does. Those separate objections (MCP interception, lexical retrieval) apply to the sandbox tools, not to the session-event store.
 - If you adopt the sandbox tools, adopt the audit habit alongside them from day one rather than retrofitting it later: every compact answer should carry a note of the query or script that produced it, so a wrong extraction is a five-minute fix rather than a silent gap discovered during an incident.
@@ -100,7 +289,7 @@ A few things I'd genuinely like to know from anyone running this in production:
 
 - Have you measured your own context or token delta with context-mode enabled, the way I did with the two-line script above — or has the 98% headline been enough to adopt it on faith?
 - Has a summary from `ctx_execute_file` ever quietly dropped a detail you needed two turns later, the way my heading-only summary lost the GitHub issue reference?
-- If a meaningful share of your context pressure comes from MCP tool calls rather than Bash, WebFetch, or file reads, has that blind spot actually shown up in your own usage — or is your workload light enough on MCP that it doesn't matter?
+- If a meaningful share of your context pressure comes from MCP tool calls rather than Bash, WebFetch or file reads, has the lack of automatic result transformation shown up in your own usage — or is your workload light enough on MCP that it doesn't matter?
 
 Drop a comment or reply — I read everything.
 
