@@ -1,0 +1,93 @@
+# ── Identity ──────────────────────────────────────────────────────────
+slug: "context-mode-context-window-management"
+working_title: "Context-mode: what it actually buys your context window"
+
+# ── Post classification ────────────────────────────────────────────────
+structural_type: "standalone"
+content_type: "series-genai"
+series_name: ""
+series_position: null
+
+# ── Core content ──────────────────────────────────────────────────────
+thesis: "Context-mode does not increase the size of an agent's context window and does not automatically reduce the total cost of a task. What it actually provides is a separate analysis sandbox: large inputs (files, logs, multi-file scans, web docs) can be processed outside the main conversation, with only the relevant result returned to context. The value of that trade depends on the task — how large the input would otherwise have been, how much of it is actually needed, and whether the returned summary preserves the detail the agent needs to act correctly. Treated as a universal context-saving tool, it will disappoint on small files or tasks that require editing the exact content just analysed; treated as a scoped tool for specific input shapes (large logs, CSV/JSON, multi-file surveys, external docs), it has a real and demonstrable use case."
+target_audience: "Claude Code users and practitioners of agentic coding patterns who have heard about context-mode as a way to manage context windows, but haven't tested where it actually helps versus where it's the wrong tool for the job."
+target_reading_time_minutes: 15
+topics_to_cover:
+  - "What problem context-mode addresses: large files, logs, or multi-file scans that would otherwise consume a large fraction of the agent's usable context window just to read"
+  - "The mechanism: how context-mode's sandboxed execution (e.g. ctx_execute_file) analyses content outside the main context and returns only a summary or extracted result"
+  - "The core distinction this post is built on: context-window management (what fits in the conversation) is not the same claim as token-cost reduction (what you're billed for) — the two are related but not identical, and vendor framing often conflates them"
+  - "Where it plausibly wins: large logs, big CSV/JSON data files, multi-file codebase surveys, and web docs that only need a targeted extraction, not the raw bytes"
+  - "Where it's the wrong tool: small files, files the agent is about to edit directly (since editing requires exact content, not a summary), or tasks where the summary loses information the agent needs downstream"
+  - "A hands-on A/B: reading a real file straight into context vs. running it through context-mode's sandbox, on this repo, measuring the actual context/token delta rather than trusting a headline claim"
+  - "Failure modes: summary fidelity loss, tasks that require exact byte-for-byte content, and the risk of treating a sandboxed summary as ground truth without spot-checking against the source"
+  - "How this fits alongside the other tools already covered (RTK, Ponytail, Caveman): a different channel of the token/context economy — input context shaping via sandboxing, not output compression or code minimisation"
+  - "A practical decision framework: when to reach for context-mode, when to just read the file, and how to self-test on your own repo before adopting it as a default habit"
+topics_to_exclude:
+  - "RTK, Ponytail, or Caveman mechanics in depth — mention only as comparison points for the broader token/context economy, per the existing posts on each"
+  - "General Claude Code tutorial content unrelated to context-window or token mechanics"
+  - "Treating any vendor-reported context-mode benchmark as validated without independent or self-run verification"
+open_research_questions:
+  - "RESOLVED (research stage): confirmed via the internal research paper and independently via the project's Hacker News launch discussion — no neutral, controlled, end-to-end benchmark exists for context-mode's token-bill or task-quality effects. Only the maintainers' own fixture benchmark (BENCHMARK.md, 21 scenarios) exists as quantitative evidence; treat as project-level, not independently verified."
+  - "RESOLVED (research stage): documented failure modes found without needing the hands-on self-test to generate them. Most significant — Hacker News user re5i5tor empirically confirmed (via code inspection + live test) that context-mode's PreToolUse hook does not match external MCP tool calls, so third-party MCP results bypass the sandbox entirely and are not indexed; the maintainer confirmed this in-thread. Also documented: hook overhead on small/observe-only calls, and the risk of a syntactically-correct-but-wrong extraction script silently discarding needed detail (e.g. git log summarised to a commit count when specific messages were needed)."
+
+# ── Brainstorm output ─────────────────────────────────────────────────
+brainstorm_summary: "This post covers context-mode, a tool for managing agentic coding context windows, and continues the same mechanics-first, benchmark-honest pattern Jose has used for RTK and Ponytail/Caveman. Unlike those two posts, which focused on token-cost claims, context-mode's core claim is about context-window management — a related but distinct axis. The post's job is to pull those two apart explicitly: context-mode does not expand the context window and does not automatically cut total cost; what it does is move large-input analysis into a separate sandbox and return only the useful result, keeping the main conversation's context smaller than it would otherwise be.
+
+The reader is a Claude Code practitioner who has heard of context-mode and wants to know where it actually helps rather than assuming it's a universal fix. The pedagogical approach mirrors the earlier posts: explain the mechanism first, then hold it against realistic use cases and a hands-on self-test rather than relying purely on vendor framing. Likely winning cases are large logs, big data files (CSV/JSON), multi-file codebase surveys, and web docs where only a targeted extraction is needed. Likely losing cases are small files and any file the agent is about to edit directly, since editing requires the exact source content, not a summary of it.
+
+Jose has research documentation (a PDF) to provide once the folder scaffold exists. That research needs to be converted via the import-pdf procedure and reviewed to see what independent evidence, if any, exists for context-mode's claims — this is flagged as an open research question rather than assumed. The post closes with a practical decision framework: when context-mode earns its place in a workflow, when it's the wrong tool, and how to self-test on your own repo rather than trusting either the vendor pitch or reflexive skepticism."
+
+## Rough Table of Contents
+- **The claim vs. the mechanism** — what context-mode says it does, and what it actually does under the hood (sandboxed execution, summary-back-to-context)
+- **Context-window management is not token-cost reduction** — pulling apart the two claims this post's predecessors (RTK, Ponytail/Caveman) covered on the cost side
+- **Where it plausibly wins** — large logs, big data files, multi-file surveys, web docs
+- **Where it's the wrong tool** — small files, files about to be edited, summary fidelity loss
+- **Hands-on A/B test** — reading raw vs. sandboxed on this repo, measuring the actual delta
+- **Failure modes** — what breaks and how to catch it
+- **Practical decision framework** — when to reach for it, when to skip it, how to self-test
+
+# ── Style references ──────────────────────────────────────────────────
+reference_posts:
+  - reference_posts/claude-code-agents-explained.md
+  - posts/rtk-token-savings/long_draft.md
+  - posts/ponytail-caveman-token-savings-myth/long_draft.md
+style_guides:
+  - style_guide/shared/voice.md
+  - style_guide/shared/anti_patterns.md
+  - style_guide/types/series-genai.md
+
+# ── Artefacts ─────────────────────────────────────────────────────────
+artefacts:
+  notes: notes.md
+  research_brief: research_brief.md
+  outline: outline.md
+  long_draft: long_draft.md
+  long_draft_backup: long_draft_pre-revise.md
+  seo_brief: seo_brief.md
+  decision_log: decision_log.md
+  review_report: review_report.md
+  promotion_posts: promotion_posts.md
+
+# ── Pipeline stages ───────────────────────────────────────────────────
+stages:
+  brainstorm:
+    status: complete
+    completed_at: "2026-09-07"
+  research:
+    status: complete
+    completed_at: "2026-09-07"
+  draft:
+    status: complete
+    completed_at: "2026-09-07"
+  seo:
+    status: complete
+    completed_at: "2026-09-07"
+  revise:
+    status: complete
+    completed_at: "2026-09-07"
+  review:
+    status: complete
+    completed_at: "2026-09-07"
+  promote:
+    status: complete
+    completed_at: "2026-09-07"

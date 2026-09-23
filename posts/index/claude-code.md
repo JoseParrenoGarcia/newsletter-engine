@@ -20,6 +20,21 @@
 
 ---
 
+<!-- slug: context-mode-context-window-management -->
+<a name="context-mode-context-window-management"></a>
+### Context-mode: what it actually buys your context window
+
+| Field | Value |
+|-------|-------|
+| **Type** | standalone / series-genai |
+| **Audience** | Claude Code users and practitioners of agentic coding patterns who have heard about context-mode as a way to manage context windows, but haven't tested where it actually helps versus where it's the wrong tool for the job |
+| **Topics** | `claude-code` `cost-optimisation` `session-context` `agents` |
+| **Path** | `posts/context-mode-context-window-management/long_draft.md` |
+
+**Summary:** Context-mode is a Claude Code MCP server and hook system that sandboxes tool output — running commands, file reads, and web fetches in a subprocess and returning only a compact result while the full data stays queryable in a local SQLite index — with a headline claim of 98% context reduction. The post's central move is separating that claim into two distinct mechanics that vendor framing routinely conflates: context-window management (what fits in the model's working memory, governed by context rot and Anthropic's own context-window documentation) and token-cost reduction (what's billed, governed by prompt-caching mechanics and usage fields like `cache_read_input_tokens`). The project's own 21-scenario fixture benchmark is examined and found genuinely transparent at the component level (a 315 KB → 5.5 KB aggregate-compute path, a 60.3 KB → 11 KB index-and-retrieve path), but not evidence of an end-to-end cost or task-quality effect. The most consequential finding is independently sourced from the project's Hacker News launch thread: a community member empirically confirmed, and the maintainer corroborated in-thread, that context-mode's `PreToolUse` hook does not intercept external MCP tool calls at all — a real, sourced blind spot rather than a hypothetical one. The post's centrepiece is a transparent, self-run mechanism test on a file in its own research folder: a 57,693-byte document compressed to a 2,796-byte structural summary (95.2% reduction, matching the vendor's own range), which is then shown to have silently omitted a specific fact that a targeted, retrieval-style query recovers exactly in 1,353 bytes — demonstrating the compute-versus-retrieve trade-off with real, reproducible numbers rather than a projected estimate. Closes with a scoped adoption ladder rather than a blanket verdict, continuing the same benchmark-honest pattern established in the RTK and Ponytail/Caveman posts.
+
+---
+
 <!-- slug: claude-code-plugins -->
 <a name="claude-code-plugins"></a>
 ### Claude Code Plugins: How to Build, Version, and Maintain Them
